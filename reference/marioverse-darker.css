@@ -1,0 +1,51 @@
+/* ==========================================================================
+   marioverse-darker.css
+   TEMA RICHIESTO: Baseline — scoped su `.cupertino-dark`, lo schema colore
+   "Cupertino" interno a Baseline (non il tema Cupertino separato). Non
+   portabile ad altri temi.
+
+   FUNZIONE: scurire il dark mode di Cupertino-dark su DESKTOP, tenendo lo
+   stesso carattere (grigio neutro), senza nero pieno.
+
+   Perché serve CSS e non Style Settings:
+   - Cupertino-dark hardcoda --background-primary: #1e1e1e su desktop
+     (`theme-dark.cupertino-dark:not(.is-mobile)`, specificità 0,3,0) e #000
+     su mobile. Il color-picker di Style Settings gira su `body` (0,1,0) e
+     PERDE contro quel selettore → non scurisce. Qui lo eguagliamo/battiamo.
+   - "Dark contrast" di Baseline salta dritto al nero pieno; non c'è un
+     "come adesso ma un filo più scuro".
+
+   Le derivate (--background-primary-alt / secondary / secondary-alt) in
+   Cupertino sono color-mix di --background-primary, quindi si scuriscono da
+   sole di conseguenza: basta cambiare primary.
+
+   Regolabile: un solo valore. #1e1e1e (originale) → più scuro qui sotto.
+   Solo desktop + solo cupertino-dark. Mobile resta #000 (già scuro).
+   ========================================================================== */
+
+/* Approccio Craft/Notion: superficie DARK UNIFORME su tutte le aree.
+   Baseline di default rende sidebar/pannelli PIÙ CHIARI dell'editor
+   (secondary = mix(primary, white 5%)). Qui ridefiniamo tutte le superfici
+   su valori scuri e ravvicinati → editor ≈ sidebar ≈ pannelli.
+   Tutti i valori sono regolabili; tienili vicini per l'effetto "superficie unica". */
+body.theme-dark.cupertino-dark:not(.is-mobile) {
+  --background-primary:       #141414;   /* editor — era #1e1e1e */
+  --background-primary-alt:   #1a1a1a;   /* superfici elevate leggere */
+  --background-secondary:     #171717;   /* sidebar + pannelli — era ~#292929 (troppo chiaro) */
+  --background-secondary-alt: #1e1e1e;   /* nav item attivo / card */
+}
+
+/* ==========================================================================
+   § OPACITÀ — dark opaco legato al CSS, indipendente dal toggle translucency
+   --------------------------------------------------------------------------
+   Il look non deve dipendere dall'impostazione "translucency" di Obsidian
+   (che tendeva a riaccendersi da sola). La vibrancy nativa di macOS si vede
+   solo dove i pixel sono trasparenti: qui forziamo un fondo SOLIDO sul
+   container radice in dark, così la vibrancy resta coperta → sempre opaco,
+   anche con translucency: true. Snippet attivo = dark opaco, comunque.
+   ========================================================================== */
+body.theme-dark.cupertino-dark,
+body.theme-dark.cupertino-dark .app-container {
+  background-color: var(--background-primary) !important;
+}
+

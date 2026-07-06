@@ -1,0 +1,23 @@
+/* marioverse-claudian.css
+   THEME REQUIRED: Baseline — relies on Baseline's `layout-cupertino`/
+   `layout-fusion` `.mod-root` bottom inset (8px). No effect / not portable
+   under other themes.
+
+   Align the bottom of the Claudian chat panel with the main editor's
+   baseline, so the input composer ends on the same line as the editor.
+
+   BOTTOM: `.workspace-split.mod-root` has `padding-bottom: 8px` (Baseline's
+   floating inset), which sidebar splits lack. Add an 8px bottom inset so the
+   input composer ends on the editor's baseline instead of dipping 8px lower
+   ("da sotto").
+
+   NOTE (2026-06-27): a previous `padding-top: 52px` was applied here to push
+   the whole stack down to the editor body line, but `.view-content` wraps the
+   panel header too — so it lowered the Claudian header by 52px. Removed.
+
+   Scoped to sidebar splits only. */
+
+.workspace-split.mod-right-split .workspace-leaf-content[data-type="claudian-view"] .view-content,
+.workspace-split.mod-left-split  .workspace-leaf-content[data-type="claudian-view"] .view-content {
+  padding-bottom: 8px;  /* = .workspace-split.mod-root padding-bottom */
+}

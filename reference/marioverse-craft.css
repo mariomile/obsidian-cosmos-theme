@@ -1,0 +1,117 @@
+/* ==========================================================================
+   marioverse-craft.css
+   TEMA RICHIESTO: Baseline — usa classi (`.tab-floating`, `.tab-floating-center`)
+   e variabili (`--anim-motion-baseline`, `--shadow-tactile`) definite solo da
+   Baseline. Non portabile ad altri temi.
+
+   FUNZIONE: layer estetico "Craft" (craft.do) sopra Baseline.
+   Contiene SOLO i delta visivi che Style Settings di Baseline non espone.
+   Tutto ciò che Baseline offre come toggle nativo va impostato lì, non qui.
+
+   SCOPE (2026-07-02, dopo passo indietro): SOLO i tab. Il warm-tint della
+   palette è stato rimosso intenzionalmente — il colore torna al Cupertino
+   neutro di Baseline. Se in futuro si vuole il paper caldo, valutare un color
+   scheme nativo (es. Flexoki) via Style Settings invece di CSS.
+
+   TECNICA: selettore + !important dove serve. In floating Baseline hard-setta
+   background-color e opacity dei tab via SELETTORE (non via variabile), quindi
+   il chip paper e il kill-ghost devono batterlo con un selettore — le var
+   (--tab-background-active ecc.) valgono solo nella modalità tab default.
+
+   Reversibile: togli lo snippet e torni a Baseline puro.
+
+   ---------------------------------------------------------------------------
+   § TABS — Craft-card pills (direzione A approvata, 2026-07-02)
+   ---------------------------------------------------------------------------
+   Baseline (tab-floating): tab attivo = chip grigio (hover-fill) su un gap;
+   inattivi ghost a opacity .5; angoli arrotondati solo in alto.
+   Craft: tab attivo = superficie paper (--background-primary) + soft lift
+   shadow, angoli pieni (chip); inattivi leggibili (niente ghost) ma mutati.
+   Scope: editor (.mod-root) + sidebar (.mod-sidedock) → UI tab uniforme
+   (2026-07-05, allineamento tab editor ↔ icon-bar sidebar).
+   ========================================================================== */
+
+/* --- Tab bar compatta (2026-07-05) -----------------------------------------
+   Niente background sempre visibile: resta solo la
+   geometria — barra aderente ai tab, centrata, pill inset uniforme 4px. */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header-container-inner {
+  /* !important: nelle sidebar Baseline setta 8px/padding con selettore più specifico */
+  border-radius: 14px !important;   /* concentrico: pill 10px + 4px di padding */
+  padding: 4px !important;
+  width: fit-content;
+  max-width: 100%;
+  align-self: center;
+  height: fit-content;
+}
+/* Il margin verticale Baseline (6px 0) gonfierebbe la card: l'inset del pill
+   nella card è il padding 4px della card, non il margin del tab. */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header-container-inner .workspace-tab-header {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* --- Geometria: radius morbido + lift animato su ogni tab floating -------- */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked) .workspace-tab-header {
+  /* !important: in sidebar Baseline setta 8px con selettore più specifico */
+  border-radius: 10px !important;   /* Baseline in floating è più squadrato */
+  transition:
+    background-color var(--anim-duration-fast) var(--anim-motion-baseline, ease),
+    box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease);
+}
+
+/* --- Gap più arioso tra i tab -------------------------------------------- */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header-container-inner {
+  gap: 6px;
+}
+
+/* --- Tab attivo = document card: paper + soft lift -----------------------
+   !important OBBLIGATORIO: in floating Baseline hard-setta background-color su
+   OGNI tab (--background-modifier-hover) via selettore, non via variabile —
+   quindi --tab-background-active NON basta, serve battere il valore diretto.
+   In dark il paper (#141414) è invisibile sul canvas identico (skin darker):
+   il pill attivo usa la superficie elevata #242424 (2026-07-05, DOM-verificato
+   — editor e sidebar avevano pill #141414 su #141414). */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone) {
+  --craft-tab-active: var(--background-primary);
+}
+body.theme-dark:is(.tab-floating, .tab-floating-center):not(.is-phone) {
+  --craft-tab-active: #242424;
+}
+body:is(.tab-floating, .tab-floating-center):not(.is-phone)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header.is-active {
+  background-color: var(--craft-tab-active) !important;
+  box-shadow: var(--shadow-tactile);
+}
+
+/* --- Inattivi: kill del ghost (opacity .5) → flat, testo muto ------------- */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header:not(.is-active) {
+  opacity: 1 !important;
+  background-color: transparent !important;
+}
+body:is(.tab-floating, .tab-floating-center):not(.is-phone)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header:not(.is-active) .workspace-tab-header-inner-title {
+  color: var(--text-muted);
+}
+
+/* --- Hover inattivo: wash morbido, testo torna pieno --------------------- */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header:not(.is-active):hover {
+  background-color: var(--background-modifier-hover) !important;
+}
+body:is(.tab-floating, .tab-floating-center):not(.is-phone)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header:not(.is-active):hover .workspace-tab-header-inner-title {
+  color: var(--text-normal);
+}

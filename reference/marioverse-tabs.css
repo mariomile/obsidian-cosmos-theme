@@ -1,0 +1,29 @@
+/* ==========================================================================
+   marioverse-tabs.css
+   FUNZIONE: leggibilità della tab bar dell'area editor (.mod-root).
+   Solo comportamento (min-width + scroll orizzontale). Nessuno stile estetico
+   — la parte visiva Craft vive in `marioverse-craft.css`.
+
+   Problema: di default Obsidian dà ai tab `flex: 1 1 0` con `min-width: 0`,
+   quindi quando sono troppi si comprimono fino a mostrare solo l'icona.
+   Il container `.workspace-tab-header-container-inner` ha già `overflow-x: auto`,
+   ma lo scroll non scatta mai perché i tab si stringono per stare nello spazio.
+
+   Fix: imponiamo una min-width ai tab. Sotto quella soglia smettono di
+   comprimersi → il container trabocca → scrolla orizzontalmente.
+
+   Scope: solo `.mod-root` (area editor). Le sidebar restano invariate.
+   ========================================================================== */
+
+.workspace-split.mod-root .workspace-tab-header {
+  min-width: 130px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Scroll attivo ma scrollbar nascosta (trackpad / shift+rotella funzionano) */
+.workspace-split.mod-root .workspace-tab-header-container-inner {
+  scrollbar-width: none;          /* Firefox/standard */
+}
+.workspace-split.mod-root .workspace-tab-header-container-inner::-webkit-scrollbar {
+  display: none;                  /* Chromium (Obsidian) */
+}

@@ -1,0 +1,327 @@
+/* ==========================================================================
+   marioverse-bases.css
+   TEMA RICHIESTO: Baseline (Cupertino dark) — ma le regole usano quasi solo
+   variabili Obsidian standard (--background-*, --text-*, --color-*), quindi
+   degradano con grazia su altri temi.
+
+   FUNZIONE: Craft skin per le viste Bases native — affordance alla Notion
+   (pill di stato, group header leggibili, card curate), estetica della suite
+   marioverse (masonry / horizon / superbasetags): bordi soffici, radius 11px,
+   shadow solo su hover, chip con dot colorato, niente focus ring.
+   Fronti coperti del brief: (1) look & feel, (4) rich props read-only.
+   I fronti (2) interazioni [row peek] e la colorazione delle proprietà
+   EDITABILI stanno nel plugin superbasetags (Phase 3): le formule html()
+   producono colonne read-only.
+
+   SCOPE: solo contenuti dentro `.bases-view` / `.bases-header` + utilities
+   `.mv-*` consumate dalle formule html() nei .base e dal pill colorizer di
+   superbasetags.
+
+   SELETTORI VERIFICATI su Obsidian 1.12.7 (2026-07-05, DOM dump reale via
+   obsidian-cli eval — rifare il dump se una release cambia il DOM di Bases):
+     table   .bases-table-container .bases-table .bases-thead .bases-tr
+             .bases-td[data-property="…"] .bases-table-header(-name|-label|-icon)
+             separatori riga = box-shadow nativo con var(--table-border-color)
+     group   .bases-group-heading > .bases-group-property + .bases-group-value
+     cards   .bases-cards-container .bases-cards-group .bases-cards-item
+             .bases-cards-property[data-property] .mod-title
+             .bases-cards-label .bases-cards-line .bases-cards-cover
+     values  .value-list-container > .value-list-element (chip tag/list)
+     toolbar .bases-header .bases-toolbar .bases-toolbar-item
+             .bases-toolbar-(views|results|sort|filter|properties|search|new-item)-menu
+   NB: .bases-th / .bases-table-row / .bases-group-header NON esistono (v1.12.7).
+
+   Reversibile: disabilita lo snippet → torni a Bases puro. Nessun .base si
+   rompe senza lo snippet (le pill degradano a testo neutro).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   § 0 — Token condivisi suite (il pill colorizer di superbasetags applica le
+   stesse classi .mv-pill-*; la palette vive SOLO qui)
+   -------------------------------------------------------------------------- */
+body {
+  --mv-ease: cubic-bezier(0.25, 1, 0.5, 1);        /* = --masonry-ease */
+  --mv-anim: var(--anim-duration-fast, 140ms) var(--mv-ease);
+  --mv-radius-card: 11px;                          /* = --masonry-radius */
+  --mv-radius-chip: 5px;                           /* = .masonry-tag-chip */
+  --mv-hairline: color-mix(in srgb, var(--text-muted) 14%, transparent);
+  --mv-card-bg: color-mix(in srgb, var(--background-primary) 92%, var(--background-secondary));
+  --mv-card-bg-hover: color-mix(in srgb, var(--background-primary) 82%, var(--background-secondary));
+  --mv-card-lift: 0 5px 16px color-mix(in srgb, var(--background-modifier-box-shadow) 18%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   § 1 — Table: Craft-clean (hairline, righe ariose, header muto small-caps)
+   -------------------------------------------------------------------------- */
+.bases-view {
+  /* i separatori riga nativi sono box-shadow pilotati da questa var */
+  --table-border-color: var(--mv-hairline);
+}
+
+.bases-view .bases-tr {
+  height: 36px;
+  transition: background-color var(--mv-anim);
+}
+.bases-view .bases-tbody .bases-tr:hover {
+  background-color: var(--background-modifier-hover);
+}
+
+/* Header: etichette small-caps mute, come i label di masonry/horizon */
+.bases-view .bases-table-header-name {
+  color: var(--text-muted);
+  font-family: var(--font-interface);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.bases-view .bases-table-header-icon {
+  color: color-mix(in srgb, var(--text-muted) 65%, transparent);
+}
+
+/* Prima colonna (titolo nota): peso da titolo */
+.bases-view .bases-td[data-property="file.name"] .internal-link,
+.bases-view .bases-td[data-property="note.name"] .internal-link {
+  font-weight: 560;
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   § 2 — Group heading: valore pieno + property muta, aria tra i gruppi
+   -------------------------------------------------------------------------- */
+.bases-view .bases-group-heading {
+  height: auto;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 18px;
+  padding-bottom: 6px;
+}
+.bases-view .bases-group-heading .bases-group-value {
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  font-size: var(--font-ui-medium);
+  font-weight: 660;
+  letter-spacing: -0.01em;
+}
+.bases-view .bases-group-heading .bases-group-property {
+  color: var(--text-faint);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   § 3 — Cards: indistinguibili dalle card masonry (bordo quieto, bg mix,
+   lift solo su hover)
+   -------------------------------------------------------------------------- */
+.bases-view .bases-cards-item {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--mv-radius-card);
+  background: var(--mv-card-bg);
+  box-shadow: none;
+  transition:
+    border-color 140ms var(--mv-ease),
+    background-color 140ms var(--mv-ease),
+    box-shadow 180ms var(--mv-ease);
+}
+@media (hover: hover) {
+  .bases-view .bases-cards-item:hover {
+    border-color: var(--background-modifier-border-hover);
+    background: var(--mv-card-bg-hover);
+    box-shadow: var(--mv-card-lift);
+  }
+}
+
+.bases-view .bases-cards-property.mod-title .bases-cards-line {
+  font-family: var(--font-interface);
+  font-weight: 680;
+  letter-spacing: -0.02em;
+}
+
+/* Label di property nelle card: mute e piccole (Craft) */
+.bases-view .bases-cards-label {
+  color: var(--text-faint);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   § 4 — Value chips: default per tag/list nelle celle (quelli NON colorati
+   dal pill colorizer): stile .masonry-tag-chip
+   -------------------------------------------------------------------------- */
+.bases-view .value-list-container {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.bases-view .value-list-container > .value-list-element {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 1px 6px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--mv-radius-chip);
+  color: var(--text-muted);
+  font-family: var(--font-interface);
+  font-size: 0.68rem;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Quando il pill colorizer di superbasetags colora il chip, il bordo grigio
+   di default lascia il posto al tint della pill */
+.bases-view .value-list-container > .value-list-element.mv-pill {
+  border-color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   § 5 — Utilities .mv-* (consumate dalle formule html() e dal pill colorizer)
+   Palette = variabili colore Obsidian → si adatta a light/dark e al tema.
+   Chip Craft: tint traslucido + dot colorato, niente bordo duro.
+   -------------------------------------------------------------------------- */
+.mv-pill {
+  --mv-pill-color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 8px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--mv-pill-color) 13%, transparent);
+  color: color-mix(in srgb, var(--mv-pill-color) 72%, var(--text-normal));
+  font-family: var(--font-interface);
+  font-size: 0.7rem;
+  font-weight: 580;
+  line-height: 1.6;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.mv-pill::before {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mv-pill-color);
+  content: '';
+  flex: 0 0 auto;
+}
+/* In light il tint 13% su bianco è quasi invisibile → rinforzo leggero */
+.theme-light .mv-pill {
+  background: color-mix(in srgb, var(--mv-pill-color) 17%, transparent);
+  color: color-mix(in srgb, var(--mv-pill-color) 60%, var(--text-normal));
+}
+
+.mv-pill-red    { --mv-pill-color: var(--color-red); }
+.mv-pill-orange { --mv-pill-color: var(--color-orange); }
+.mv-pill-yellow { --mv-pill-color: var(--color-yellow); }
+.mv-pill-green  { --mv-pill-color: var(--color-green); }
+.mv-pill-cyan   { --mv-pill-color: var(--color-cyan); }
+.mv-pill-blue   { --mv-pill-color: var(--color-blue); }
+.mv-pill-purple { --mv-pill-color: var(--color-purple); }
+.mv-pill-pink   { --mv-pill-color: var(--color-pink); }
+.mv-pill-gray   { --mv-pill-color: var(--text-muted); }
+
+/* Progress bar — html() emette <span class="mv-progress" style="--pct:60"> */
+.mv-progress {
+  position: relative;
+  display: inline-block;
+  width: 72px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--background-modifier-border);
+  vertical-align: middle;
+}
+.mv-progress::after {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(clamp(0, var(--pct, 0), 100) * 1%);
+  border-radius: inherit;
+  background: var(--interactive-accent);
+  content: '';
+}
+
+/* Avatar a iniziali (CRM) — <span class="mv-avatar">MM</span> */
+.mv-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--interactive-accent) 18%, var(--background-secondary));
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  font-size: 0.62rem;
+  font-weight: 640;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+/* Layout packed per card contatto (CRM Gallery): avatar + nome + ruolo */
+.mv-packed {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.mv-packed .mv-avatar {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  font-size: 0.78rem;
+}
+.mv-packed-main {
+  min-width: 0;
+}
+.mv-packed-title {
+  overflow: hidden;
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  font-weight: 680;
+  letter-spacing: -0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mv-packed-sub {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   § 6 — Packing / spacer (tecnica EzraMarks: property fantasma per layout)
+   -------------------------------------------------------------------------- */
+.bases-view [data-property^="formula.spacer"] {
+  display: none;
+}
+.bases-view .bases-cards-property[data-property^="formula.packed"] {
+  padding: 0;
+  margin: 0;
+}
+.bases-view .bases-cards-property[data-property^="formula.packed"] .bases-cards-label {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   § 7 — Toolbar: quiet text-items, coerente con i tab Craft della suite
+   -------------------------------------------------------------------------- */
+.bases-header .bases-toolbar-item {
+  border-radius: 8px;
+  color: var(--text-muted);
+  transition: background-color var(--mv-anim), color var(--mv-anim);
+}
+.bases-header .bases-toolbar-item:hover {
+  background-color: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+/* Selettore vista corrente: peso da tab attivo */
+.bases-header .bases-toolbar-views-menu {
+  color: var(--text-normal);
+  font-weight: 600;
+}

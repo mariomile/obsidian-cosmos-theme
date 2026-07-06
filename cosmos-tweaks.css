@@ -1,0 +1,16 @@
+
+
+/* ==========================================================================
+   § COSMOS TWEAKS — micro-fix generali (tutti i flavour)
+   ========================================================================== */
+
+/* --- Ribbon sinistra: centra le icone -------------------------------------
+   Baseline le offsetta con `.workspace-ribbon.mod-left:not(.is-collapsed){padding-left:12px}`
+   → sembrano spinte a sinistra. Azzeriamo il padding e centriamo la colonna. */
+body:not(.is-mobile) .workspace-ribbon.mod-left:not(.is-collapsed) {
+  padding-left: 0;
+}
+body:not(.is-mobile) .workspace-ribbon.mod-left,
+body:not(.is-mobile) .workspace-ribbon.mod-left .side-dock-actions {
+  align-items: center;
+}

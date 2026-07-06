@@ -1,0 +1,546 @@
+
+/* ==========================================================================
+   ███  COSMOS LAYER  ███
+   Baked-in sopra la base Baseline (fork). Assemblato dagli snippet marioverse-*
+   del vault (copie in reference/) via trasformazioni di gating Cosmos:
+     • craft/darker → :not(.layout-baseline)  (spenti nel flavour Standard)
+     • darker       → :not(.cosmos-light)      (spento in "Superfici chiare" = Cupertino Light)
+   Ordine: tabs (behavior) · craft (tab UI) · darker (dark surfaces) · bases (Bases skin).
+   Rigenera con ./sync-snippets.sh dopo modifiche agli snippet nel vault.
+   ========================================================================== */
+
+
+/* ===== TABS BEHAVIOR ===== */
+/* ==========================================================================
+   marioverse-tabs.css
+   FUNZIONE: leggibilità della tab bar dell'area editor (.mod-root).
+   Solo comportamento (min-width + scroll orizzontale). Nessuno stile estetico
+   — la parte visiva Craft vive in `marioverse-craft.css`.
+
+   Problema: di default Obsidian dà ai tab `flex: 1 1 0` con `min-width: 0`,
+   quindi quando sono troppi si comprimono fino a mostrare solo l'icona.
+   Il container `.workspace-tab-header-container-inner` ha già `overflow-x: auto`,
+   ma lo scroll non scatta mai perché i tab si stringono per stare nello spazio.
+
+   Fix: imponiamo una min-width ai tab. Sotto quella soglia smettono di
+   comprimersi → il container trabocca → scrolla orizzontalmente.
+
+   Scope: solo `.mod-root` (area editor). Le sidebar restano invariate.
+   ========================================================================== */
+
+.workspace-split.mod-root .workspace-tab-header {
+  min-width: 130px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Scroll attivo ma scrollbar nascosta (trackpad / shift+rotella funzionano) */
+.workspace-split.mod-root .workspace-tab-header-container-inner {
+  scrollbar-width: none;          /* Firefox/standard */
+}
+.workspace-split.mod-root .workspace-tab-header-container-inner::-webkit-scrollbar {
+  display: none;                  /* Chromium (Obsidian) */
+}
+
+
+/* ===== CRAFT TABS (gated :not(.layout-baseline)) ===== */
+/* ==========================================================================
+   marioverse-craft.css
+   TEMA RICHIESTO: Baseline — usa classi (`.tab-floating`, `.tab-floating-center`)
+   e variabili (`--anim-motion-baseline`, `--shadow-tactile`) definite solo da
+   Baseline. Non portabile ad altri temi.
+
+   FUNZIONE: layer estetico "Craft" (craft.do) sopra Baseline.
+   Contiene SOLO i delta visivi che Style Settings di Baseline non espone.
+   Tutto ciò che Baseline offre come toggle nativo va impostato lì, non qui.
+
+   SCOPE (2026-07-02, dopo passo indietro): SOLO i tab. Il warm-tint della
+   palette è stato rimosso intenzionalmente — il colore torna al Cupertino
+   neutro di Baseline. Se in futuro si vuole il paper caldo, valutare un color
+   scheme nativo (es. Flexoki) via Style Settings invece di CSS.
+
+   TECNICA: selettore + !important dove serve. In floating Baseline hard-setta
+   background-color e opacity dei tab via SELETTORE (non via variabile), quindi
+   il chip paper e il kill-ghost devono batterlo con un selettore — le var
+   (--tab-background-active ecc.) valgono solo nella modalità tab default.
+
+   Reversibile: togli lo snippet e torni a Baseline puro.
+
+   ---------------------------------------------------------------------------
+   § TABS — Craft-card pills (direzione A approvata, 2026-07-02)
+   ---------------------------------------------------------------------------
+   Baseline (tab-floating): tab attivo = chip grigio (hover-fill) su un gap;
+   inattivi ghost a opacity .5; angoli arrotondati solo in alto.
+   Craft: tab attivo = superficie paper (--background-primary) + soft lift
+   shadow, angoli pieni (chip); inattivi leggibili (niente ghost) ma mutati.
+   Scope: editor (.mod-root) + sidebar (.mod-sidedock) → UI tab uniforme
+   (2026-07-05, allineamento tab editor ↔ icon-bar sidebar).
+   ========================================================================== */
+
+/* --- Tab bar compatta (2026-07-05) -----------------------------------------
+   Niente background sempre visibile: resta solo la
+   geometria — barra aderente ai tab, centrata, pill inset uniforme 4px. */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header-container-inner {
+  /* !important: nelle sidebar Baseline setta 8px/padding con selettore più specifico */
+  border-radius: 14px !important;   /* concentrico: pill 10px + 4px di padding */
+  padding: 4px !important;
+  width: fit-content;
+  max-width: 100%;
+  align-self: center;
+  height: fit-content;
+}
+/* Il margin verticale Baseline (6px 0) gonfierebbe la card: l'inset del pill
+   nella card è il padding 4px della card, non il margin del tab. */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header-container-inner .workspace-tab-header {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* --- Geometria: radius morbido + lift animato su ogni tab floating -------- */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked) .workspace-tab-header {
+  /* !important: in sidebar Baseline setta 8px con selettore più specifico */
+  border-radius: 10px !important;   /* Baseline in floating è più squadrato */
+  transition:
+    background-color var(--anim-duration-fast) var(--anim-motion-baseline, ease),
+    box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease);
+}
+
+/* --- Gap più arioso tra i tab -------------------------------------------- */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header-container-inner {
+  gap: 6px;
+}
+
+/* --- Tab attivo = document card: paper + soft lift -----------------------
+   !important OBBLIGATORIO: in floating Baseline hard-setta background-color su
+   OGNI tab (--background-modifier-hover) via selettore, non via variabile —
+   quindi --tab-background-active NON basta, serve battere il valore diretto.
+   In dark il paper (#141414) è invisibile sul canvas identico (skin darker):
+   il pill attivo usa la superficie elevata #242424 (2026-07-05, DOM-verificato
+   — editor e sidebar avevano pill #141414 su #141414). */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline) {
+  --craft-tab-active: var(--background-primary);
+}
+body.theme-dark:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline) {
+  --craft-tab-active: #242424;
+}
+body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header.is-active {
+  background-color: var(--craft-tab-active) !important;
+  box-shadow: var(--shadow-tactile);
+}
+
+/* --- Inattivi: kill del ghost (opacity .5) → flat, testo muto ------------- */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header:not(.is-active) {
+  opacity: 1 !important;
+  background-color: transparent !important;
+}
+body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header:not(.is-active) .workspace-tab-header-inner-title {
+  color: var(--text-muted);
+}
+
+/* --- Hover inattivo: wash morbido, testo torna pieno --------------------- */
+body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header:not(.is-active):hover {
+  background-color: var(--background-modifier-hover) !important;
+}
+body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
+  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-tab-header:not(.is-active):hover .workspace-tab-header-inner-title {
+  color: var(--text-normal);
+}
+
+
+/* ===== DARKER (gated :not(.layout-baseline):not(.cosmos-light)) ===== */
+/* ==========================================================================
+   marioverse-darker.css
+   TEMA RICHIESTO: Baseline — scoped su `.cupertino-dark`, lo schema colore
+   "Cupertino" interno a Baseline (non il tema Cupertino separato). Non
+   portabile ad altri temi.
+
+   FUNZIONE: scurire il dark mode di Cupertino-dark su DESKTOP, tenendo lo
+   stesso carattere (grigio neutro), senza nero pieno.
+
+   Perché serve CSS e non Style Settings:
+   - Cupertino-dark hardcoda --background-primary: #1e1e1e su desktop
+     (`theme-dark.cupertino-dark:not(.is-mobile)`, specificità 0,3,0) e #000
+     su mobile. Il color-picker di Style Settings gira su `body` (0,1,0) e
+     PERDE contro quel selettore → non scurisce. Qui lo eguagliamo/battiamo.
+   - "Dark contrast" di Baseline salta dritto al nero pieno; non c'è un
+     "come adesso ma un filo più scuro".
+
+   Le derivate (--background-primary-alt / secondary / secondary-alt) in
+   Cupertino sono color-mix di --background-primary, quindi si scuriscono da
+   sole di conseguenza: basta cambiare primary.
+
+   Regolabile: un solo valore. #1e1e1e (originale) → più scuro qui sotto.
+   Solo desktop + solo cupertino-dark. Mobile resta #000 (già scuro).
+   ========================================================================== */
+
+/* Approccio Craft/Notion: superficie DARK UNIFORME su tutte le aree.
+   Baseline di default rende sidebar/pannelli PIÙ CHIARI dell'editor
+   (secondary = mix(primary, white 5%)). Qui ridefiniamo tutte le superfici
+   su valori scuri e ravvicinati → editor ≈ sidebar ≈ pannelli.
+   Tutti i valori sono regolabili; tienili vicini per l'effetto "superficie unica". */
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) {
+  --background-primary:       #141414;   /* editor — era #1e1e1e */
+  --background-primary-alt:   #1a1a1a;   /* superfici elevate leggere */
+  --background-secondary:     #171717;   /* sidebar + pannelli — era ~#292929 (troppo chiaro) */
+  --background-secondary-alt: #1e1e1e;   /* nav item attivo / card */
+}
+
+/* ==========================================================================
+   § OPACITÀ — dark opaco legato al CSS, indipendente dal toggle translucency
+   --------------------------------------------------------------------------
+   Il look non deve dipendere dall'impostazione "translucency" di Obsidian
+   (che tendeva a riaccendersi da sola). La vibrancy nativa di macOS si vede
+   solo dove i pixel sono trasparenti: qui forziamo un fondo SOLIDO sul
+   container radice in dark, così la vibrancy resta coperta → sempre opaco,
+   anche con translucency: true. Snippet attivo = dark opaco, comunque.
+   ========================================================================== */
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light),
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-container {
+  background-color: var(--background-primary) !important;
+}
+
+
+
+/* ===== BASES SKIN ===== */
+/* ==========================================================================
+   marioverse-bases.css
+   TEMA RICHIESTO: Baseline (Cupertino dark) — ma le regole usano quasi solo
+   variabili Obsidian standard (--background-*, --text-*, --color-*), quindi
+   degradano con grazia su altri temi.
+
+   FUNZIONE: Craft skin per le viste Bases native — affordance alla Notion
+   (pill di stato, group header leggibili, card curate), estetica della suite
+   marioverse (masonry / horizon / superbasetags): bordi soffici, radius 11px,
+   shadow solo su hover, chip con dot colorato, niente focus ring.
+   Fronti coperti del brief: (1) look & feel, (4) rich props read-only.
+   I fronti (2) interazioni [row peek] e la colorazione delle proprietà
+   EDITABILI stanno nel plugin superbasetags (Phase 3): le formule html()
+   producono colonne read-only.
+
+   SCOPE: solo contenuti dentro `.bases-view` / `.bases-header` + utilities
+   `.mv-*` consumate dalle formule html() nei .base e dal pill colorizer di
+   superbasetags.
+
+   SELETTORI VERIFICATI su Obsidian 1.12.7 (2026-07-05, DOM dump reale via
+   obsidian-cli eval — rifare il dump se una release cambia il DOM di Bases):
+     table   .bases-table-container .bases-table .bases-thead .bases-tr
+             .bases-td[data-property="…"] .bases-table-header(-name|-label|-icon)
+             separatori riga = box-shadow nativo con var(--table-border-color)
+     group   .bases-group-heading > .bases-group-property + .bases-group-value
+     cards   .bases-cards-container .bases-cards-group .bases-cards-item
+             .bases-cards-property[data-property] .mod-title
+             .bases-cards-label .bases-cards-line .bases-cards-cover
+     values  .value-list-container > .value-list-element (chip tag/list)
+     toolbar .bases-header .bases-toolbar .bases-toolbar-item
+             .bases-toolbar-(views|results|sort|filter|properties|search|new-item)-menu
+   NB: .bases-th / .bases-table-row / .bases-group-header NON esistono (v1.12.7).
+
+   Reversibile: disabilita lo snippet → torni a Bases puro. Nessun .base si
+   rompe senza lo snippet (le pill degradano a testo neutro).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   § 0 — Token condivisi suite (il pill colorizer di superbasetags applica le
+   stesse classi .mv-pill-*; la palette vive SOLO qui)
+   -------------------------------------------------------------------------- */
+body {
+  --mv-ease: cubic-bezier(0.25, 1, 0.5, 1);        /* = --masonry-ease */
+  --mv-anim: var(--anim-duration-fast, 140ms) var(--mv-ease);
+  --mv-radius-card: 11px;                          /* = --masonry-radius */
+  --mv-radius-chip: 5px;                           /* = .masonry-tag-chip */
+  --mv-hairline: color-mix(in srgb, var(--text-muted) 14%, transparent);
+  --mv-card-bg: color-mix(in srgb, var(--background-primary) 92%, var(--background-secondary));
+  --mv-card-bg-hover: color-mix(in srgb, var(--background-primary) 82%, var(--background-secondary));
+  --mv-card-lift: 0 5px 16px color-mix(in srgb, var(--background-modifier-box-shadow) 18%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   § 1 — Table: Craft-clean (hairline, righe ariose, header muto small-caps)
+   -------------------------------------------------------------------------- */
+.bases-view {
+  /* i separatori riga nativi sono box-shadow pilotati da questa var */
+  --table-border-color: var(--mv-hairline);
+}
+
+.bases-view .bases-tr {
+  height: 36px;
+  transition: background-color var(--mv-anim);
+}
+.bases-view .bases-tbody .bases-tr:hover {
+  background-color: var(--background-modifier-hover);
+}
+
+/* Header: etichette small-caps mute, come i label di masonry/horizon */
+.bases-view .bases-table-header-name {
+  color: var(--text-muted);
+  font-family: var(--font-interface);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.bases-view .bases-table-header-icon {
+  color: color-mix(in srgb, var(--text-muted) 65%, transparent);
+}
+
+/* Prima colonna (titolo nota): peso da titolo */
+.bases-view .bases-td[data-property="file.name"] .internal-link,
+.bases-view .bases-td[data-property="note.name"] .internal-link {
+  font-weight: 560;
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   § 2 — Group heading: valore pieno + property muta, aria tra i gruppi
+   -------------------------------------------------------------------------- */
+.bases-view .bases-group-heading {
+  height: auto;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 18px;
+  padding-bottom: 6px;
+}
+.bases-view .bases-group-heading .bases-group-value {
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  font-size: var(--font-ui-medium);
+  font-weight: 660;
+  letter-spacing: -0.01em;
+}
+.bases-view .bases-group-heading .bases-group-property {
+  color: var(--text-faint);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   § 3 — Cards: indistinguibili dalle card masonry (bordo quieto, bg mix,
+   lift solo su hover)
+   -------------------------------------------------------------------------- */
+.bases-view .bases-cards-item {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--mv-radius-card);
+  background: var(--mv-card-bg);
+  box-shadow: none;
+  transition:
+    border-color 140ms var(--mv-ease),
+    background-color 140ms var(--mv-ease),
+    box-shadow 180ms var(--mv-ease);
+}
+@media (hover: hover) {
+  .bases-view .bases-cards-item:hover {
+    border-color: var(--background-modifier-border-hover);
+    background: var(--mv-card-bg-hover);
+    box-shadow: var(--mv-card-lift);
+  }
+}
+
+.bases-view .bases-cards-property.mod-title .bases-cards-line {
+  font-family: var(--font-interface);
+  font-weight: 680;
+  letter-spacing: -0.02em;
+}
+
+/* Label di property nelle card: mute e piccole (Craft) */
+.bases-view .bases-cards-label {
+  color: var(--text-faint);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   § 4 — Value chips: default per tag/list nelle celle (quelli NON colorati
+   dal pill colorizer): stile .masonry-tag-chip
+   -------------------------------------------------------------------------- */
+.bases-view .value-list-container {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.bases-view .value-list-container > .value-list-element {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 1px 6px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--mv-radius-chip);
+  color: var(--text-muted);
+  font-family: var(--font-interface);
+  font-size: 0.68rem;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Quando il pill colorizer di superbasetags colora il chip, il bordo grigio
+   di default lascia il posto al tint della pill */
+.bases-view .value-list-container > .value-list-element.mv-pill {
+  border-color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   § 5 — Utilities .mv-* (consumate dalle formule html() e dal pill colorizer)
+   Palette = variabili colore Obsidian → si adatta a light/dark e al tema.
+   Chip Craft: tint traslucido + dot colorato, niente bordo duro.
+   -------------------------------------------------------------------------- */
+.mv-pill {
+  --mv-pill-color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 8px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--mv-pill-color) 13%, transparent);
+  color: color-mix(in srgb, var(--mv-pill-color) 72%, var(--text-normal));
+  font-family: var(--font-interface);
+  font-size: 0.7rem;
+  font-weight: 580;
+  line-height: 1.6;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.mv-pill::before {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mv-pill-color);
+  content: '';
+  flex: 0 0 auto;
+}
+/* In light il tint 13% su bianco è quasi invisibile → rinforzo leggero */
+.theme-light .mv-pill {
+  background: color-mix(in srgb, var(--mv-pill-color) 17%, transparent);
+  color: color-mix(in srgb, var(--mv-pill-color) 60%, var(--text-normal));
+}
+
+.mv-pill-red    { --mv-pill-color: var(--color-red); }
+.mv-pill-orange { --mv-pill-color: var(--color-orange); }
+.mv-pill-yellow { --mv-pill-color: var(--color-yellow); }
+.mv-pill-green  { --mv-pill-color: var(--color-green); }
+.mv-pill-cyan   { --mv-pill-color: var(--color-cyan); }
+.mv-pill-blue   { --mv-pill-color: var(--color-blue); }
+.mv-pill-purple { --mv-pill-color: var(--color-purple); }
+.mv-pill-pink   { --mv-pill-color: var(--color-pink); }
+.mv-pill-gray   { --mv-pill-color: var(--text-muted); }
+
+/* Progress bar — html() emette <span class="mv-progress" style="--pct:60"> */
+.mv-progress {
+  position: relative;
+  display: inline-block;
+  width: 72px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--background-modifier-border);
+  vertical-align: middle;
+}
+.mv-progress::after {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(clamp(0, var(--pct, 0), 100) * 1%);
+  border-radius: inherit;
+  background: var(--interactive-accent);
+  content: '';
+}
+
+/* Avatar a iniziali (CRM) — <span class="mv-avatar">MM</span> */
+.mv-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--interactive-accent) 18%, var(--background-secondary));
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  font-size: 0.62rem;
+  font-weight: 640;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+/* Layout packed per card contatto (CRM Gallery): avatar + nome + ruolo */
+.mv-packed {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.mv-packed .mv-avatar {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  font-size: 0.78rem;
+}
+.mv-packed-main {
+  min-width: 0;
+}
+.mv-packed-title {
+  overflow: hidden;
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  font-weight: 680;
+  letter-spacing: -0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mv-packed-sub {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   § 6 — Packing / spacer (tecnica EzraMarks: property fantasma per layout)
+   -------------------------------------------------------------------------- */
+.bases-view [data-property^="formula.spacer"] {
+  display: none;
+}
+.bases-view .bases-cards-property[data-property^="formula.packed"] {
+  padding: 0;
+  margin: 0;
+}
+.bases-view .bases-cards-property[data-property^="formula.packed"] .bases-cards-label {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   § 7 — Toolbar: quiet text-items, coerente con i tab Craft della suite
+   -------------------------------------------------------------------------- */
+.bases-header .bases-toolbar-item {
+  border-radius: 8px;
+  color: var(--text-muted);
+  transition: background-color var(--mv-anim), color var(--mv-anim);
+}
+.bases-header .bases-toolbar-item:hover {
+  background-color: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+/* Selettore vista corrente: peso da tab attivo */
+.bases-header .bases-toolbar-views-menu {
+  color: var(--text-normal);
+  font-weight: 600;
+}
