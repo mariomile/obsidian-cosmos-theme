@@ -1,0 +1,18 @@
+{
+  "comment": "Live pixel contract (idea #6b). Assertions run by verify.sh against the running Obsidian vault via obsidian-cli eval. Assumes Mario's daily setup: theme Cosmos, layout Cupertino, tab-floating-center, dark mode, darker surfaces on. Selectors not present in the DOM (closed modals etc.) report SKIP, not FAIL.",
+  "assertions": [
+    { "name": "canvas is surface-0",            "selector": "body",                                                          "property": "--background-primary", "expected": "#141414" },
+    { "name": "editor tab pill radius",         "selector": ".mod-root .workspace-tab-header",                              "property": "border-radius",         "expected": "8px" },
+    { "name": "editor tab container radius (concentric 8+2)", "selector": ".mod-root .workspace-tab-header-container-inner", "property": "border-radius",         "expected": "10px" },
+    { "name": "editor tab container padding",   "selector": ".mod-root .workspace-tab-header-container-inner",              "property": "padding",               "expected": "2px" },
+    { "name": "editor tab gap",                 "selector": ".mod-root .workspace-tab-header-container-inner",              "property": "gap",                   "expected": "4px" },
+    { "name": "sidebar tabs flush (gap 0)",     "selector": ".mod-sidedock .workspace-tab-header-container-inner",          "property": "gap",                   "expected": "0px" },
+    { "name": "right island margin",            "selector": ".mod-right-split .workspace-tab-container",                    "property": "margin",                "expected": "0px 8px 8px", "skipIfBodyClass": "cosmos-right-island-off" },
+    { "name": "right island radius",            "selector": ".mod-right-split .workspace-tab-container",                    "property": "border-radius",         "expected": "8px",         "skipIfBodyClass": "cosmos-right-island-off" },
+    { "name": "right island hairline",          "selector": ".mod-right-split .workspace-tab-container",                    "property": "outline-width",         "expected": "1px",         "skipIfBodyClass": "cosmos-right-island-off" },
+    { "name": "left island margin (mirror)",    "selector": ".mod-left-split .workspace-tab-container",                     "property": "margin",                "expected": "0px 8px 8px", "skipIfBodyClass": "cosmos-left-island-off" },
+    { "name": "left island radius (mirror)",    "selector": ".mod-left-split .workspace-tab-container",                     "property": "border-radius",         "expected": "8px",         "skipIfBodyClass": "cosmos-left-island-off" },
+    { "name": "sidebar divider removed",        "selector": ".mod-sidedock .workspace-leaf-resize-handle",                  "property": "border-bottom-width",   "expected": "0px" },
+    { "name": "settings nav icon flat (no box)","selector": ".modal.mod-settings .vertical-tab-nav-item-icon",              "property": "background-image",      "expected": "none" }
+  ]
+}
