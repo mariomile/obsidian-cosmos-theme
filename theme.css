@@ -2992,16 +2992,10 @@ body.theme-dark, body.theme-light {
   --font-text-size: 24px;  /* corpo editor/nota */
 }
 
-/* ===== ICONE — assottigliate a ~1px, stile Nucleo Outline =====
-   Il set icone di Obsidian (Lucide) si risolve via JS, non è sostituibile
-   da un tema — questo assottiglia solo lo stroke-width dei glifi esistenti. */
-body.theme-dark, body.theme-light {
-  --icon-xs-stroke-width: 1px;
-  --icon-s-stroke-width: 1px;
-  --icon-m-stroke-width: 1px;
-  --icon-l-stroke-width: 1px;
-  --icon-xl-stroke-width: 1px;
-}
+/* ===== ICONE — stroke NORMALE (2026-07-10) =====
+   L'assottigliamento a ~1px era nel bundle SF Pro; rimosso su richiesta di
+   Mario. Le icone tornano allo stroke-width di default (pilotato da Baseline
+   via --icon-stroke-modifier, regolabile dallo slider "Icon thickness"). */
 
 /* ===== TOKEN COLORE — palette chiara proposta =====
    subtle/default/strong mappano sui livelli di testo di Obsidian; bg-selected
