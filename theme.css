@@ -516,8 +516,21 @@ settings:
 	-
 		id: font-interface-override
 		title: Interface font
-		type: variable-text
-		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
+		type: variable-select
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+		options:
+			-
+				label: System (SF Pro)
+				value: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+			-
+				label: Inter
+				value: 'Inter, sans-serif'
+			-
+				label: New York (serif)
+				value: 'ui-serif, "New York", Georgia, serif'
+			-
+				label: Geist Mono
+				value: '"Geist Mono", ui-monospace, monospace'
 	-
 		id: density-modifier
 		title: Density
@@ -1242,13 +1255,33 @@ settings:
 	-
 		id: font-text-override
 		title: Editor font
-		type: variable-text
-		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
+		type: variable-select
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+		options:
+			-
+				label: System (SF Pro)
+				value: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+			-
+				label: Inter
+				value: 'Inter, sans-serif'
+			-
+				label: New York (serif)
+				value: 'ui-serif, "New York", Georgia, serif'
+			-
+				label: Geist Mono
+				value: '"Geist Mono", ui-monospace, monospace'
 	-
 		id: font-monospace-override
 		title: Monospace font
-		type: variable-text
-		default: 'ui-monospace'
+		type: variable-select
+		default: 'ui-monospace, "SF Mono", Menlo, monospace'
+		options:
+			-
+				label: SF Mono (System)
+				value: 'ui-monospace, "SF Mono", Menlo, monospace'
+			-
+				label: Geist Mono
+				value: '"Geist Mono", ui-monospace, monospace'
 	-
 		id: p-spacing
 		title: Paragraph spacing
@@ -1397,8 +1430,21 @@ settings:
 	-
 		id: inline-title-font
 		title: Inline title font
-		type: variable-text
-		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
+		type: variable-select
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+		options:
+			-
+				label: System (SF Pro)
+				value: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+			-
+				label: Inter
+				value: 'Inter, sans-serif'
+			-
+				label: New York (serif)
+				value: 'ui-serif, "New York", Georgia, serif'
+			-
+				label: Geist Mono
+				value: '"Geist Mono", ui-monospace, monospace'
 	-
 		id: inline-title-size
 		title: Inline title font size
@@ -1578,8 +1624,21 @@ settings:
 	-
 		id: h1-font
 		title: H1 font
-		type: variable-text
-		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
+		type: variable-select
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+		options:
+			-
+				label: System (SF Pro)
+				value: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+			-
+				label: Inter
+				value: 'Inter, sans-serif'
+			-
+				label: New York (serif)
+				value: 'ui-serif, "New York", Georgia, serif'
+			-
+				label: Geist Mono
+				value: '"Geist Mono", ui-monospace, monospace'
 	-
 		id: h1-size
 		title: H1 font size
@@ -1674,8 +1733,21 @@ settings:
 	-
 		id: h2-font
 		title: H2 font
-		type: variable-text
-		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
+		type: variable-select
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+		options:
+			-
+				label: System (SF Pro)
+				value: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+			-
+				label: Inter
+				value: 'Inter, sans-serif'
+			-
+				label: New York (serif)
+				value: 'ui-serif, "New York", Georgia, serif'
+			-
+				label: Geist Mono
+				value: '"Geist Mono", ui-monospace, monospace'
 	-
 		id: h2-size
 		title: H2 font size
@@ -1770,8 +1842,21 @@ settings:
 	-
 		id: h3-font
 		title: H3 font
-		type: variable-text
-		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
+		type: variable-select
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+		options:
+			-
+				label: System (SF Pro)
+				value: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+			-
+				label: Inter
+				value: 'Inter, sans-serif'
+			-
+				label: New York (serif)
+				value: 'ui-serif, "New York", Georgia, serif'
+			-
+				label: Geist Mono
+				value: '"Geist Mono", ui-monospace, monospace'
 	-
 		id: h3-size
 		title: H3 font size
@@ -1866,8 +1951,21 @@ settings:
 	-
 		id: h4-font
 		title: H4 font
-		type: variable-text
-		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
+		type: variable-select
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+		options:
+			-
+				label: System (SF Pro)
+				value: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+			-
+				label: Inter
+				value: 'Inter, sans-serif'
+			-
+				label: New York (serif)
+				value: 'ui-serif, "New York", Georgia, serif'
+			-
+				label: Geist Mono
+				value: '"Geist Mono", ui-monospace, monospace'
 	-
 		id: h4-size
 		title: H4 font size
@@ -1963,8 +2061,21 @@ settings:
 	-
 		id: h5-font
 		title: H5 font
-		type: variable-text
-		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
+		type: variable-select
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+		options:
+			-
+				label: System (SF Pro)
+				value: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+			-
+				label: Inter
+				value: 'Inter, sans-serif'
+			-
+				label: New York (serif)
+				value: 'ui-serif, "New York", Georgia, serif'
+			-
+				label: Geist Mono
+				value: '"Geist Mono", ui-monospace, monospace'
 	- 
 		id: h5-size
 		title: H5 font size
@@ -2059,8 +2170,21 @@ settings:
 	-
 		id: h6-font
 		title: H6 font
-		type: variable-text
-		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
+		type: variable-select
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+		options:
+			-
+				label: System (SF Pro)
+				value: '-apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif'
+			-
+				label: Inter
+				value: 'Inter, sans-serif'
+			-
+				label: New York (serif)
+				value: 'ui-serif, "New York", Georgia, serif'
+			-
+				label: Geist Mono
+				value: '"Geist Mono", ui-monospace, monospace'
 	-
 		id: h6-size
 		title: H6 font size
