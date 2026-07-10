@@ -1,0 +1,10 @@
+{
+  "comment": "Asserzioni mobile (verify-mobile.sh v2: class-injection is-mobile/is-phone sul body, MAI EmulateMobile — il footgun plugin-Node è impossibile by design). Target: iPhone Pro Max. Engine Chromium: i gate CSS si testano qui, i bug WebKit-only sul device reale.",
+  "assertions": [
+    {
+      "name": "class-injection attiva (is-phone)",
+      "bodyClass": "is-phone",
+      "expected": true
+    }
+  ]
+}

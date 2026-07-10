@@ -74,6 +74,20 @@ if contract.get('outline_none_requires_comment'):
             if '/*' not in window and '*/' not in window:
                 failures.append(f"{f}: outline:none at offset {m.start()} without a justifying comment nearby")
 
+
+# 7. Ratchet mobile: gate escludenti (:not(.is-phone)/:not(.is-mobile)) e 100vh
+if 'mobile_excluding_gates_max' in contract:
+    n=0
+    for f,css in texts.items():
+        if css is None: continue
+        n+=len(re.findall(r':not\(\.is-(?:phone|mobile)\)', strip_comments(css)))
+    if n>contract['mobile_excluding_gates_max']:
+        failures.append(f"gate mobile escludenti x{n} > ceiling {contract['mobile_excluding_gates_max']} (la polarity deve migliorare, non peggiorare)")
+if 'raw_100vh_max' in contract:
+    n=sum(len(re.findall(r'\b100vh\b', strip_comments(css))) for css in texts.values() if css)
+    if n>contract['raw_100vh_max']:
+        failures.append(f"100vh x{n} > ceiling {contract['raw_100vh_max']} (usare dvh: 100vh e' rotto su iOS)")
+
 if warnings:
     print("contract warnings:")
     for w in warnings: print(f"  ⚠ {w}")
