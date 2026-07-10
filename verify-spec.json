@@ -138,6 +138,10 @@
     {
       "name": "serif-headings toggle rule deployed",
       "ruleExists": ".cosmos-serif-headings"
+    },
+    {
+      "name": "generous-radii toggle rule deployed",
+      "ruleExists": ".cosmos-generous-radii"
     }
   ]
 }

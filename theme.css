@@ -535,6 +535,11 @@ settings:
 		max: 1.5
 		step: 0.25
 	-
+		id: cosmos-generous-radii
+		title: Generous radii (Craft)
+		description: Raggi base più ampi (pill/card/pannelli/modali) per un look più morbido alla Craft. Si combina con Roundness.
+		type: class-toggle
+	-
 		id: icon-stroke-modifier
 		title: Icon thickness
 		type: variable-number-slider
@@ -3996,6 +4001,22 @@ body:not(.is-phone) .workspace-tab-header:active {
 .markdown-reading-view input[type="checkbox"]:active,
 .markdown-rendered input[type="checkbox"]:active {
   transform: scale(0.8);
+}
+
+/* ==========================================================================
+   § RAGGI GENEROSI (Tier 3, toggle Style Settings: cosmos-generous-radii)
+   --------------------------------------------------------------------------
+   Craft arrotonda generosamente i contenitori. Alziamo la SCALA base dei
+   raggi (non un modifier globale: così i chip piccoli non diventano bolle) —
+   pill/card/pannelli/modali si ammorbidiscono. Composabile con lo slider
+   Roundness (--radius-modifier resta il fattore). island/pill derivano da
+   --tab-radius/--radius-s → scalano di conseguenza. Default OFF. ========================================================================== */
+body.cosmos-generous-radii {
+  --radius-s: calc(12px * var(--radius-modifier));
+  --radius-m: calc(16px * var(--radius-modifier));
+  --radius-l: calc(24px * var(--radius-modifier));
+  --radius-xl: calc(32px * var(--radius-modifier));
+  --tab-radius: calc(10px * var(--radius-modifier));
 }
 
 /* ==========================================================================
