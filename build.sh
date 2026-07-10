@@ -16,33 +16,23 @@ i = next(k for k,l in enumerate(lines) if 'COSMOS TOKENS' in l or 'COSMOS LAYER'
 cut = i-1                                    # the '/* ===' opener line
 while cut>0 and lines[cut-1].strip()=='' : cut-=1   # trim blank lines before it
 base = lines[:cut]
-# --- @layer wrap (2026-07-10, idea #7) --------------------------------------
-# The minified Baseline base (line 1) is wrapped in `@layer baseline { ... }`.
-# The Cosmos layers stay UNLAYERED: unlayered author styles beat layered ones
-# regardless of selector specificity, so Cosmos declarations win without
-# !important. (Checked: none of the base's own 81 !important collide with
-# Cosmos fights.) User snippets — also unlayered, loaded later — beat both.
-# Idempotente: prima UNWRAP di un eventuale wrap precedente, poi re-wrap.
-# GOTCHA (scoperto live 2026-07-10): la base minificata termina con un
-# commento PENDENTE (`/*!`). Senza chiuderlo, la `}` del layer viene
-# inghiottita dal commento → il blocco @layer resta aperto → TUTTI i layer
-# Cosmos finiscono layered dentro `baseline` e perdono la cascade war.
+# --- @layer wrap: TENTATO E RITIRATO (2026-07-10) ----------------------------
+# L'idea era wrappare la base in `@layer baseline{}` così i layer Cosmos
+# (unlayered) vincono senza !important. NON FUNZIONA: app.css di Obsidian è
+# unlayered e viene prima → unlayered batte layered → app.css vincerebbe su
+# TUTTA la base layerata (radius dimezzati, bottoni nativi del file explorer
+# riapparsi, divider fra le tab, ecc. — regressioni viste live). Un tema
+# Obsidian DEVE restare unlayered per battere app.css. Gli override Cosmos
+# contro la base tornano a vincere con !important mirati (documentati inline).
+# Qui facciamo solo UNWRAP di un eventuale wrap residuo di quel tentativo.
 line = base[0]
 if line.startswith('@layer baseline{'):
     line = line[len('@layer baseline{'):]
     if line.endswith('}'):  line = line[:-1]
     if line.endswith('*/'): line = line[:-2]
-if line.count('/*') > line.count('*/'):
-    line += '*/'                          # chiude il commento pendente
-base[0] = '@layer baseline{' + line + '}'
-# NB (tentato e ritirato 2026-07-10): NON wrappare anche la regione leggibile
-# (righe 2..cut). Contiene il sistema di variabili input-style di Baseline
-# (--radius-s & co.) che DEVE restare unlayered per battere i default di
-# app.css (unlayered vince su layered → layerarla dimezzava tutti i radius).
-# Le sue poche regole che collidono con Cosmos (es. gradiente icone settings)
-# si vincono per specificità, caso per caso.
+base[0] = line
 rest = base[1:]
-while rest and rest[0].strip() == '@layer baseline{' : rest = rest[1:]      # unwrap del tentativo
+while rest and rest[0].strip() == '@layer baseline{' : rest = rest[1:]
 while rest and rest[-1].strip() == '} /* end @layer baseline */' : rest = rest[:-1]
 base = [base[0]] + rest
 parts = base + ['']

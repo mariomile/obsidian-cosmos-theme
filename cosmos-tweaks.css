@@ -54,7 +54,7 @@ body.cosmos-left-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
    ridondante (ogni pannello ha già il suo outline) e stona. La togliamo (la
    maniglia resta funzionale per il resize, sparisce solo il bordo). 2026-07-09. */
 body:not(.is-phone) .workspace-split.mod-sidedock .workspace-leaf-resize-handle {
-  border: none;
+  border: none !important;   /* beats: border del divider Baseline (selettore più specifico) */
 }
 
 /* ==========================================================================

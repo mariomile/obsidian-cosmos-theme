@@ -28,8 +28,8 @@
    ========================================================================== */
 
 .workspace-split.mod-root .workspace-tab-header {
-  min-width: 130px;
-  flex-shrink: 0;
+  min-width: 130px !important;   /* beats: base flex 1 1 0 / min-width 0 sui tab */
+  flex-shrink: 0 !important;
 }
 
 /* Scroll attivo ma scrollbar nascosta (trackpad / shift+rotella funzionano) */
@@ -82,10 +82,10 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
   /* Concentricità by-construction: raggio barra = pill + inset (cosmos-tokens).
-     Vince su Baseline via @layer (base layered, Cosmos unlayered) — niente
-     !important (refactor 2026-07-10). */
-  border-radius: var(--cosmos-r-tabbar);
-  padding: var(--cosmos-tab-inset);
+     !important: nelle sidebar la base setta radius/padding con selettore più
+     specifico (il tentativo @layer è stato ritirato — vedi build.sh). */
+  border-radius: var(--cosmos-r-tabbar) !important;
+  padding: var(--cosmos-tab-inset) !important;
   width: fit-content;
   max-width: 100%;
   align-self: center;
@@ -103,7 +103,8 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 /* --- Geometria: radius morbido + lift animato su ogni tab floating -------- */
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked) .workspace-tab-header {
-  border-radius: var(--cosmos-r-pill);
+  /* !important: in sidebar la base setta 8px con selettore più specifico */
+  border-radius: var(--cosmos-r-pill) !important;
   transition:
     background-color var(--anim-duration-fast) var(--anim-motion-baseline, ease),
     box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease);
@@ -142,7 +143,7 @@ body.theme-dark:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layo
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header.is-active {
-  background-color: var(--craft-tab-active);
+  background-color: var(--craft-tab-active) !important;  /* beats: hard-set base per-selettore */
   box-shadow: var(--shadow-tactile);
 }
 
@@ -150,8 +151,8 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header:not(.is-active) {
-  opacity: 1;
-  background-color: transparent;
+  opacity: 1 !important;                    /* beats: ghost opacity .5 della base */
+  background-color: transparent !important;
 }
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
@@ -163,7 +164,7 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header:not(.is-active):hover {
-  background-color: var(--background-modifier-hover);
+  background-color: var(--background-modifier-hover) !important;
 }
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
@@ -224,7 +225,7 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-
    ========================================================================== */
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light),
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-container {
-  background-color: var(--background-primary);
+  background-color: var(--background-primary) !important;  /* copre la vibrancy anche con translucency: true */
 }
 
 
