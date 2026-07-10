@@ -26,6 +26,18 @@
       "name": "scala superfici viva su phone",
       "resolveVar": "--cosmos-surface-1",
       "expected": "rgb(23, 23, 23)"
+    },
+    {
+      "name": "one-thumb: nav row ≥44pt su phone",
+      "selector": ".nav-file-title",
+      "property": "min-height",
+      "expected": "44px"
+    },
+    {
+      "name": "one-thumb: menu item ≥44pt su phone",
+      "selector": ".menu-item",
+      "property": "min-height",
+      "expected": "44px"
     }
   ]
 }

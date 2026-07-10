@@ -35,13 +35,32 @@ body:not(.is-mobile) .workspace-ribbon.mod-left .side-dock-actions {
     color var(--cosmos-t-fast) var(--mv-lift);
 }
 /* Wash esplicito: un tint accent-neutro morbido, così l'hover si sente anche
-   sul canvas scuro dove --background-modifier-hover è quasi invisibile. */
-.nav-file-title:hover,
-.nav-folder-title:hover,
-.tree-item-self:hover,
-.search-result-file-title:hover,
-.suggestion-item:hover {
-  background-color: color-mix(in srgb, var(--text-normal) 6%, transparent);
+   sul canvas scuro dove --background-modifier-hover è quasi invisibile.
+   Gated su (hover: hover): su touch il :hover diventa STICKY dopo il tap
+   (la riga resta evidenziata) — su phone il feedback è il tap stesso. */
+@media (hover: hover) {
+  .nav-file-title:hover,
+  .nav-folder-title:hover,
+  .tree-item-self:hover,
+  .search-result-file-title:hover,
+  .suggestion-item:hover {
+    background-color: color-mix(in srgb, var(--text-normal) 6%, transparent);
+  }
+}
+
+/* ==========================================================================
+   § ONE-THUMB (mobile #2 slice 2, 2026-07-10) — target 44pt su phone
+   --------------------------------------------------------------------------
+   Apple HIG: minimo 44pt per i target touch. Su is-phone le righe interattive
+   che Cosmos stila salgono a --cosmos-touch-min (solo min-height: possono
+   solo CRESCERE, mai stringersi — zero rischio di rottura layout). */
+body.is-phone .nav-file-title,
+body.is-phone .nav-folder-title,
+body.is-phone .tree-item-self,
+body.is-phone .suggestion-item,
+body.is-phone .menu-item {
+  min-height: var(--cosmos-touch-min);
+  align-items: center;
 }
 
 /* --- Selezione col PESO (Tier 1c, 2026-07-10) -------------------------------
