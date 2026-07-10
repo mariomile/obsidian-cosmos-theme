@@ -583,6 +583,21 @@ settings:
 			-
 				label: New Craft
 				value: input-cupertino
+			-
+				label: Elevated
+				value: input-material
+			-
+				label: Frosted
+				value: input-fluent
+			-
+				label: Flat
+				value: input-adwaita
+			-
+				label: Tactile
+				value: input-tactile
+			-
+				label: Plain
+				value: input-baseline
 	-
 		id: status-bar-style
 		title: Status bar
@@ -593,6 +608,15 @@ settings:
 			-
 				label: New Craft
 				value: status-bar-cupertino
+			-
+				label: Native
+				value: status-bar-default
+			-
+				label: Full width
+				value: status-bar-full
+			-
+				label: Plain
+				value: status-bar-baseline
 	-
 		id: cosmos-hide-status-bar
 		title: Nascondi status bar
