@@ -73,3 +73,33 @@ body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
   margin-left: var(--island-gap, 8px);
   margin-right: var(--island-gap, 8px);
 }
+
+/* ============================ ISOLA SINISTRA ================================
+   Mirror esatto dell'isola destra su `.mod-left-split`. ON di default (simmetrica
+   alla destra). Disattivabile col toggle Style Settings `cosmos-left-island-off`
+   (reset in cosmos-tweaks.css, come per la destra). 2026-07-09. */
+body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+  .workspace-split.mod-left-split .workspace-tab-container {
+  --island-gap: 8px;
+  margin: 0 var(--island-gap) var(--island-gap);
+  border-radius: var(--tab-radius);
+  outline: var(--tab-outline-width) solid var(--tab-outline-color);
+  overflow: hidden;
+}
+body.layout-cupertino:not(.is-phone).theme-light
+  .workspace-split.mod-left-split .workspace-tab-container,
+body.layout-fusion:not(.is-phone).theme-light
+  .workspace-split.mod-left-split .workspace-tab-container {
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 24px 48px, rgba(0, 0, 0, 0.02) 0px 4px 16px;
+}
+body.layout-cupertino:not(.is-phone).theme-dark
+  .workspace-split.mod-left-split .workspace-tab-container,
+body.layout-fusion:not(.is-phone).theme-dark
+  .workspace-split.mod-left-split .workspace-tab-container {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 24px 48px, rgba(0, 0, 0, 0.12) 0px 4px 16px;
+}
+body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+  .workspace-split.mod-left-split .workspace-tab-header-container {
+  margin-left: var(--island-gap, 8px);
+  margin-right: var(--island-gap, 8px);
+}

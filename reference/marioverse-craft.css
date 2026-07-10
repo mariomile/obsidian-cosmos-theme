@@ -9,7 +9,7 @@
    Tutto ciò che Baseline offre come toggle nativo va impostato lì, non qui.
 
    SCOPE (2026-07-02, dopo passo indietro): SOLO i tab. Il warm-tint della
-   palette è stato rimosso intenzionalmente — il colore torna al Cupertino
+   palette è stato rimosso su richiesta di Mario — il colore torna al Cupertino
    neutro di Baseline. Se in futuro si vuole il paper caldo, valutare un color
    scheme nativo (es. Flexoki) via Style Settings invece di CSS.
 
@@ -32,14 +32,14 @@
    ========================================================================== */
 
 /* --- Tab bar compatta (2026-07-05) -----------------------------------------
-   Niente background sempre visibile: resta solo la
+   Niente background sempre visibile (bocciato da Mario 05-07): resta solo la
    geometria — barra aderente ai tab, centrata, pill inset uniforme 4px. */
 body:is(.tab-floating, .tab-floating-center):not(.is-phone)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
   /* !important: nelle sidebar Baseline setta 8px/padding con selettore più specifico */
-  border-radius: 14px !important;   /* concentrico: pill 10px + 4px di padding */
-  padding: 4px !important;
+  border-radius: 10px !important;   /* concentrico: pill 8px + 2px di padding */
+  padding: 2px !important;
   width: fit-content;
   max-width: 100%;
   align-self: center;
@@ -58,31 +58,37 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone)
 body:is(.tab-floating, .tab-floating-center):not(.is-phone)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked) .workspace-tab-header {
   /* !important: in sidebar Baseline setta 8px con selettore più specifico */
-  border-radius: 10px !important;   /* Baseline in floating è più squadrato */
+  border-radius: 8px !important;   /* Baseline in floating è più squadrato */
   transition:
     background-color var(--anim-duration-fast) var(--anim-motion-baseline, ease),
     box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease);
 }
 
-/* --- Gap più arioso tra i tab -------------------------------------------- */
+/* --- Gap compatto tra i tab (2026-07-09: stretto per avvicinare a Baseline) - */
 body:is(.tab-floating, .tab-floating-center):not(.is-phone)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
-  gap: 6px;
+  gap: 4px;
 }
 
 /* --- Tab attivo = document card: paper + soft lift -----------------------
    !important OBBLIGATORIO: in floating Baseline hard-setta background-color su
    OGNI tab (--background-modifier-hover) via selettore, non via variabile —
    quindi --tab-background-active NON basta, serve battere il valore diretto.
-   In dark il paper (#141414) è invisibile sul canvas identico (skin darker):
-   il pill attivo usa la superficie elevata #242424 (2026-07-05, DOM-verificato
-   — editor e sidebar avevano pill #141414 su #141414). */
+   In dark il paper è invisibile sul canvas identico (skin darker): il pill
+   attivo usa una superficie elevata (2026-07-05, DOM-verificato — editor e
+   sidebar avevano pill #141414 su #141414).
+   FIX 2026-07-08: l'8% white era un valore fisso (#242424), tarato solo sul
+   canvas darker (#141414 → delta +16, visibile). Col toggle "Cupertino Light"
+   (cosmos-light) il canvas torna al grigio nativo Baseline (~#1e1e1e = 30),
+   e #242424 (36) ci finiva a soli +6 → pill attivo invisibile. Un color-mix
+   relativo al --background-primary corrente ricalcola sempre un delta pieno,
+   qualunque sia il canvas (darker o cosmos-light). */
 body:is(.tab-floating, .tab-floating-center):not(.is-phone) {
   --craft-tab-active: var(--background-primary);
 }
 body.theme-dark:is(.tab-floating, .tab-floating-center):not(.is-phone) {
-  --craft-tab-active: #242424;
+  --craft-tab-active: color-mix(in srgb, var(--background-primary), white 8%);
 }
 body:is(.tab-floating, .tab-floating-center):not(.is-phone)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
