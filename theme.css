@@ -3896,6 +3896,19 @@ body.cosmos-left-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
   margin-right: 0;
 }
 
+/* --- Sidebar collapse più secca (2026-07-10) --------------------------------
+   Baseline anima l'apri/chiudi delle sidebar sulla WIDTH (`.workspace-split`,
+   `transition: all var(--anim-duration-moderate)` = 320ms). Animare la width
+   forza un relayout a ogni frame → slide poco fluido ("scattoso"), amplificato
+   dall'isola che riclippa il contenuto. Non possiamo evitare il relayout
+   (è come Obsidian muove le sidebar), ma accorciare la durata riduce la
+   finestra in cui si vede il jank → sensazione più immediata. Reduced-motion
+   la azzera (il token è a 0 sotto prefers-reduced-motion). Selettore a
+   specificità superiore a quello base (`+.mod-sidedock`). */
+body:not(.is-mobile) .workspace-split.mod-sidedock {
+  transition-duration: var(--cosmos-t-base);
+}
+
 /* --- Sidebar: via la linea divisore tra pannelli impilati -------------------
    Con più leaf impilati in una sidebar, Baseline mette un border sul
    `.workspace-leaf-resize-handle` → una riga tra i pannelli. Con le island è
