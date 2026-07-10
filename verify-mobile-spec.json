@@ -38,6 +38,13 @@
       "selector": ".menu-item",
       "property": "min-height",
       "expected": "44px"
+    },
+    {
+      "name": "press-scale flip: token vivo su phone (:active tab)",
+      "comment": "Slice 3: il gate press-scale è stato flippato → il tab reagisce al tap anche su phone. Chromium non triggera :active da script, ma il payload del gate (--cosmos-press-scale) DEVE risolvere su phone. Sign-off del tap reale su iPhone.",
+      "selector": "body",
+      "property": "--cosmos-press-scale",
+      "expected": "0.98"
     }
   ]
 }
