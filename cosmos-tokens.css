@@ -123,6 +123,10 @@ body.theme-light {
 
 /* --------------------------------------------------------------------------
    § Superfici dark — scala a step da UN seed (gate identico al layer darker).
+   2026-07-10: estesa anche a MOBILE (prima :not(.is-mobile)): l'identità
+   Cosmos (canvas #141414 + elevazioni) ora esiste su iPhone. Il #000 puro
+   di cupertino-dark mobile è battuto per specificità. OLED-black: eventuale
+   toggle futuro.
    Percentuali srgb tarate per riprodurre gli hex storici al pixel:
      surface-0  #141414  rgb(20)  — canvas/editor        (seed)
      surface-1  #171717  rgb(23)  — sidebar + pannelli   (+3  → 1.2766%)
@@ -132,7 +136,7 @@ body.theme-light {
    cosmos-layer: è RELATIVO al canvas corrente per funzionare anche con
    "Superfici chiare" (cosmos-light), dove questa scala è spenta.
    -------------------------------------------------------------------------- */
-body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) {
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --cosmos-surface-0: #141414;
   --cosmos-surface-1: color-mix(in srgb, var(--cosmos-surface-0), white 1.2766%);
   --cosmos-surface-2: color-mix(in srgb, var(--cosmos-surface-0), white 2.5532%);

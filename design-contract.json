@@ -30,7 +30,7 @@
   ],
   "duplicate_prop_allowlist_comment": "craft-tab-active & island-shadow: theme-branch override; cosmos-t-*: azzerati nel media query reduced-motion; mv-pill-color: 9 varianti colore.",
   "outline_none_requires_comment": true,
-  "mobile_excluding_gates_max": 33,
+  "mobile_excluding_gates_max": 25,
   "mobile_excluding_gates_comment": "Gate :not(.is-phone)/:not(.is-mobile) nei 4 layer. Può solo SCENDERE (polarity flip in corso: ogni slice additiva ne rimuove).",
   "raw_100vh_max": 0
 }

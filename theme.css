@@ -3295,6 +3295,10 @@ body.theme-light {
 
 /* --------------------------------------------------------------------------
    § Superfici dark — scala a step da UN seed (gate identico al layer darker).
+   2026-07-10: estesa anche a MOBILE (prima :not(.is-mobile)): l'identità
+   Cosmos (canvas #141414 + elevazioni) ora esiste su iPhone. Il #000 puro
+   di cupertino-dark mobile è battuto per specificità. OLED-black: eventuale
+   toggle futuro.
    Percentuali srgb tarate per riprodurre gli hex storici al pixel:
      surface-0  #141414  rgb(20)  — canvas/editor        (seed)
      surface-1  #171717  rgb(23)  — sidebar + pannelli   (+3  → 1.2766%)
@@ -3304,7 +3308,7 @@ body.theme-light {
    cosmos-layer: è RELATIVO al canvas corrente per funzionare anche con
    "Superfici chiare" (cosmos-light), dove questa scala è spenta.
    -------------------------------------------------------------------------- */
-body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) {
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --cosmos-surface-0: #141414;
   --cosmos-surface-1: color-mix(in srgb, var(--cosmos-surface-0), white 1.2766%);
   --cosmos-surface-2: color-mix(in srgb, var(--cosmos-surface-0), white 2.5532%);
@@ -3536,7 +3540,7 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 /* Valori dalla scala --cosmos-surface-* (cosmos-tokens.css): un seed, step
    derivati. La migrazione è pixel-neutra: gli step riproducono gli hex storici
    (#141414 / #171717 / #1a1a1a / #1e1e1e). */
-body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) {
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --background-primary:       var(--cosmos-surface-0);   /* editor/canvas */
   --background-secondary:     var(--cosmos-surface-1);   /* sidebar + pannelli */
   --background-primary-alt:   var(--cosmos-surface-2);   /* superfici elevate leggere */
@@ -3915,23 +3919,23 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
    Gate identico al darker (in light/cosmos-light Baseline è già coerente). */
 
 /* Menu contestuali — via variabile: Style Settings può ancora sovrascrivere. */
-body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) {
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --menu-background: var(--cosmos-surface-2);
 }
 
 /* Modal, prompt (quick switcher), suggestion popover, hover popover —
    element-level: la base pinna --modal-background con important layered,
    quindi la variabile non basta. */
-body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .modal,
-body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .prompt,
-body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .suggestion-container,
-body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .popover.hover-popover {
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .modal,
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .prompt,
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .suggestion-container,
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .popover.hover-popover {
   background-color: var(--cosmos-surface-2);
   box-shadow: var(--cosmos-pop-shadow);
 }
 
 /* Tooltip — piccolo e transiente: uno step più su per leggibilità. */
-body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .tooltip {
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .tooltip {
   background-color: var(--cosmos-surface-3);
   color: var(--text-normal);
   box-shadow: var(--cosmos-pop-shadow);

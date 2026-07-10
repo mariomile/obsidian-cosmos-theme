@@ -11,6 +11,21 @@
       "selector": "body",
       "property": "--cosmos-touch-min",
       "expected": "44px"
+    },
+    {
+      "name": "canvas Cosmos su phone (surface-0)",
+      "resolveVar": "--background-primary",
+      "expected": "rgb(20, 20, 20)"
+    },
+    {
+      "name": "menu elevato su phone (surface-2)",
+      "resolveVar": "--menu-background",
+      "expected": "rgb(26, 26, 26)"
+    },
+    {
+      "name": "scala superfici viva su phone",
+      "resolveVar": "--cosmos-surface-1",
+      "expected": "rgb(23, 23, 23)"
     }
   ]
 }
