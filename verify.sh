@@ -24,6 +24,18 @@ JS=$(cat <<JS
   const results = spec.map(a=>{
     if(a.skipIfBodyClass && document.body.classList.contains(a.skipIfBodyClass))
       return {name:a.name, status:"SKIP", note:"toggle "+a.skipIfBodyClass+" active"};
+    if(a.ruleExists){
+      let found=false;
+      for(const sheet of document.styleSheets){
+        let rules; try{rules=sheet.cssRules}catch(e){continue;}
+        // NB: con il CSS nesting ogni CSSStyleRule ha cssRules (vuota ma truthy):
+        // testare selectorText SEMPRE, e ricorrere solo se la lista ha elementi.
+        const walk=(rs)=>{for(const r of rs){ if(r.selectorText && r.selectorText.includes(a.ruleExists)) found=true; if(r.cssRules && r.cssRules.length) walk(r.cssRules); }};
+        walk(rules);
+        if(found) break;
+      }
+      return found ? {name:a.name, status:"PASS"} : {name:a.name, status:"FAIL", expected:"rule "+a.ruleExists, actual:"not found in any stylesheet"};
+    }
     if(a.resolveVar){
       const actual = resolveVar(a.resolveVar);
       // Normalize the expected value through the SAME probe: the browser may

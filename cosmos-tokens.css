@@ -69,6 +69,15 @@ body {
   --mv-label-size: 0.7rem;
   --mv-label-weight: 600;
   --mv-label-track: 0.05em;
+
+  /* --- Interaction-state contract ------------------------------------------
+     Focus ring unico per TUTTE le superfici interattive stilate da Cosmos
+     (ricetta Tahoe: accent smorzato via color-mix). Outline, non box-shadow:
+     non collide mai con le shadow di stato (es. --shadow-tactile sul tab
+     attivo) e segue il border-radius. Press = micro-scale, quasi subliminale. */
+  --cosmos-focus-ring: 2px solid color-mix(in srgb, var(--interactive-accent) 55%, transparent);
+  --cosmos-focus-offset: 1px;
+  --cosmos-press-scale: 0.98;
 }
 
 /* Island shadow — variante light (più tenue del dark). */

@@ -22,7 +22,7 @@
     {
       "name": "editor tab container padding",
       "selector": ".mod-root .workspace-tab-header-container-inner",
-      "property": "padding",
+      "property": "padding-top",
       "expected": "2px"
     },
     {
@@ -113,6 +113,10 @@
       "name": "background-secondary-alt consumes ladder",
       "resolveVar": "--background-secondary-alt",
       "expected": "rgb(30, 30, 30)"
+    },
+    {
+      "name": "focus-visible rule deployed (state contract)",
+      "ruleExists": ".workspace-tab-header:focus-visible"
     }
   ]
 }

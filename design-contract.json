@@ -18,7 +18,7 @@
     "cosmos-islands.css": 0,
     "cosmos-tweaks.css": 0
   },
-  "focus_visible_min": 0,
+  "focus_visible_min": 3,
   "duplicate_prop_allowlist": [
     "--craft-tab-active",
     "--cosmos-island-shadow",

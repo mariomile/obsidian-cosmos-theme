@@ -3095,6 +3095,15 @@ body {
   --mv-label-size: 0.7rem;
   --mv-label-weight: 600;
   --mv-label-track: 0.05em;
+
+  /* --- Interaction-state contract ------------------------------------------
+     Focus ring unico per TUTTE le superfici interattive stilate da Cosmos
+     (ricetta Tahoe: accent smorzato via color-mix). Outline, non box-shadow:
+     non collide mai con le shadow di stato (es. --shadow-tactile sul tab
+     attivo) e segue il border-radius. Press = micro-scale, quasi subliminale. */
+  --cosmos-focus-ring: 2px solid color-mix(in srgb, var(--interactive-accent) 55%, transparent);
+  --cosmos-focus-offset: 1px;
+  --cosmos-press-scale: 0.98;
 }
 
 /* Island shadow — variante light (più tenue del dark). */
@@ -3809,7 +3818,7 @@ body:not(.is-phone) .workspace-split.mod-sidedock .workspace-tabs:not(.mod-stack
 body.cosmos-right-island-off .workspace-split.mod-right-split .workspace-tab-container {
   margin: 0 !important;
   border-radius: 0 !important;
-  outline: none !important;
+  outline: none !important;  /* hairline decorativa dell'isola, NON un focus ring */
   box-shadow: none !important;
 }
 body.cosmos-right-island-off .workspace-split.mod-right-split .workspace-tab-header-container {
@@ -3822,7 +3831,7 @@ body.cosmos-right-island-off .workspace-split.mod-right-split .workspace-tab-hea
 body.cosmos-left-island-off .workspace-split.mod-left-split .workspace-tab-container {
   margin: 0 !important;
   border-radius: 0 !important;
-  outline: none !important;
+  outline: none !important;  /* hairline decorativa dell'isola, NON un focus ring */
   box-shadow: none !important;
 }
 body.cosmos-left-island-off .workspace-split.mod-left-split .workspace-tab-header-container {
@@ -3837,6 +3846,30 @@ body.cosmos-left-island-off .workspace-split.mod-left-split .workspace-tab-heade
    maniglia resta funzionale per il resize, sparisce solo il bordo). 2026-07-09. */
 body:not(.is-phone) .workspace-split.mod-sidedock .workspace-leaf-resize-handle {
   border: none !important;
+}
+
+/* ==========================================================================
+   § STATE CONTRACT — focus-visible + press su ogni superficie interattiva
+   stilata da Cosmos (2026-07-10). Prima: :hover ×6, :focus-visible ×0 → per
+   un utente tastiera il tema era invisibile. Ricetta unica dai token
+   (--cosmos-focus-ring / --cosmos-press-scale); nuove superfici DEVONO
+   adottarla (contract.sh: floor sul conteggio :focus-visible).
+   ========================================================================== */
+
+/* Focus ring — tab pill (editor + sidebar) e toolbar Bases. */
+.workspace-tab-header:focus-visible,
+.bases-header .bases-toolbar-item:focus-visible,
+.bases-view .bases-cards-item:focus-visible {
+  outline: var(--cosmos-focus-ring);
+  outline-offset: var(--cosmos-focus-offset);
+}
+
+/* Press feedback — micro-scale alla Apple sul pill del tab. Solo transform
+   (composito). Il drag nativo usa transform INLINE → vince comunque sul
+   nostro scale: nessun conflitto col riordino dei tab. */
+body:not(.is-phone) .workspace-tab-header:active {
+  transform: scale(var(--cosmos-press-scale));
+  transition: transform var(--cosmos-t-fast) var(--mv-lift);
 }
 
 /* --- Menu impostazioni: icone piatte, niente quadratini colorati macOS -------
