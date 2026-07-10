@@ -2,9 +2,9 @@
   "comment": "Design-contract ratchet. Numbers may only go DOWN (or stay equal). contract.sh fails the build if any metric exceeds its ceiling. cosmos-tokens.css is the ONLY home for raw hex/ms values. Tighten ceilings as refactors land; never raise them without a written reason here.",
   "important_max": {
     "cosmos-tokens.css": 0,
-    "cosmos-layer.css": 14,
+    "cosmos-layer.css": 0,
     "cosmos-islands.css": 0,
-    "cosmos-tweaks.css": 21
+    "cosmos-tweaks.css": 0
   },
   "raw_hex_max": {
     "comment": "Raw color hexes outside cosmos-tokens.css (comments stripped). Tokenized 2026-07-10.",

@@ -15,6 +15,11 @@ SPEC=$(jq -c '.assertions' verify-spec.json)
 JS=$(cat <<JS
 (()=>{
   const spec = ${SPEC};
+  // Gotcha Obsidian: su pane non-painting le CSSTransition restano "running"
+  // congelate al valore di partenza → getComputedStyle riporta il valore
+  // animato, non lo steady-state del CSS. Chiudiamo tutte le animazioni
+  // prima di misurare (finish() lancia sulle infinite → try/catch).
+  document.getAnimations().forEach(a=>{ try{ a.finish(); }catch(e){} });
   // Probe: resolve a custom property to a concrete color (color-mix & var
   // chains resolve only when applied to a real property, not on the raw var).
   const probe = document.createElement("div");

@@ -16,6 +16,25 @@ i = next(k for k,l in enumerate(lines) if 'COSMOS TOKENS' in l or 'COSMOS LAYER'
 cut = i-1                                    # the '/* ===' opener line
 while cut>0 and lines[cut-1].strip()=='' : cut-=1   # trim blank lines before it
 base = lines[:cut]
+# --- @layer wrap (2026-07-10, idea #7) --------------------------------------
+# The minified Baseline base (line 1) is wrapped in `@layer baseline { ... }`.
+# The Cosmos layers stay UNLAYERED: unlayered author styles beat layered ones
+# regardless of selector specificity, so Cosmos declarations win without
+# !important. (Checked: none of the base's own 81 !important collide with
+# Cosmos fights.) User snippets — also unlayered, loaded later — beat both.
+# Idempotente: prima UNWRAP di un eventuale wrap precedente, poi re-wrap.
+# GOTCHA (scoperto live 2026-07-10): la base minificata termina con un
+# commento PENDENTE (`/*!`). Senza chiuderlo, la `}` del layer viene
+# inghiottita dal commento → il blocco @layer resta aperto → TUTTI i layer
+# Cosmos finiscono layered dentro `baseline` e perdono la cascade war.
+line = base[0]
+if line.startswith('@layer baseline{'):
+    line = line[len('@layer baseline{'):]
+    if line.endswith('}'):  line = line[:-1]
+    if line.endswith('*/'): line = line[:-2]
+if line.count('/*') > line.count('*/'):
+    line += '*/'                          # chiude il commento pendente
+base[0] = '@layer baseline{' + line + '}'
 parts = base + ['']
 LAYERS = ['cosmos-tokens.css','cosmos-layer.css','cosmos-islands.css','cosmos-tweaks.css']
 used = [fn for fn in LAYERS if os.path.exists(fn)]

@@ -15,48 +15,37 @@ body:not(.is-mobile) .workspace-ribbon.mod-left .side-dock-actions {
   align-items: center;
 }
 
-/* --- Sidebar tab bar: gap 0 (icone attaccate, come Baseline+snippet) --------
-   Lo skin pill di craft targetta `:is(.mod-root, .mod-sidedock)` e quindi aggiunge
-   gap tra i tab ANCHE in sidebar. Nel setup live (Baseline + snippet caricati come
-   sheet separati) quella regola non raggiunge la sidebar → gap 0. In Cosmos gli
-   stessi stili sono baked in theme.css e il gap ci finisce → icone più distanti.
-   Riallineiamo: solo in sidebar azzeriamo il gap (l'editor tiene il suo).
-   !important come nel resto di craft (Baseline setta la sidebar con selettore
-   più specifico). 2026-07-09. */
+/* --- Sidebar tab bar: icone attaccate (gap 0) -------------------------------
+   Decisione di design (2026-07-09): nelle sidebar le icone stanno attaccate;
+   il gap arioso è solo dell'editor (craft, scoped .mod-root). Baseline dà
+   3px alle icon-bar compatte: da unlayered vinciamo senza !important
+   (2026-07-10, refactor @layer). */
 body:not(.is-phone) .workspace-split.mod-sidedock .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
-  gap: 0 !important;
+  gap: 0;
 }
 
-/* --- Toggle: "Hide right sidebar island" (Style Settings: cosmos-right-island-off)
-   L'island destra vive in cosmos-islands.css, che è GENERATO dallo snippet
-   marioverse-sidebar-island via sync-snippets → non si può gate lì (verrebbe
-   sovrascritto). Qui (layer repo-owned, applicato dopo islands) la annulliamo
-   quando il toggle è attivo: la sidebar destra torna flush come nei layout non
-   cupertino. !important per battere le regole island (che non usano !important).
-   2026-07-09. */
-body.cosmos-right-island-off .workspace-split.mod-right-split .workspace-tab-container {
-  margin: 0 !important;
-  border-radius: 0 !important;
-  outline: none !important;  /* hairline decorativa dell'isola, NON un focus ring */
-  box-shadow: none !important;
+/* --- Toggle: "Hide right/left sidebar island" (Style Settings:
+   cosmos-right-island-off / cosmos-left-island-off)
+   Annullano la ricetta island di cosmos-islands.css → sidebar flush come nei
+   layout non-cupertino. Il selettore SPECCHIA quello delle regole island
+   (stesso gate layout + classe toggle in più) → vince per specificità e
+   ordine, senza !important — vietato dal refactor @layer (2026-07-10). */
+body.cosmos-right-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+  .workspace-split.mod-right-split .workspace-tab-container,
+body.cosmos-left-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+  .workspace-split.mod-left-split .workspace-tab-container {
+  margin: 0;
+  border-radius: 0;
+  outline: none;  /* hairline decorativa dell'isola, NON un focus ring */
+  box-shadow: none;
 }
-body.cosmos-right-island-off .workspace-split.mod-right-split .workspace-tab-header-container {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-/* --- Toggle: "Hide left sidebar island" (Style Settings: cosmos-left-island-off)
-   Mirror del reset destro. Spegne l'isola sinistra → sidebar sinistra flush. */
-body.cosmos-left-island-off .workspace-split.mod-left-split .workspace-tab-container {
-  margin: 0 !important;
-  border-radius: 0 !important;
-  outline: none !important;  /* hairline decorativa dell'isola, NON un focus ring */
-  box-shadow: none !important;
-}
-body.cosmos-left-island-off .workspace-split.mod-left-split .workspace-tab-header-container {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+body.cosmos-right-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+  .workspace-split.mod-right-split .workspace-tab-header-container,
+body.cosmos-left-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+  .workspace-split.mod-left-split .workspace-tab-header-container {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* --- Sidebar: via la linea divisore tra pannelli impilati -------------------
@@ -65,7 +54,7 @@ body.cosmos-left-island-off .workspace-split.mod-left-split .workspace-tab-heade
    ridondante (ogni pannello ha già il suo outline) e stona. La togliamo (la
    maniglia resta funzionale per il resize, sparisce solo il bordo). 2026-07-09. */
 body:not(.is-phone) .workspace-split.mod-sidedock .workspace-leaf-resize-handle {
-  border: none !important;
+  border: none;
 }
 
 /* ==========================================================================
@@ -98,11 +87,11 @@ body:not(.is-phone) .workspace-tab-header:active {
    Cosmos le vuole piatte: via box/shadow, il glifo torna monocromo e segue il
    colore del testo della voce (come nei temi non-cupertino). 2026-07-09. */
 .modal.mod-settings .vertical-tab-nav-item .vertical-tab-nav-item-icon {
-  background: none !important;
-  box-shadow: none !important;
-  color: inherit !important;
+  background: none;
+  box-shadow: none;
+  color: inherit;
 }
 .modal.mod-settings .vertical-tab-nav-item .vertical-tab-nav-item-icon svg {
-  color: inherit !important;
-  stroke: currentColor !important;
+  color: inherit;
+  stroke: currentColor;
 }

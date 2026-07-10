@@ -28,8 +28,8 @@
    ========================================================================== */
 
 .workspace-split.mod-root .workspace-tab-header {
-  min-width: 130px !important;
-  flex-shrink: 0 !important;
+  min-width: 130px;
+  flex-shrink: 0;
 }
 
 /* Scroll attivo ma scrollbar nascosta (trackpad / shift+rotella funzionano) */
@@ -57,7 +57,7 @@
    neutro di Baseline. Se in futuro si vuole il paper caldo, valutare un color
    scheme nativo (es. Flexoki) via Style Settings invece di CSS.
 
-   TECNICA: selettore + !important dove serve. In floating Baseline hard-setta
+   TECNICA: selettore + dove serve. In floating Baseline hard-setta
    background-color e opacity dei tab via SELETTORE (non via variabile), quindi
    il chip paper e il kill-ghost devono batterlo con un selettore — le var
    (--tab-background-active ecc.) valgono solo nella modalità tab default.
@@ -81,10 +81,11 @@
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
-  /* !important: nelle sidebar Baseline setta 8px/padding con selettore più specifico.
-     Concentricità by-construction: raggio barra = pill + inset (cosmos-tokens). */
-  border-radius: var(--cosmos-r-tabbar) !important;
-  padding: var(--cosmos-tab-inset) !important;
+  /* Concentricità by-construction: raggio barra = pill + inset (cosmos-tokens).
+     Vince su Baseline via @layer (base layered, Cosmos unlayered) — niente
+     !important (refactor 2026-07-10). */
+  border-radius: var(--cosmos-r-tabbar);
+  padding: var(--cosmos-tab-inset);
   width: fit-content;
   max-width: 100%;
   align-self: center;
@@ -102,24 +103,27 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 /* --- Geometria: radius morbido + lift animato su ogni tab floating -------- */
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked) .workspace-tab-header {
-  /* !important: in sidebar Baseline setta 8px con selettore più specifico */
-  border-radius: var(--cosmos-r-pill) !important;
+  border-radius: var(--cosmos-r-pill);
   transition:
     background-color var(--anim-duration-fast) var(--anim-motion-baseline, ease),
     box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease);
 }
 
-/* --- Gap compatto tra i tab (2026-07-09: stretto per avvicinare a Baseline) - */
+/* --- Gap compatto tra i tab — SOLO editor (2026-07-10: la sidebar vuole le
+   icone attaccate, gap 0; prima lo scope includeva .mod-sidedock e serviva un
+   contro-override in cosmos-tweaks — ora lo scope è giusto alla
+   fonte e il contro-override è stato eliminato). */
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
-  .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
+  .workspace-split.mod-root .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
   gap: var(--cosmos-gap-1);
 }
 
 /* --- Tab attivo = document card: paper + soft lift -----------------------
-   !important OBBLIGATORIO: in floating Baseline hard-setta background-color su
-   OGNI tab (--background-modifier-hover) via selettore, non via variabile —
-   quindi --tab-background-active NON basta, serve battere il valore diretto.
+   In floating Baseline hard-setta background-color su OGNI tab
+   (--background-modifier-hover) via selettore, non via variabile — quindi
+   --tab-background-active NON basta: va battuto il valore diretto (oggi via
+   @layer: la base è layered, Cosmos unlayered vince senza !important).
    In dark il paper è invisibile sul canvas identico (skin darker): il pill
    attivo usa una superficie elevata (2026-07-05, DOM-verificato — editor e
    sidebar avevano pill #141414 su #141414).
@@ -138,7 +142,7 @@ body.theme-dark:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layo
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header.is-active {
-  background-color: var(--craft-tab-active) !important;
+  background-color: var(--craft-tab-active);
   box-shadow: var(--shadow-tactile);
 }
 
@@ -146,8 +150,8 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header:not(.is-active) {
-  opacity: 1 !important;
-  background-color: transparent !important;
+  opacity: 1;
+  background-color: transparent;
 }
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
@@ -159,7 +163,7 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header:not(.is-active):hover {
-  background-color: var(--background-modifier-hover) !important;
+  background-color: var(--background-modifier-hover);
 }
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
@@ -220,7 +224,7 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-
    ========================================================================== */
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light),
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-container {
-  background-color: var(--background-primary) !important;
+  background-color: var(--background-primary);
 }
 
 
