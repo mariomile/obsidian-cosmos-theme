@@ -136,6 +136,24 @@ body:not(.is-phone) .workspace-tab-header:active {
 }
 
 /* ==========================================================================
+   § TITOLI/HEADING SANS DI DEFAULT (2026-07-10)
+   --------------------------------------------------------------------------
+   Baseline mette titoli inline e heading in "Instrument Serif". Finché c'era
+   l'override font (Inter) restava mascherato; togliendolo per SF Pro il serif
+   riemergeva. Cosmos vuole titoli SANS di default (coerenti col corpo SF Pro).
+   Il serif resta un'opzione: toggle "Serif headings (New York)". Specificità
+   .theme-dark/.theme-light per battere il default della base. ========================================================================== */
+body.theme-dark, body.theme-light {
+  --inline-title-font: var(--font-text);
+  --h1-font: var(--font-text);
+  --h2-font: var(--font-text);
+  --h3-font: var(--font-text);
+  --h4-font: var(--font-text);
+  --h5-font: var(--font-text);
+  --h6-font: var(--font-text);
+}
+
+/* ==========================================================================
    § RAGGI GENEROSI (Tier 3, toggle Style Settings: cosmos-generous-radii)
    --------------------------------------------------------------------------
    Craft arrotonda generosamente i contenitori. Alziamo la SCALA base dei
