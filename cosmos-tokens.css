@@ -1,0 +1,112 @@
+
+/* ==========================================================================
+   ███  COSMOS TOKENS — layer zero  ███
+   Unica casa dei design token di Cosmos (2026-07-10, refactor pixel-perfect).
+   Gli altri layer (cosmos-layer / cosmos-islands / cosmos-tweaks) CONSUMANO
+   questi token e non definiscono valori raw: hex, durate ms e radii numerici
+   fuori da questo file sono violazioni del design contract (contract.sh).
+
+   Regole del sistema:
+   · SUPERFICI — scala derivata da UN seed via color-mix in srgb (percentuali
+     tarate per riprodurre ESATTAMENTE gli hex storici: la migrazione è
+     pixel-neutra). Cambiare il seed ri-deriva l'intera scala.
+   · RADII — concentrici by-construction: raggio interno + inset = raggio
+     esterno, sempre via calc(), mai due numeri indipendenti.
+   · MOTION — tre durate; reduced-motion azzera i token (e il moltiplicatore
+     di Baseline), quindi ogni transizione futura è conforme by-construction.
+   ========================================================================== */
+
+body {
+  /* --- Motion scale ------------------------------------------------------
+     fast  = micro feedback (hover wash, colore)         — ex --mv-t 140ms
+     base  = lift fisico (card shadow, pill)             — ex 180ms raw
+     slow  = progress/estensioni                         — ex 260ms raw */
+  --cosmos-t-fast: 140ms;
+  --cosmos-t-base: 180ms;
+  --cosmos-t-slow: 260ms;
+
+  /* --- Radius geometry (concentrica) --------------------------------------
+     Il pill dei tab eredita il raggio tab di Baseline (8px di default);
+     la barra che lo contiene è SEMPRE pill + inset — mai un numero a sé. */
+  --cosmos-r-pill: var(--tab-radius, 8px);
+  --cosmos-tab-inset: 2px;
+  --cosmos-r-tabbar: calc(var(--cosmos-r-pill) + var(--cosmos-tab-inset));
+
+  /* --- Spacing rhythm (base 4) -------------------------------------------- */
+  --cosmos-gap-1: 4px;
+  --cosmos-gap-2: 8px;
+  /* Stacco delle isole dai bordi finestra — UNICA definizione (prima era
+     duplicata dentro le regole left/right di cosmos-islands). */
+  --island-gap: var(--cosmos-gap-2);
+
+  /* --- Island elevation (ricetta unica, 2 layer di shadow) ----------------
+     Consumata da cosmos-islands per entrambe le sidebar; il fork light/dark
+     vive QUI nel token, non in 4 regole copia-incollate. Dark = default. */
+  --cosmos-island-shadow:
+    rgba(0, 0, 0, 0.16) 0px 24px 48px,
+    rgba(0, 0, 0, 0.12) 0px 4px 16px;
+
+  /* --- Bases / suite marioverse (API cross-plugin: NON rinominare) ---------
+     I nomi --mv-* sono consumati anche da superbasetags (pill colorizer) e
+     dalle formule html() nei .base → contratto pubblico, valori allineati a
+     exo (--mva-r1/r2/r3 = 6/9/13) e masonry (card 11, chip 5). */
+  --mv-r1: 6px;                                    /* = exo --mva-r1 · chip/toolbar */
+  --mv-r-card: 11px;                               /* = --masonry-radius */
+  --mv-r-chip: 5px;                                /* = .masonry-tag-chip */
+
+  --mv-wash: cubic-bezier(0.25, 1, 0.5, 1);        /* = --masonry-ease · colore/bg */
+  --mv-lift: cubic-bezier(0.22, 1, 0.36, 1);       /* = exo --mva-ease-out · fisico */
+  --mv-t: var(--cosmos-t-fast);                    /* = exo --mva-t (0.14s) */
+
+  --mv-hairline: color-mix(in srgb, var(--text-muted) 14%, transparent);
+  --mv-card-bg: color-mix(in srgb, var(--background-primary) 92%, var(--background-secondary));
+  --mv-card-bg-hover: color-mix(in srgb, var(--background-primary) 82%, var(--background-secondary));
+  --mv-card-lift: 0 5px 16px color-mix(in srgb, var(--background-modifier-box-shadow) 18%, transparent);
+  --mv-ring: color-mix(in srgb, var(--interactive-accent) 16%, transparent);
+
+  /* Label recipe (eyebrow small-caps muto) — usata da header, card e group */
+  --mv-label-color: var(--text-muted);
+  --mv-label-size: 0.7rem;
+  --mv-label-weight: 600;
+  --mv-label-track: 0.05em;
+}
+
+/* Island shadow — variante light (più tenue del dark). */
+body.theme-light {
+  --cosmos-island-shadow:
+    rgba(0, 0, 0, 0.04) 0px 24px 48px,
+    rgba(0, 0, 0, 0.02) 0px 4px 16px;
+}
+
+/* --------------------------------------------------------------------------
+   § Superfici dark — scala a step da UN seed (gate identico al layer darker).
+   Percentuali srgb tarate per riprodurre gli hex storici al pixel:
+     surface-0  #141414  rgb(20)  — canvas/editor        (seed)
+     surface-1  #171717  rgb(23)  — sidebar + pannelli   (+3  → 1.2766%)
+     surface-2  #1a1a1a  rgb(26)  — superfici elevate    (+6  → 2.5532%)
+     surface-3  #1e1e1e  rgb(30)  — nav attivo / card    (+10 → 4.2553%)
+   Il pill tab attivo resta color-mix(--background-primary, white 8%) in
+   cosmos-layer: è RELATIVO al canvas corrente per funzionare anche con
+   "Superfici chiare" (cosmos-light), dove questa scala è spenta.
+   -------------------------------------------------------------------------- */
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) {
+  --cosmos-surface-0: #141414;
+  --cosmos-surface-1: color-mix(in srgb, var(--cosmos-surface-0), white 1.2766%);
+  --cosmos-surface-2: color-mix(in srgb, var(--cosmos-surface-0), white 2.5532%);
+  --cosmos-surface-3: color-mix(in srgb, var(--cosmos-surface-0), white 4.2553%);
+}
+
+/* --------------------------------------------------------------------------
+   § Reduced motion — al livello dei token, non per-selettore.
+   Azzerare le durate qui rende conforme OGNI transizione che le consuma,
+   incluse quelle future. --anim-speed-modifier: 0 propaga lo stesso principio
+   a tutte le durate native di Baseline (calc(Nms * modifier)).
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  body {
+    --cosmos-t-fast: 0ms;
+    --cosmos-t-base: 0ms;
+    --cosmos-t-slow: 0ms;
+    --anim-speed-modifier: 0;
+  }
+}

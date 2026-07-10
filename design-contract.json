@@ -1,5 +1,5 @@
 {
-  "comment": "Design-contract ratchet. Numbers may only go DOWN (or stay equal). contract.sh fails the build if any metric exceeds its ceiling. Tighten ceilings as refactors land; never raise them without a written reason here.",
+  "comment": "Design-contract ratchet. Numbers may only go DOWN (or stay equal). contract.sh fails the build if any metric exceeds its ceiling. cosmos-tokens.css is the ONLY home for raw hex/ms values. Tighten ceilings as refactors land; never raise them without a written reason here.",
   "important_max": {
     "cosmos-tokens.css": 0,
     "cosmos-layer.css": 14,
@@ -7,23 +7,26 @@
     "cosmos-tweaks.css": 21
   },
   "raw_hex_max": {
-    "comment": "Raw color hexes outside cosmos-tokens.css. Target: 0 everywhere once the tone ladder lands.",
-    "cosmos-layer.css": 16,
+    "comment": "Raw color hexes outside cosmos-tokens.css (comments stripped). Tokenized 2026-07-10.",
+    "cosmos-layer.css": 0,
     "cosmos-islands.css": 0,
     "cosmos-tweaks.css": 0
   },
   "raw_ms_max": {
-    "comment": "Hardcoded durations outside cosmos-tokens.css. Target: 0 once the motion scale lands.",
-    "cosmos-layer.css": 4,
+    "comment": "Hardcoded durations outside cosmos-tokens.css (comments stripped). Tokenized 2026-07-10.",
+    "cosmos-layer.css": 0,
     "cosmos-islands.css": 0,
     "cosmos-tweaks.css": 0
   },
   "focus_visible_min": 0,
   "duplicate_prop_allowlist": [
-    "--background-primary",
     "--craft-tab-active",
-    "--island-gap",
+    "--cosmos-island-shadow",
+    "--cosmos-t-fast",
+    "--cosmos-t-base",
+    "--cosmos-t-slow",
     "--mv-pill-color"
   ],
+  "duplicate_prop_allowlist_comment": "craft-tab-active & island-shadow: theme-branch override; cosmos-t-*: azzerati nel media query reduced-motion; mv-pill-color: 9 varianti colore.",
   "outline_none_requires_comment": true
 }

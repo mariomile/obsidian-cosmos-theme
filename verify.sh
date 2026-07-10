@@ -15,9 +15,31 @@ SPEC=$(jq -c '.assertions' verify-spec.json)
 JS=$(cat <<JS
 (()=>{
   const spec = ${SPEC};
+  // Probe: resolve a custom property to a concrete color (color-mix & var
+  // chains resolve only when applied to a real property, not on the raw var).
+  const probe = document.createElement("div");
+  probe.style.display = "none";
+  document.body.appendChild(probe);
+  const resolveVar = (v)=>{ probe.style.backgroundColor = "var(" + v + ")"; return getComputedStyle(probe).backgroundColor; };
   const results = spec.map(a=>{
     if(a.skipIfBodyClass && document.body.classList.contains(a.skipIfBodyClass))
       return {name:a.name, status:"SKIP", note:"toggle "+a.skipIfBodyClass+" active"};
+    if(a.resolveVar){
+      const actual = resolveVar(a.resolveVar);
+      // Normalize the expected value through the SAME probe: the browser may
+      // serialize color-mix results as color(srgb ...) instead of rgb(...).
+      probe.style.backgroundColor = "";
+      probe.style.backgroundColor = a.expected;
+      const expectedNorm = getComputedStyle(probe).backgroundColor;
+      const pass = actual === expectedNorm || actual === a.expected ||
+        (()=>{ // last resort: numeric compare via color(srgb r g b) / rgb(r,g,b)
+          const num = s => (s.match(/[\d.]+/g)||[]).map(Number).map(x=>x<=1?Math.round(x*255):Math.round(x)).slice(0,3).join(",");
+          return num(actual) === num(expectedNorm) && num(actual).length>0;
+        })();
+      return pass
+        ? {name:a.name, status:"PASS"}
+        : {name:a.name, status:"FAIL", expected:expectedNorm, actual};
+    }
     const el = document.querySelector(a.selector);
     if(!el) return {name:a.name, status:"SKIP", note:"selector not in DOM"};
     const cs = getComputedStyle(el);

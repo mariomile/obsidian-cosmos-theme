@@ -3026,6 +3026,119 @@ body.cosmos-hide-status-bar .status-bar {
 
 
 /* ==========================================================================
+   ███  COSMOS TOKENS — layer zero  ███
+   Unica casa dei design token di Cosmos (2026-07-10, refactor pixel-perfect).
+   Gli altri layer (cosmos-layer / cosmos-islands / cosmos-tweaks) CONSUMANO
+   questi token e non definiscono valori raw: hex, durate ms e radii numerici
+   fuori da questo file sono violazioni del design contract (contract.sh).
+
+   Regole del sistema:
+   · SUPERFICI — scala derivata da UN seed via color-mix in srgb (percentuali
+     tarate per riprodurre ESATTAMENTE gli hex storici: la migrazione è
+     pixel-neutra). Cambiare il seed ri-deriva l'intera scala.
+   · RADII — concentrici by-construction: raggio interno + inset = raggio
+     esterno, sempre via calc(), mai due numeri indipendenti.
+   · MOTION — tre durate; reduced-motion azzera i token (e il moltiplicatore
+     di Baseline), quindi ogni transizione futura è conforme by-construction.
+   ========================================================================== */
+
+body {
+  /* --- Motion scale ------------------------------------------------------
+     fast  = micro feedback (hover wash, colore)         — ex --mv-t 140ms
+     base  = lift fisico (card shadow, pill)             — ex 180ms raw
+     slow  = progress/estensioni                         — ex 260ms raw */
+  --cosmos-t-fast: 140ms;
+  --cosmos-t-base: 180ms;
+  --cosmos-t-slow: 260ms;
+
+  /* --- Radius geometry (concentrica) --------------------------------------
+     Il pill dei tab eredita il raggio tab di Baseline (8px di default);
+     la barra che lo contiene è SEMPRE pill + inset — mai un numero a sé. */
+  --cosmos-r-pill: var(--tab-radius, 8px);
+  --cosmos-tab-inset: 2px;
+  --cosmos-r-tabbar: calc(var(--cosmos-r-pill) + var(--cosmos-tab-inset));
+
+  /* --- Spacing rhythm (base 4) -------------------------------------------- */
+  --cosmos-gap-1: 4px;
+  --cosmos-gap-2: 8px;
+  /* Stacco delle isole dai bordi finestra — UNICA definizione (prima era
+     duplicata dentro le regole left/right di cosmos-islands). */
+  --island-gap: var(--cosmos-gap-2);
+
+  /* --- Island elevation (ricetta unica, 2 layer di shadow) ----------------
+     Consumata da cosmos-islands per entrambe le sidebar; il fork light/dark
+     vive QUI nel token, non in 4 regole copia-incollate. Dark = default. */
+  --cosmos-island-shadow:
+    rgba(0, 0, 0, 0.16) 0px 24px 48px,
+    rgba(0, 0, 0, 0.12) 0px 4px 16px;
+
+  /* --- Bases / suite marioverse (API cross-plugin: NON rinominare) ---------
+     I nomi --mv-* sono consumati anche da superbasetags (pill colorizer) e
+     dalle formule html() nei .base → contratto pubblico, valori allineati a
+     exo (--mva-r1/r2/r3 = 6/9/13) e masonry (card 11, chip 5). */
+  --mv-r1: 6px;                                    /* = exo --mva-r1 · chip/toolbar */
+  --mv-r-card: 11px;                               /* = --masonry-radius */
+  --mv-r-chip: 5px;                                /* = .masonry-tag-chip */
+
+  --mv-wash: cubic-bezier(0.25, 1, 0.5, 1);        /* = --masonry-ease · colore/bg */
+  --mv-lift: cubic-bezier(0.22, 1, 0.36, 1);       /* = exo --mva-ease-out · fisico */
+  --mv-t: var(--cosmos-t-fast);                    /* = exo --mva-t (0.14s) */
+
+  --mv-hairline: color-mix(in srgb, var(--text-muted) 14%, transparent);
+  --mv-card-bg: color-mix(in srgb, var(--background-primary) 92%, var(--background-secondary));
+  --mv-card-bg-hover: color-mix(in srgb, var(--background-primary) 82%, var(--background-secondary));
+  --mv-card-lift: 0 5px 16px color-mix(in srgb, var(--background-modifier-box-shadow) 18%, transparent);
+  --mv-ring: color-mix(in srgb, var(--interactive-accent) 16%, transparent);
+
+  /* Label recipe (eyebrow small-caps muto) — usata da header, card e group */
+  --mv-label-color: var(--text-muted);
+  --mv-label-size: 0.7rem;
+  --mv-label-weight: 600;
+  --mv-label-track: 0.05em;
+}
+
+/* Island shadow — variante light (più tenue del dark). */
+body.theme-light {
+  --cosmos-island-shadow:
+    rgba(0, 0, 0, 0.04) 0px 24px 48px,
+    rgba(0, 0, 0, 0.02) 0px 4px 16px;
+}
+
+/* --------------------------------------------------------------------------
+   § Superfici dark — scala a step da UN seed (gate identico al layer darker).
+   Percentuali srgb tarate per riprodurre gli hex storici al pixel:
+     surface-0  #141414  rgb(20)  — canvas/editor        (seed)
+     surface-1  #171717  rgb(23)  — sidebar + pannelli   (+3  → 1.2766%)
+     surface-2  #1a1a1a  rgb(26)  — superfici elevate    (+6  → 2.5532%)
+     surface-3  #1e1e1e  rgb(30)  — nav attivo / card    (+10 → 4.2553%)
+   Il pill tab attivo resta color-mix(--background-primary, white 8%) in
+   cosmos-layer: è RELATIVO al canvas corrente per funzionare anche con
+   "Superfici chiare" (cosmos-light), dove questa scala è spenta.
+   -------------------------------------------------------------------------- */
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) {
+  --cosmos-surface-0: #141414;
+  --cosmos-surface-1: color-mix(in srgb, var(--cosmos-surface-0), white 1.2766%);
+  --cosmos-surface-2: color-mix(in srgb, var(--cosmos-surface-0), white 2.5532%);
+  --cosmos-surface-3: color-mix(in srgb, var(--cosmos-surface-0), white 4.2553%);
+}
+
+/* --------------------------------------------------------------------------
+   § Reduced motion — al livello dei token, non per-selettore.
+   Azzerare le durate qui rende conforme OGNI transizione che le consuma,
+   incluse quelle future. --anim-speed-modifier: 0 propaga lo stesso principio
+   a tutte le durate native di Baseline (calc(Nms * modifier)).
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  body {
+    --cosmos-t-fast: 0ms;
+    --cosmos-t-base: 0ms;
+    --cosmos-t-slow: 0ms;
+    --anim-speed-modifier: 0;
+  }
+}
+
+
+/* ==========================================================================
    ███  COSMOS LAYER  ███
    Baked-in sopra la base Baseline (fork). Assemblato dagli snippet marioverse-*
    del vault (copie in reference/) via ./sync-snippets.sh, con gating Cosmos:
@@ -3107,9 +3220,10 @@ body.cosmos-hide-status-bar .status-bar {
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
-  /* !important: nelle sidebar Baseline setta 8px/padding con selettore più specifico */
-  border-radius: 10px !important;   /* concentrico: pill 8px + 2px di padding */
-  padding: 2px !important;
+  /* !important: nelle sidebar Baseline setta 8px/padding con selettore più specifico.
+     Concentricità by-construction: raggio barra = pill + inset (cosmos-tokens). */
+  border-radius: var(--cosmos-r-tabbar) !important;
+  padding: var(--cosmos-tab-inset) !important;
   width: fit-content;
   max-width: 100%;
   align-self: center;
@@ -3128,7 +3242,7 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked) .workspace-tab-header {
   /* !important: in sidebar Baseline setta 8px con selettore più specifico */
-  border-radius: 8px !important;   /* Baseline in floating è più squadrato */
+  border-radius: var(--cosmos-r-pill) !important;
   transition:
     background-color var(--anim-duration-fast) var(--anim-motion-baseline, ease),
     box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease);
@@ -3138,7 +3252,7 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
-  gap: 4px;
+  gap: var(--cosmos-gap-1);
 }
 
 /* --- Tab attivo = document card: paper + soft lift -----------------------
@@ -3224,11 +3338,14 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
    (secondary = mix(primary, white 5%)). Qui ridefiniamo tutte le superfici
    su valori scuri e ravvicinati → editor ≈ sidebar ≈ pannelli.
    Tutti i valori sono regolabili; tienili vicini per l'effetto "superficie unica". */
+/* Valori dalla scala --cosmos-surface-* (cosmos-tokens.css): un seed, step
+   derivati. La migrazione è pixel-neutra: gli step riproducono gli hex storici
+   (#141414 / #171717 / #1a1a1a / #1e1e1e). */
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) {
-  --background-primary:       #141414;   /* editor — era #1e1e1e */
-  --background-primary-alt:   #1a1a1a;   /* superfici elevate leggere */
-  --background-secondary:     #171717;   /* sidebar + pannelli — era ~#292929 (troppo chiaro) */
-  --background-secondary-alt: #1e1e1e;   /* nav item attivo / card */
+  --background-primary:       var(--cosmos-surface-0);   /* editor/canvas */
+  --background-secondary:     var(--cosmos-surface-1);   /* sidebar + pannelli */
+  --background-primary-alt:   var(--cosmos-surface-2);   /* superfici elevate leggere */
+  --background-secondary-alt: var(--cosmos-surface-3);   /* nav item attivo / card */
 }
 
 /* ==========================================================================
@@ -3286,29 +3403,10 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   § 0 — Token (allineati a exo --mva-* e masonry --masonry-*)
+   § 0 — Token: SPOSTATI in cosmos-tokens.css (layer zero, 2026-07-10).
+   I nomi --mv-* restano l'API cross-plugin (superbasetags, formule html());
+   qui vengono solo consumati.
    -------------------------------------------------------------------------- */
-body {
-  --mv-r1: 6px;                                    /* = exo --mva-r1 · chip/toolbar */
-  --mv-r-card: 11px;                               /* = --masonry-radius */
-  --mv-r-chip: 5px;                                /* = .masonry-tag-chip */
-
-  --mv-wash: cubic-bezier(0.25, 1, 0.5, 1);        /* = --masonry-ease · colore/bg */
-  --mv-lift: cubic-bezier(0.22, 1, 0.36, 1);       /* = exo --mva-ease-out · fisico */
-  --mv-t: 140ms;                                   /* = exo --mva-t (0.14s) */
-
-  --mv-hairline: color-mix(in srgb, var(--text-muted) 14%, transparent);
-  --mv-card-bg: color-mix(in srgb, var(--background-primary) 92%, var(--background-secondary));
-  --mv-card-bg-hover: color-mix(in srgb, var(--background-primary) 82%, var(--background-secondary));
-  --mv-card-lift: 0 5px 16px color-mix(in srgb, var(--background-modifier-box-shadow) 18%, transparent);
-  --mv-ring: color-mix(in srgb, var(--interactive-accent) 16%, transparent);
-
-  /* Label recipe (eyebrow small-caps muto) — usata da header, card e group */
-  --mv-label-color: var(--text-muted);
-  --mv-label-size: 0.7rem;
-  --mv-label-weight: 600;
-  --mv-label-track: 0.05em;
-}
 
 /* Recipe condivisa: header colonna, label card, property di gruppo — UN look */
 .bases-view .bases-table-header-name,
@@ -3386,7 +3484,7 @@ body {
   transition:
     border-color var(--mv-t) var(--mv-wash),
     background-color var(--mv-t) var(--mv-wash),
-    box-shadow 180ms var(--mv-lift);
+    box-shadow var(--cosmos-t-base) var(--mv-lift);
 }
 /* anello accent interno — comparsa curata su hover/focus (= masonry ::after) */
 .bases-view .bases-cards-item::after {
@@ -3513,7 +3611,7 @@ body {
   transform-origin: left center;
   border-radius: inherit;
   background: var(--interactive-accent);
-  transition: transform 260ms var(--mv-lift);   /* composito, no layout thrash */
+  transition: transform var(--cosmos-t-slow) var(--mv-lift);   /* composito, no layout thrash */
 }
 
 /* Avatar a iniziali (CRM) — <span class="mv-avatar">MM</span> */
@@ -3605,125 +3703,70 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   § 8 — Reduced motion: azzera i movimenti fisici, tieni i cambi di stato
-   istantanei (accessibilità — obbligatorio)
+   § 8 — Reduced motion: gestito AL LIVELLO DEI TOKEN in cosmos-tokens.css
+   (azzera --cosmos-t-* e --anim-speed-modifier) → ogni transizione che
+   consuma la scala è conforme by-construction, incluse quelle future.
+   Il vecchio blocco per-selettore (solo Bases) è stato rimosso (2026-07-10).
    -------------------------------------------------------------------------- */
-@media (prefers-reduced-motion: reduce) {
-  .bases-view .bases-tr,
-  .bases-view .bases-cards-item,
-  .bases-view .bases-cards-item::after,
-  .bases-view .value-list-container > .value-list-element,
-  .bases-header .bases-toolbar-item,
-  .mv-pill,
-  .mv-progress::after {
-    transition-duration: 0ms;
-  }
-}
 
 /* ==========================================================================
-   marioverse-sidebar-island.css
+   cosmos-islands.css
    TEMA RICHIESTO: Baseline — usa var(--tab-radius), var(--tab-outline-width),
    var(--tab-outline-color) e il meccanismo island dei layout `layout-cupertino`
    / `layout-fusion`. Non portabile ad altri temi.
 
-   FUNZIONE: rendere la SIDEBAR DESTRA un'isola galleggiante identica al main
-   content — radius + outline hairline + shadow + stacco dai bordi.
+   FUNZIONE: rendere le SIDEBAR isole galleggianti identiche al main content —
+   radius + outline hairline + shadow + stacco dai bordi. Destra e sinistra
+   sono la STESSA ricetta istanziata due volte (pattern 9-slice: il look è
+   definito una volta, la posizione è l'unica differenza).
+
+   TOKEN (cosmos-tokens.css): --island-gap (stacco), --cosmos-island-shadow
+   (elevazione, fork light/dark nel token). Qui NESSUN valore raw.
 
    ALTITUDE — punto chiave (v2, dopo il fix):
    L'isola va SOLO sul `.workspace-tab-container` (il contenuto), NON su
    `.workspace-tabs` (che include anche la barra di icone in alto,
    `.workspace-tab-header-container`). Baseline fa esattamente questo sul main
    content: island su `.mod-root .workspace-tab-container`, tab che galleggiano
-   sopra/fuori. Qui replichiamo lo stesso livello sul `.mod-right-split`, così:
-     - la barra icone in alto resta FUORI dall'isola (galleggia sopra)
-     - l'isola è staccata su tutti i lati (left incluso → non tocca il centro)
-
-   REGOLABILE: --island-gap (default 8px = gap nativo del tema tra pannelli).
-   Reversibile: disabilita lo snippet e la sidebar torna flush.
+   sopra/fuori.
 
    NO OPEN-STATE GATE (v3, fix jank):
-   Le regole NON sono gated su `.is-right-sidedock-open`. Al collapse Obsidian
+   Le regole NON sono gated su `.is-*-sidedock-open`. Al collapse Obsidian
    rimuove quella classe all'istante e poi anima la width per 0.32s: con il gate
-   gli stili isola (margin/radius/outline/shadow) sparivano a frame 0 mentre il
-   pannello scorreva ancora → scatto visibile. Applicandoli sempre restano
-   costanti per tutta l'animazione (a width→0 sono invisibili comunque) → smooth.
+   gli stili isola sparivano a frame 0 mentre il pannello scorreva ancora →
+   scatto visibile. Applicandoli sempre restano costanti per tutta l'animazione.
 
-   Per la STESSA isola a SINISTRA: duplica i blocchi sostituendo
-   `mod-right-split` → `mod-left-split`.
+   Toggle Style Settings: `cosmos-right-island-off` / `cosmos-left-island-off`
+   (reset in cosmos-tweaks.css). 2026-07-09: isola sinistra aggiunta, mirror
+   della destra. 2026-07-10: shadow e gap tokenizzati (era 4× copia-incolla).
    ========================================================================== */
 
-/* --- Isola = SOLO il tab-container (il contenuto), non la barra icone ------ */
+/* --- Isola = SOLO il tab-container (il contenuto), non la barra icone ------
+   top=0: il bordo superiore combacia con l'isola dell'editor (che tocca la
+   sua tab bar). left/right/bottom → stacco dai bordi finestra e dal centro. */
 body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
-  .workspace-split.mod-right-split .workspace-tab-container {
-  --island-gap: 8px;
-
-  /* Stacco su left/right/bottom, MA top=0: così il bordo superiore dell'isola
-     Exo combacia con quello dell'isola dell'editor (che tocca la sua tab bar,
-     nessun gap sopra). Con margin-top: 8px la sidebar cascava 8px più in basso
-     dell'editor → disallineata. left → non tocca l'isola centrale;
-     right/bottom → stacca dai bordi finestra. */
+  .workspace-split.mod-right-split .workspace-tab-container,
+body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+  .workspace-split.mod-left-split .workspace-tab-container {
   margin: 0 var(--island-gap) var(--island-gap);
-
   border-radius: var(--tab-radius);
   outline: var(--tab-outline-width) solid var(--tab-outline-color);
   overflow: hidden;   /* clippa il contenuto della leaf agli angoli */
-}
-
-/* --- Shadow: match esatto del main content island di Baseline ------------- */
-body.layout-cupertino:not(.is-phone).theme-light
-  .workspace-split.mod-right-split .workspace-tab-container,
-body.layout-fusion:not(.is-phone).theme-light
-  .workspace-split.mod-right-split .workspace-tab-container {
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 24px 48px, rgba(0, 0, 0, 0.02) 0px 4px 16px;
-}
-body.layout-cupertino:not(.is-phone).theme-dark
-  .workspace-split.mod-right-split .workspace-tab-container,
-body.layout-fusion:not(.is-phone).theme-dark
-  .workspace-split.mod-right-split .workspace-tab-container {
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 24px 48px, rgba(0, 0, 0, 0.12) 0px 4px 16px;
+  box-shadow: var(--cosmos-island-shadow);
 }
 
 /* --- Allinea la barra icone all'isola --------------------------------------
-   L'isola (`.workspace-tab-container`) è inset di --island-gap (8px) a sinistra
-   e destra; la barra icone (`.workspace-tab-header-container`) resta full-width
-   e sborda oltre l'isola. Stesso margin orizzontale → bordi allineati.
-   È un flex-item in un `.workspace-tabs` column: il margin orizzontale lo
-   RESTRINGE (non solo shift), così left/right combaciano con l'isola sotto.
-   Solo left/right: top/bottom restano invariati (la barra galleggia sopra). */
+   L'isola è inset di --island-gap a sinistra e destra; la barra icone
+   (`.workspace-tab-header-container`) resta full-width e sborderebbe oltre
+   l'isola. Stesso margin orizzontale → bordi allineati. È un flex-item in un
+   `.workspace-tabs` column: il margin orizzontale la RESTRINGE (non solo
+   shift). Solo left/right: top/bottom invariati (la barra galleggia sopra). */
 body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
-  .workspace-split.mod-right-split .workspace-tab-header-container {
-  margin-left: var(--island-gap, 8px);
-  margin-right: var(--island-gap, 8px);
-}
-
-/* ============================ ISOLA SINISTRA ================================
-   Mirror esatto dell'isola destra su `.mod-left-split`. ON di default (simmetrica
-   alla destra). Disattivabile col toggle Style Settings `cosmos-left-island-off`
-   (reset in cosmos-tweaks.css, come per la destra). 2026-07-09. */
-body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
-  .workspace-split.mod-left-split .workspace-tab-container {
-  --island-gap: 8px;
-  margin: 0 var(--island-gap) var(--island-gap);
-  border-radius: var(--tab-radius);
-  outline: var(--tab-outline-width) solid var(--tab-outline-color);
-  overflow: hidden;
-}
-body.layout-cupertino:not(.is-phone).theme-light
-  .workspace-split.mod-left-split .workspace-tab-container,
-body.layout-fusion:not(.is-phone).theme-light
-  .workspace-split.mod-left-split .workspace-tab-container {
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 24px 48px, rgba(0, 0, 0, 0.02) 0px 4px 16px;
-}
-body.layout-cupertino:not(.is-phone).theme-dark
-  .workspace-split.mod-left-split .workspace-tab-container,
-body.layout-fusion:not(.is-phone).theme-dark
-  .workspace-split.mod-left-split .workspace-tab-container {
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 24px 48px, rgba(0, 0, 0, 0.12) 0px 4px 16px;
-}
+  .workspace-split.mod-right-split .workspace-tab-header-container,
 body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
   .workspace-split.mod-left-split .workspace-tab-header-container {
-  margin-left: var(--island-gap, 8px);
-  margin-right: var(--island-gap, 8px);
+  margin-left: var(--island-gap);
+  margin-right: var(--island-gap);
 }
 
 

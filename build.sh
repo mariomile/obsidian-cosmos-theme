@@ -11,7 +11,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 python3 - <<'PY'
 import os
 lines = open('theme.css').read().split('\n')
-i = next(k for k,l in enumerate(lines) if 'COSMOS LAYER' in l)
+# Cut at the FIRST Cosmos marker: tokens (when present) precede the layer.
+i = next(k for k,l in enumerate(lines) if 'COSMOS TOKENS' in l or 'COSMOS LAYER' in l)
 cut = i-1                                    # the '/* ===' opener line
 while cut>0 and lines[cut-1].strip()=='' : cut-=1   # trim blank lines before it
 base = lines[:cut]

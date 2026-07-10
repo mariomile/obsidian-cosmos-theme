@@ -81,9 +81,10 @@
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
-  /* !important: nelle sidebar Baseline setta 8px/padding con selettore più specifico */
-  border-radius: 10px !important;   /* concentrico: pill 8px + 2px di padding */
-  padding: 2px !important;
+  /* !important: nelle sidebar Baseline setta 8px/padding con selettore più specifico.
+     Concentricità by-construction: raggio barra = pill + inset (cosmos-tokens). */
+  border-radius: var(--cosmos-r-tabbar) !important;
+  padding: var(--cosmos-tab-inset) !important;
   width: fit-content;
   max-width: 100%;
   align-self: center;
@@ -102,7 +103,7 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked) .workspace-tab-header {
   /* !important: in sidebar Baseline setta 8px con selettore più specifico */
-  border-radius: 8px !important;   /* Baseline in floating è più squadrato */
+  border-radius: var(--cosmos-r-pill) !important;
   transition:
     background-color var(--anim-duration-fast) var(--anim-motion-baseline, ease),
     box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease);
@@ -112,7 +113,7 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
-  gap: 4px;
+  gap: var(--cosmos-gap-1);
 }
 
 /* --- Tab attivo = document card: paper + soft lift -----------------------
@@ -198,11 +199,14 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
    (secondary = mix(primary, white 5%)). Qui ridefiniamo tutte le superfici
    su valori scuri e ravvicinati → editor ≈ sidebar ≈ pannelli.
    Tutti i valori sono regolabili; tienili vicini per l'effetto "superficie unica". */
+/* Valori dalla scala --cosmos-surface-* (cosmos-tokens.css): un seed, step
+   derivati. La migrazione è pixel-neutra: gli step riproducono gli hex storici
+   (#141414 / #171717 / #1a1a1a / #1e1e1e). */
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) {
-  --background-primary:       #141414;   /* editor — era #1e1e1e */
-  --background-primary-alt:   #1a1a1a;   /* superfici elevate leggere */
-  --background-secondary:     #171717;   /* sidebar + pannelli — era ~#292929 (troppo chiaro) */
-  --background-secondary-alt: #1e1e1e;   /* nav item attivo / card */
+  --background-primary:       var(--cosmos-surface-0);   /* editor/canvas */
+  --background-secondary:     var(--cosmos-surface-1);   /* sidebar + pannelli */
+  --background-primary-alt:   var(--cosmos-surface-2);   /* superfici elevate leggere */
+  --background-secondary-alt: var(--cosmos-surface-3);   /* nav item attivo / card */
 }
 
 /* ==========================================================================
@@ -260,29 +264,10 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   § 0 — Token (allineati a exo --mva-* e masonry --masonry-*)
+   § 0 — Token: SPOSTATI in cosmos-tokens.css (layer zero, 2026-07-10).
+   I nomi --mv-* restano l'API cross-plugin (superbasetags, formule html());
+   qui vengono solo consumati.
    -------------------------------------------------------------------------- */
-body {
-  --mv-r1: 6px;                                    /* = exo --mva-r1 · chip/toolbar */
-  --mv-r-card: 11px;                               /* = --masonry-radius */
-  --mv-r-chip: 5px;                                /* = .masonry-tag-chip */
-
-  --mv-wash: cubic-bezier(0.25, 1, 0.5, 1);        /* = --masonry-ease · colore/bg */
-  --mv-lift: cubic-bezier(0.22, 1, 0.36, 1);       /* = exo --mva-ease-out · fisico */
-  --mv-t: 140ms;                                   /* = exo --mva-t (0.14s) */
-
-  --mv-hairline: color-mix(in srgb, var(--text-muted) 14%, transparent);
-  --mv-card-bg: color-mix(in srgb, var(--background-primary) 92%, var(--background-secondary));
-  --mv-card-bg-hover: color-mix(in srgb, var(--background-primary) 82%, var(--background-secondary));
-  --mv-card-lift: 0 5px 16px color-mix(in srgb, var(--background-modifier-box-shadow) 18%, transparent);
-  --mv-ring: color-mix(in srgb, var(--interactive-accent) 16%, transparent);
-
-  /* Label recipe (eyebrow small-caps muto) — usata da header, card e group */
-  --mv-label-color: var(--text-muted);
-  --mv-label-size: 0.7rem;
-  --mv-label-weight: 600;
-  --mv-label-track: 0.05em;
-}
 
 /* Recipe condivisa: header colonna, label card, property di gruppo — UN look */
 .bases-view .bases-table-header-name,
@@ -360,7 +345,7 @@ body {
   transition:
     border-color var(--mv-t) var(--mv-wash),
     background-color var(--mv-t) var(--mv-wash),
-    box-shadow 180ms var(--mv-lift);
+    box-shadow var(--cosmos-t-base) var(--mv-lift);
 }
 /* anello accent interno — comparsa curata su hover/focus (= masonry ::after) */
 .bases-view .bases-cards-item::after {
@@ -487,7 +472,7 @@ body {
   transform-origin: left center;
   border-radius: inherit;
   background: var(--interactive-accent);
-  transition: transform 260ms var(--mv-lift);   /* composito, no layout thrash */
+  transition: transform var(--cosmos-t-slow) var(--mv-lift);   /* composito, no layout thrash */
 }
 
 /* Avatar a iniziali (CRM) — <span class="mv-avatar">MM</span> */
@@ -579,17 +564,8 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   § 8 — Reduced motion: azzera i movimenti fisici, tieni i cambi di stato
-   istantanei (accessibilità — obbligatorio)
+   § 8 — Reduced motion: gestito AL LIVELLO DEI TOKEN in cosmos-tokens.css
+   (azzera --cosmos-t-* e --anim-speed-modifier) → ogni transizione che
+   consuma la scala è conforme by-construction, incluse quelle future.
+   Il vecchio blocco per-selettore (solo Bases) è stato rimosso (2026-07-10).
    -------------------------------------------------------------------------- */
-@media (prefers-reduced-motion: reduce) {
-  .bases-view .bases-tr,
-  .bases-view .bases-cards-item,
-  .bases-view .bases-cards-item::after,
-  .bases-view .value-list-container > .value-list-element,
-  .bases-header .bases-toolbar-item,
-  .mv-pill,
-  .mv-progress::after {
-    transition-duration: 0ms;
-  }
-}

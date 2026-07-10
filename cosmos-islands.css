@@ -1,105 +1,59 @@
 /* ==========================================================================
-   marioverse-sidebar-island.css
+   cosmos-islands.css
    TEMA RICHIESTO: Baseline — usa var(--tab-radius), var(--tab-outline-width),
    var(--tab-outline-color) e il meccanismo island dei layout `layout-cupertino`
    / `layout-fusion`. Non portabile ad altri temi.
 
-   FUNZIONE: rendere la SIDEBAR DESTRA un'isola galleggiante identica al main
-   content — radius + outline hairline + shadow + stacco dai bordi.
+   FUNZIONE: rendere le SIDEBAR isole galleggianti identiche al main content —
+   radius + outline hairline + shadow + stacco dai bordi. Destra e sinistra
+   sono la STESSA ricetta istanziata due volte (pattern 9-slice: il look è
+   definito una volta, la posizione è l'unica differenza).
+
+   TOKEN (cosmos-tokens.css): --island-gap (stacco), --cosmos-island-shadow
+   (elevazione, fork light/dark nel token). Qui NESSUN valore raw.
 
    ALTITUDE — punto chiave (v2, dopo il fix):
    L'isola va SOLO sul `.workspace-tab-container` (il contenuto), NON su
    `.workspace-tabs` (che include anche la barra di icone in alto,
    `.workspace-tab-header-container`). Baseline fa esattamente questo sul main
    content: island su `.mod-root .workspace-tab-container`, tab che galleggiano
-   sopra/fuori. Qui replichiamo lo stesso livello sul `.mod-right-split`, così:
-     - la barra icone in alto resta FUORI dall'isola (galleggia sopra)
-     - l'isola è staccata su tutti i lati (left incluso → non tocca il centro)
-
-   REGOLABILE: --island-gap (default 8px = gap nativo del tema tra pannelli).
-   Reversibile: disabilita lo snippet e la sidebar torna flush.
+   sopra/fuori.
 
    NO OPEN-STATE GATE (v3, fix jank):
-   Le regole NON sono gated su `.is-right-sidedock-open`. Al collapse Obsidian
+   Le regole NON sono gated su `.is-*-sidedock-open`. Al collapse Obsidian
    rimuove quella classe all'istante e poi anima la width per 0.32s: con il gate
-   gli stili isola (margin/radius/outline/shadow) sparivano a frame 0 mentre il
-   pannello scorreva ancora → scatto visibile. Applicandoli sempre restano
-   costanti per tutta l'animazione (a width→0 sono invisibili comunque) → smooth.
+   gli stili isola sparivano a frame 0 mentre il pannello scorreva ancora →
+   scatto visibile. Applicandoli sempre restano costanti per tutta l'animazione.
 
-   Per la STESSA isola a SINISTRA: duplica i blocchi sostituendo
-   `mod-right-split` → `mod-left-split`.
+   Toggle Style Settings: `cosmos-right-island-off` / `cosmos-left-island-off`
+   (reset in cosmos-tweaks.css). 2026-07-09: isola sinistra aggiunta, mirror
+   della destra. 2026-07-10: shadow e gap tokenizzati (era 4× copia-incolla).
    ========================================================================== */
 
-/* --- Isola = SOLO il tab-container (il contenuto), non la barra icone ------ */
+/* --- Isola = SOLO il tab-container (il contenuto), non la barra icone ------
+   top=0: il bordo superiore combacia con l'isola dell'editor (che tocca la
+   sua tab bar). left/right/bottom → stacco dai bordi finestra e dal centro. */
 body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
-  .workspace-split.mod-right-split .workspace-tab-container {
-  --island-gap: 8px;
-
-  /* Stacco su left/right/bottom, MA top=0: così il bordo superiore dell'isola
-     Exo combacia con quello dell'isola dell'editor (che tocca la sua tab bar,
-     nessun gap sopra). Con margin-top: 8px la sidebar cascava 8px più in basso
-     dell'editor → disallineata. left → non tocca l'isola centrale;
-     right/bottom → stacca dai bordi finestra. */
+  .workspace-split.mod-right-split .workspace-tab-container,
+body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+  .workspace-split.mod-left-split .workspace-tab-container {
   margin: 0 var(--island-gap) var(--island-gap);
-
   border-radius: var(--tab-radius);
   outline: var(--tab-outline-width) solid var(--tab-outline-color);
   overflow: hidden;   /* clippa il contenuto della leaf agli angoli */
-}
-
-/* --- Shadow: match esatto del main content island di Baseline ------------- */
-body.layout-cupertino:not(.is-phone).theme-light
-  .workspace-split.mod-right-split .workspace-tab-container,
-body.layout-fusion:not(.is-phone).theme-light
-  .workspace-split.mod-right-split .workspace-tab-container {
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 24px 48px, rgba(0, 0, 0, 0.02) 0px 4px 16px;
-}
-body.layout-cupertino:not(.is-phone).theme-dark
-  .workspace-split.mod-right-split .workspace-tab-container,
-body.layout-fusion:not(.is-phone).theme-dark
-  .workspace-split.mod-right-split .workspace-tab-container {
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 24px 48px, rgba(0, 0, 0, 0.12) 0px 4px 16px;
+  box-shadow: var(--cosmos-island-shadow);
 }
 
 /* --- Allinea la barra icone all'isola --------------------------------------
-   L'isola (`.workspace-tab-container`) è inset di --island-gap (8px) a sinistra
-   e destra; la barra icone (`.workspace-tab-header-container`) resta full-width
-   e sborda oltre l'isola. Stesso margin orizzontale → bordi allineati.
-   È un flex-item in un `.workspace-tabs` column: il margin orizzontale lo
-   RESTRINGE (non solo shift), così left/right combaciano con l'isola sotto.
-   Solo left/right: top/bottom restano invariati (la barra galleggia sopra). */
+   L'isola è inset di --island-gap a sinistra e destra; la barra icone
+   (`.workspace-tab-header-container`) resta full-width e sborderebbe oltre
+   l'isola. Stesso margin orizzontale → bordi allineati. È un flex-item in un
+   `.workspace-tabs` column: il margin orizzontale la RESTRINGE (non solo
+   shift). Solo left/right: top/bottom invariati (la barra galleggia sopra). */
 body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
-  .workspace-split.mod-right-split .workspace-tab-header-container {
-  margin-left: var(--island-gap, 8px);
-  margin-right: var(--island-gap, 8px);
-}
-
-/* ============================ ISOLA SINISTRA ================================
-   Mirror esatto dell'isola destra su `.mod-left-split`. ON di default (simmetrica
-   alla destra). Disattivabile col toggle Style Settings `cosmos-left-island-off`
-   (reset in cosmos-tweaks.css, come per la destra). 2026-07-09. */
-body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
-  .workspace-split.mod-left-split .workspace-tab-container {
-  --island-gap: 8px;
-  margin: 0 var(--island-gap) var(--island-gap);
-  border-radius: var(--tab-radius);
-  outline: var(--tab-outline-width) solid var(--tab-outline-color);
-  overflow: hidden;
-}
-body.layout-cupertino:not(.is-phone).theme-light
-  .workspace-split.mod-left-split .workspace-tab-container,
-body.layout-fusion:not(.is-phone).theme-light
-  .workspace-split.mod-left-split .workspace-tab-container {
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 24px 48px, rgba(0, 0, 0, 0.02) 0px 4px 16px;
-}
-body.layout-cupertino:not(.is-phone).theme-dark
-  .workspace-split.mod-left-split .workspace-tab-container,
-body.layout-fusion:not(.is-phone).theme-dark
-  .workspace-split.mod-left-split .workspace-tab-container {
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 24px 48px, rgba(0, 0, 0, 0.12) 0px 4px 16px;
-}
+  .workspace-split.mod-right-split .workspace-tab-header-container,
 body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
   .workspace-split.mod-left-split .workspace-tab-header-container {
-  margin-left: var(--island-gap, 8px);
-  margin-right: var(--island-gap, 8px);
+  margin-left: var(--island-gap);
+  margin-right: var(--island-gap);
 }
