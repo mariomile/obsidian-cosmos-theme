@@ -15,6 +15,35 @@ body:not(.is-mobile) .workspace-ribbon.mod-left .side-dock-actions {
   align-items: center;
 }
 
+/* ==========================================================================
+   § TATTILITÀ HOVER (Tier 1b, 2026-07-10) — il feel Craft di ogni riga
+   --------------------------------------------------------------------------
+   Craft dà feedback tattile su OGNI riga interattiva. In Cosmos queste righe
+   avevano `transition: all 0s` → l'hover scattava. Qui: lo sfondo SFUMA
+   (--mv-lift, la curva burrosa — MAI la molla, che su hover sarebbe kitsch),
+   e garantiamo un wash percepibile anche dove il :hover base è troppo tenue.
+   Solo background/color (compositing leggero, niente reflow). ========================================================================== */
+.nav-file-title,
+.nav-folder-title,
+.tree-item-self,
+.search-result-file-title,
+.suggestion-item,
+.menu-item,
+.workspace-tab-header:not(.is-active) {
+  transition:
+    background-color var(--cosmos-t-fast) var(--mv-lift),
+    color var(--cosmos-t-fast) var(--mv-lift);
+}
+/* Wash esplicito: un tint accent-neutro morbido, così l'hover si sente anche
+   sul canvas scuro dove --background-modifier-hover è quasi invisibile. */
+.nav-file-title:hover,
+.nav-folder-title:hover,
+.tree-item-self:hover,
+.search-result-file-title:hover,
+.suggestion-item:hover {
+  background-color: color-mix(in srgb, var(--text-normal) 6%, transparent);
+}
+
 /* --- Sidebar tab bar: icone attaccate (gap 0) -------------------------------
    Decisione di design (2026-07-09): nelle sidebar le icone stanno attaccate;
    il gap arioso è solo dell'editor (craft, scoped .mod-root). Baseline dà
