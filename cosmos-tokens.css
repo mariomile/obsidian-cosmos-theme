@@ -87,6 +87,19 @@ body.theme-light {
     rgba(0, 0, 0, 0.02) 0px 4px 16px;
 }
 
+/* Pop shadow — elevazione delle superfici flottanti (menu, tooltip, popover,
+   prompt): stessa famiglia dell'island shadow, raggio più corto. Dark default. */
+body {
+  --cosmos-pop-shadow:
+    rgba(0, 0, 0, 0.28) 0px 12px 32px,
+    rgba(0, 0, 0, 0.16) 0px 2px 8px;
+}
+body.theme-light {
+  --cosmos-pop-shadow:
+    rgba(0, 0, 0, 0.08) 0px 12px 32px,
+    rgba(0, 0, 0, 0.04) 0px 2px 8px;
+}
+
 /* --------------------------------------------------------------------------
    § Superfici dark — scala a step da UN seed (gate identico al layer darker).
    Percentuali srgb tarate per riprodurre gli hex storici al pixel:

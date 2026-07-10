@@ -25,7 +25,8 @@
     "--cosmos-t-fast",
     "--cosmos-t-base",
     "--cosmos-t-slow",
-    "--mv-pill-color"
+    "--mv-pill-color",
+    "--cosmos-pop-shadow"
   ],
   "duplicate_prop_allowlist_comment": "craft-tab-active & island-shadow: theme-branch override; cosmos-t-*: azzerati nel media query reduced-motion; mv-pill-color: 9 varianti colore.",
   "outline_none_requires_comment": true

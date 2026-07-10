@@ -573,3 +573,53 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
    consuma la scala è conforme by-construction, incluse quelle future.
    Il vecchio blocco per-selettore (solo Bases) è stato rimosso (2026-07-10).
    -------------------------------------------------------------------------- */
+
+/* ===== ANGLAGE — finitura delle superfici "invisibili" (2026-07-10) ========
+   Come l'anglage in orologeria: le superfici che si vedono solo aprendo la
+   cassa (menu contestuali, quick switcher, tooltip, modal, hover popover)
+   ricevono la stessa disciplina di elevazione del resto del tema. Sul canvas
+   darker le misure live davano: menu a +3 dal canvas (indistinguibile),
+   modal/prompt = canvas (zero elevazione). Fluent/Material: in dark
+   l'elevazione si comunica con superfici PIÙ CHIARE, non solo con l'ombra.
+   Scala: flottanti = surface-2 (+6), tooltip = surface-3 (+10, più leggibile).
+   Gate identico al darker (in light/cosmos-light Baseline è già coerente). */
+
+/* Menu contestuali — via variabile: Style Settings può ancora sovrascrivere. */
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) {
+  --menu-background: var(--cosmos-surface-2);
+}
+
+/* Modal, prompt (quick switcher), suggestion popover, hover popover —
+   element-level: la base pinna --modal-background con important layered,
+   quindi la variabile non basta. */
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .modal,
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .prompt,
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .suggestion-container,
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .popover.hover-popover {
+  background-color: var(--cosmos-surface-2);
+  box-shadow: var(--cosmos-pop-shadow);
+}
+
+/* Tooltip — piccolo e transiente: uno step più su per leggibilità. */
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .tooltip {
+  background-color: var(--cosmos-surface-3);
+  color: var(--text-normal);
+  box-shadow: var(--cosmos-pop-shadow);
+}
+
+/* --------------------------------------------------------------------------
+   Graph view — il bridge CSS (~11 classi) è l'UNICO modo per tematizzare il
+   canvas WebGL del grafo, e la base NON lo copre (verificato: 0 occorrenze).
+   Superficie più dimenticata cross-source. Variabili Obsidian → si adatta a
+   light/dark e agli accent senza gate.
+   -------------------------------------------------------------------------- */
+.graph-view.color-fill            { color: var(--text-muted); }
+.graph-view.color-fill-focused    { color: var(--text-normal); }
+.graph-view.color-circle          { color: var(--interactive-accent); }
+.graph-view.color-line            { color: var(--background-modifier-border); }
+.graph-view.color-text            { color: var(--text-normal); }
+.graph-view.color-fill-highlight  { color: var(--interactive-accent); }
+.graph-view.color-line-highlight  { color: var(--interactive-accent); }
+.graph-view.color-fill-tag        { color: var(--color-green); }
+.graph-view.color-fill-attachment { color: var(--color-yellow); }
+.graph-view.color-fill-unresolved { color: var(--text-faint); }

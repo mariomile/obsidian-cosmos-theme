@@ -117,6 +117,23 @@
     {
       "name": "focus-visible rule deployed (state contract)",
       "ruleExists": ".workspace-tab-header:focus-visible"
+    },
+    {
+      "name": "menu elevated to surface-2",
+      "resolveVar": "--menu-background",
+      "expected": "rgb(26, 26, 26)"
+    },
+    {
+      "name": "graph bridge deployed (fill)",
+      "ruleExists": ".graph-view.color-fill"
+    },
+    {
+      "name": "graph bridge deployed (unresolved)",
+      "ruleExists": ".graph-view.color-fill-unresolved"
+    },
+    {
+      "name": "anglage tooltip rule deployed",
+      "ruleExists": ".tooltip"
     }
   ]
 }

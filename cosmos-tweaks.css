@@ -85,13 +85,16 @@ body:not(.is-phone) .workspace-tab-header:active {
    Baseline (input-cupertino/material) rende ogni icona del nav impostazioni come
    un box 22×22 colorato (background + gradient + inner-shadow, glifo bianco).
    Cosmos le vuole piatte: via box/shadow, il glifo torna monocromo e segue il
-   colore del testo della voce (come nei temi non-cupertino). 2026-07-09. */
-.modal.mod-settings .vertical-tab-nav-item .vertical-tab-nav-item-icon {
+   colore del testo della voce (come nei temi non-cupertino). 2026-07-09.
+   Il selettore SPECCHIA quello del box colorato di Baseline (che vive nella
+   regione leggibile, unlayered): pari specificità + ordine successivo → vince
+   senza !important (2026-07-10). */
+body:is(.input-cupertino, .input-material) .modal.mod-settings .vertical-tab-nav-item .vertical-tab-nav-item-icon {
   background: none;
   box-shadow: none;
   color: inherit;
 }
-.modal.mod-settings .vertical-tab-nav-item .vertical-tab-nav-item-icon svg {
+body:is(.input-cupertino, .input-material) .modal.mod-settings .vertical-tab-nav-item .vertical-tab-nav-item-icon svg {
   color: inherit;
   stroke: currentColor;
 }

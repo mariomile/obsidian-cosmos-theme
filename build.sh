@@ -35,6 +35,16 @@ if line.startswith('@layer baseline{'):
 if line.count('/*') > line.count('*/'):
     line += '*/'                          # chiude il commento pendente
 base[0] = '@layer baseline{' + line + '}'
+# NB (tentato e ritirato 2026-07-10): NON wrappare anche la regione leggibile
+# (righe 2..cut). Contiene il sistema di variabili input-style di Baseline
+# (--radius-s & co.) che DEVE restare unlayered per battere i default di
+# app.css (unlayered vince su layered → layerarla dimezzava tutti i radius).
+# Le sue poche regole che collidono con Cosmos (es. gradiente icone settings)
+# si vincono per specificità, caso per caso.
+rest = base[1:]
+while rest and rest[0].strip() == '@layer baseline{' : rest = rest[1:]      # unwrap del tentativo
+while rest and rest[-1].strip() == '} /* end @layer baseline */' : rest = rest[:-1]
+base = [base[0]] + rest
 parts = base + ['']
 LAYERS = ['cosmos-tokens.css','cosmos-layer.css','cosmos-islands.css','cosmos-tweaks.css']
 used = [fn for fn in LAYERS if os.path.exists(fn)]

@@ -3113,6 +3113,19 @@ body.theme-light {
     rgba(0, 0, 0, 0.02) 0px 4px 16px;
 }
 
+/* Pop shadow — elevazione delle superfici flottanti (menu, tooltip, popover,
+   prompt): stessa famiglia dell'island shadow, raggio più corto. Dark default. */
+body {
+  --cosmos-pop-shadow:
+    rgba(0, 0, 0, 0.28) 0px 12px 32px,
+    rgba(0, 0, 0, 0.16) 0px 2px 8px;
+}
+body.theme-light {
+  --cosmos-pop-shadow:
+    rgba(0, 0, 0, 0.08) 0px 12px 32px,
+    rgba(0, 0, 0, 0.04) 0px 2px 8px;
+}
+
 /* --------------------------------------------------------------------------
    § Superfici dark — scala a step da UN seed (gate identico al layer darker).
    Percentuali srgb tarate per riprodurre gli hex storici al pixel:
@@ -3722,6 +3735,56 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
    Il vecchio blocco per-selettore (solo Bases) è stato rimosso (2026-07-10).
    -------------------------------------------------------------------------- */
 
+/* ===== ANGLAGE — finitura delle superfici "invisibili" (2026-07-10) ========
+   Come l'anglage in orologeria: le superfici che si vedono solo aprendo la
+   cassa (menu contestuali, quick switcher, tooltip, modal, hover popover)
+   ricevono la stessa disciplina di elevazione del resto del tema. Sul canvas
+   darker le misure live davano: menu a +3 dal canvas (indistinguibile),
+   modal/prompt = canvas (zero elevazione). Fluent/Material: in dark
+   l'elevazione si comunica con superfici PIÙ CHIARE, non solo con l'ombra.
+   Scala: flottanti = surface-2 (+6), tooltip = surface-3 (+10, più leggibile).
+   Gate identico al darker (in light/cosmos-light Baseline è già coerente). */
+
+/* Menu contestuali — via variabile: Style Settings può ancora sovrascrivere. */
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) {
+  --menu-background: var(--cosmos-surface-2);
+}
+
+/* Modal, prompt (quick switcher), suggestion popover, hover popover —
+   element-level: la base pinna --modal-background con important layered,
+   quindi la variabile non basta. */
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .modal,
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .prompt,
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .suggestion-container,
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .popover.hover-popover {
+  background-color: var(--cosmos-surface-2);
+  box-shadow: var(--cosmos-pop-shadow);
+}
+
+/* Tooltip — piccolo e transiente: uno step più su per leggibilità. */
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(.is-mobile) .tooltip {
+  background-color: var(--cosmos-surface-3);
+  color: var(--text-normal);
+  box-shadow: var(--cosmos-pop-shadow);
+}
+
+/* --------------------------------------------------------------------------
+   Graph view — il bridge CSS (~11 classi) è l'UNICO modo per tematizzare il
+   canvas WebGL del grafo, e la base NON lo copre (verificato: 0 occorrenze).
+   Superficie più dimenticata cross-source. Variabili Obsidian → si adatta a
+   light/dark e agli accent senza gate.
+   -------------------------------------------------------------------------- */
+.graph-view.color-fill            { color: var(--text-muted); }
+.graph-view.color-fill-focused    { color: var(--text-normal); }
+.graph-view.color-circle          { color: var(--interactive-accent); }
+.graph-view.color-line            { color: var(--background-modifier-border); }
+.graph-view.color-text            { color: var(--text-normal); }
+.graph-view.color-fill-highlight  { color: var(--interactive-accent); }
+.graph-view.color-line-highlight  { color: var(--interactive-accent); }
+.graph-view.color-fill-tag        { color: var(--color-green); }
+.graph-view.color-fill-attachment { color: var(--color-yellow); }
+.graph-view.color-fill-unresolved { color: var(--text-faint); }
+
 /* ==========================================================================
    cosmos-islands.css
    TEMA RICHIESTO: Baseline — usa var(--tab-radius), var(--tab-outline-width),
@@ -3869,13 +3932,16 @@ body:not(.is-phone) .workspace-tab-header:active {
    Baseline (input-cupertino/material) rende ogni icona del nav impostazioni come
    un box 22×22 colorato (background + gradient + inner-shadow, glifo bianco).
    Cosmos le vuole piatte: via box/shadow, il glifo torna monocromo e segue il
-   colore del testo della voce (come nei temi non-cupertino). 2026-07-09. */
-.modal.mod-settings .vertical-tab-nav-item .vertical-tab-nav-item-icon {
+   colore del testo della voce (come nei temi non-cupertino). 2026-07-09.
+   Il selettore SPECCHIA quello del box colorato di Baseline (che vive nella
+   regione leggibile, unlayered): pari specificità + ordine successivo → vince
+   senza !important (2026-07-10). */
+body:is(.input-cupertino, .input-material) .modal.mod-settings .vertical-tab-nav-item .vertical-tab-nav-item-icon {
   background: none;
   box-shadow: none;
   color: inherit;
 }
-.modal.mod-settings .vertical-tab-nav-item .vertical-tab-nav-item-icon svg {
+body:is(.input-cupertino, .input-material) .modal.mod-settings .vertical-tab-nav-item .vertical-tab-nav-item-icon svg {
   color: inherit;
   stroke: currentColor;
 }
