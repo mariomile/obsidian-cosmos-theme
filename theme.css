@@ -28,7 +28,7 @@ settings:
 		default: cupertino-light
 		options:
 			-
-				label: Cupertino
+				label: New Craft
 				value: cupertino-light
 	-
 		id: background-contrast-light
@@ -54,7 +54,7 @@ settings:
 		default: cupertino-dark
 		options:
 			-
-				label: Cupertino
+				label: New Craft
 				value: cupertino-dark
 	-
 		id: background-contrast-dark
@@ -569,8 +569,8 @@ settings:
 				value: layout-border
 	-
 		id: cosmos-light
-		title: Superfici chiare (Cupertino Light)
-		description: Disattiva le superfici scure Cosmos → grigi nativi più chiari. Si combina con Cupertino/Fusion.
+		title: Superfici chiare (New Craft Light)
+		description: Disattiva le superfici scure Cosmos → grigi nativi più chiari. Si combina con New Craft/Apple.
 		type: class-toggle
 		default: false
 	-
@@ -581,7 +581,7 @@ settings:
 		default: input-cupertino
 		options:
 			-
-				label: Cupertino
+				label: New Craft
 				value: input-cupertino
 	-
 		id: status-bar-style
@@ -591,7 +591,7 @@ settings:
 		default: status-bar-cupertino
 		options:
 			-
-				label: Cupertino
+				label: New Craft
 				value: status-bar-cupertino
 	-
 		id: cosmos-hide-status-bar
@@ -933,12 +933,12 @@ settings:
 	-
 		id: cosmos-right-island-off
 		title: Hide right sidebar island
-		description: Turn off the floating island on the right sidebar (Cupertino/Fusion layouts only)
+		description: Turn off the floating island on the right sidebar (New Craft/Apple layouts only)
 		type: class-toggle
 	-
 		id: cosmos-left-island-off
 		title: Hide left sidebar island
-		description: Turn off the floating island on the left sidebar (Cupertino/Fusion layouts only)
+		description: Turn off the floating island on the left sidebar (New Craft/Apple layouts only)
 		type: class-toggle
 	-
 		id: hover-sidebars
@@ -1422,7 +1422,7 @@ settings:
 		default: metadata-cupertino
 		options:
 			-
-				label: Cupertino
+				label: New Craft
 				value: metadata-cupertino
 	-
 		id: metadata-add-property
