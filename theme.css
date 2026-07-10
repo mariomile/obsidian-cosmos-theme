@@ -574,12 +574,6 @@ settings:
 		type: class-toggle
 		default: false
 	-
-		id: cosmos-sfpro
-		title: SF Pro — tipografia, icone & palette
-		description: Font SF Pro (regular/medium), scala 12/13(base)/14/16/18/24px, icone assottigliate (~1px, stile Nucleo Outline). Sul tema chiaro applica anche i 5 token colore proposti (subtle/default/strong/bg-selected/border).
-		type: class-toggle
-		default: false
-	-
 		id: element-style
 		title: Personality
 		type: class-select
@@ -2974,14 +2968,14 @@ settings:
    Aggiunta originale Cosmos (2026-07-08), NON sincronizzata da uno snippet
    del vault — vive direttamente nella base di theme.css, quindi sopravvive
    ai rerun di ./build.sh.
-   Un solo toggle Style Settings (vedi blocco YAML sopra), cosmos-sfpro:
-   scala tipografica SF Pro + icone assottigliate ovunque, e sul tema chiaro
-   applica anche i 5 token colore proposti (era un secondo toggle separato,
-   unificato il 2026-07-08 su richiesta).
+   DEFAULT dal 2026-07-10 (era il toggle cosmos-sfpro, rimosso su richiesta):
+   scala tipografica SF Pro (font di sistema) + icone assottigliate ovunque, e
+   sul tema chiaro i 5 token colore. Applicato a body.theme-dark/.theme-light
+   per battere l'Inter che la base setta su quelle classi.
    ========================================================================== */
 
 /* ===== TIPO — SF Pro, regular/medium (font di sistema, niente @font-face) ===== */
-body.cosmos-sfpro {
+body.theme-dark, body.theme-light {
   --font-interface-theme: -apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif;
   --font-text-theme: -apple-system, "SF Pro Text", "SF Pro Display", BlinkMacSystemFont, sans-serif;
 }
@@ -2989,7 +2983,7 @@ body.cosmos-sfpro {
 /* ===== SCALA DIMENSIONI — 12 / 13 (base) / 14 / 16 / 18 / 24px =====
    La UI resta compatta (12–18px); il corpo nota/editor — la più grande,
    la superficie più letta — prende il top della scala a 24px. */
-body.cosmos-sfpro {
+body.theme-dark, body.theme-light {
   --font-ui-smaller: 12px;
   --font-ui-small: 13px;   /* base */
   --font-ui-medium: 14px;
@@ -3001,7 +2995,7 @@ body.cosmos-sfpro {
 /* ===== ICONE — assottigliate a ~1px, stile Nucleo Outline =====
    Il set icone di Obsidian (Lucide) si risolve via JS, non è sostituibile
    da un tema — questo assottiglia solo lo stroke-width dei glifi esistenti. */
-body.cosmos-sfpro {
+body.theme-dark, body.theme-light {
   --icon-xs-stroke-width: 1px;
   --icon-s-stroke-width: 1px;
   --icon-m-stroke-width: 1px;
@@ -3014,7 +3008,7 @@ body.cosmos-sfpro {
    e border non hanno un token generico unico, quindi sia il fill hover che
    la superficie nav-item attiva in sidebar usano bg-selected per coerenza.
    Scoped a theme-light — la palette è quasi bianca, non ha senso sul dark. */
-body.theme-light.cosmos-sfpro {
+body.theme-light {
   --text-faint: #7F7F7F;   /* subtle */
   --text-muted: #5D5D5D;   /* default */
   --text-normal: #292929;  /* strong */
