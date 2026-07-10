@@ -81,6 +81,20 @@ body:not(.is-phone) .workspace-tab-header:active {
   transition: transform var(--cosmos-t-fast) var(--mv-lift);
 }
 
+/* Checkbox dei task = pop elastico al tap: il momento di conferma per
+   eccellenza alla Craft. Press → si schiaccia, rilascio → rimbalza (spring).
+   Scoped al markdown per non toccare i toggle dei settings. */
+.markdown-source-view input[type="checkbox"],
+.markdown-reading-view input[type="checkbox"],
+.markdown-rendered input[type="checkbox"] {
+  transition: transform var(--cosmos-t-fast) var(--cosmos-spring);
+}
+.markdown-source-view input[type="checkbox"]:active,
+.markdown-reading-view input[type="checkbox"]:active,
+.markdown-rendered input[type="checkbox"]:active {
+  transform: scale(0.8);
+}
+
 /* --- Menu impostazioni: icone piatte, niente quadratini colorati macOS -------
    Baseline (input-cupertino/material) rende ogni icona del nav impostazioni come
    un box 22×22 colorato (background + gradient + inner-shadow, glifo bianco).

@@ -3051,6 +3051,15 @@ body {
   --cosmos-t-base: 180ms;
   --cosmos-t-slow: 260ms;
 
+  /* Easing "Craft": molla con leggero overshoot (il control point y>1 supera
+     il target e rientra → si legge "fisico/elastico"). SOLO per micro-momenti
+     di conferma (press-release del tab, tap della checkbox), MAI su hover/
+     reveal (lì kitsch): quelli usano --mv-lift, la curva burrosa senza rimbalzo.
+     Sotto reduced-motion la durata è 0 → l'overshoot sparisce da sé.
+     impeccable-disable bounce-easing -- overshoot voluto (feel Craft), uso
+     stretto ai momenti di conferma, mai su hover. Approvato da Mario 2026-07-10. */
+  --cosmos-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
   /* --- Radius geometry (concentrica) --------------------------------------
      Il pill dei tab eredita il raggio tab di Baseline (8px di default);
      la barra che lo contiene è SEMPRE pill + inset — mai un numero a sé. */
@@ -3268,7 +3277,8 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
   border-radius: var(--cosmos-r-pill) !important;
   transition:
     background-color var(--anim-duration-fast) var(--anim-motion-baseline, ease),
-    box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease);
+    box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease),
+    transform        var(--cosmos-t-fast) var(--cosmos-spring);   /* pop-back elastico al rilascio del press */
 }
 
 /* --- Gap compatto tra i tab — SOLO editor (2026-07-10: la sidebar vuole le
@@ -3927,6 +3937,20 @@ body:not(.is-phone) .workspace-split.mod-sidedock .workspace-leaf-resize-handle 
 body:not(.is-phone) .workspace-tab-header:active {
   transform: scale(var(--cosmos-press-scale));
   transition: transform var(--cosmos-t-fast) var(--mv-lift);
+}
+
+/* Checkbox dei task = pop elastico al tap: il momento di conferma per
+   eccellenza alla Craft. Press → si schiaccia, rilascio → rimbalza (spring).
+   Scoped al markdown per non toccare i toggle dei settings. */
+.markdown-source-view input[type="checkbox"],
+.markdown-reading-view input[type="checkbox"],
+.markdown-rendered input[type="checkbox"] {
+  transition: transform var(--cosmos-t-fast) var(--cosmos-spring);
+}
+.markdown-source-view input[type="checkbox"]:active,
+.markdown-reading-view input[type="checkbox"]:active,
+.markdown-rendered input[type="checkbox"]:active {
+  transform: scale(0.8);
 }
 
 /* --- Menu impostazioni: icone piatte, niente quadratini colorati macOS -------
