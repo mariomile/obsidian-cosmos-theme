@@ -559,13 +559,13 @@ settings:
 				label: Standard
 				value: layout-baseline
 			-
-				label: Fusion
+				label: Apple
 				value: layout-fusion
 			-
-				label: Cupertino
+				label: New Craft
 				value: layout-cupertino
 			-
-				label: Border
+				label: No Border
 				value: layout-border
 	-
 		id: cosmos-light
