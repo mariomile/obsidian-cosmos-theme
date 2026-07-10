@@ -3251,6 +3251,18 @@ body {
   --mv-label-weight: 600;
   --mv-label-track: 0.05em;
 
+  /* --- Mobile (iPhone Pro Max è il target; niente iPad nel parco) -----------
+     Primi token mobile dell'ecosistema (nessun tema Obsidian usa safe-area,
+     verificato 2026-07-10): notch/home-indicator via env(), target touch HIG,
+     altezza viewport con dvh (100vh è rotto su iOS WebKit — vietato dal
+     contract). Consumati dal layer phone del tema E dai plugin della suite. */
+  --cosmos-safe-top: env(safe-area-inset-top, 0px);
+  --cosmos-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --cosmos-safe-left: env(safe-area-inset-left, 0px);
+  --cosmos-safe-right: env(safe-area-inset-right, 0px);
+  --cosmos-touch-min: 44px;            /* Apple HIG minimum touch target */
+  --cosmos-vh-full: 100dvh;            /* MAI 100vh su mobile */
+
   /* --- Interaction-state contract ------------------------------------------
      Focus ring unico per TUTTE le superfici interattive stilate da Cosmos
      (ricetta Tahoe: accent smorzato via color-mix). Outline, non box-shadow:

@@ -5,6 +5,12 @@
       "name": "class-injection attiva (is-phone)",
       "bodyClass": "is-phone",
       "expected": true
+    },
+    {
+      "name": "token touch-min presente (44px HIG)",
+      "selector": "body",
+      "property": "--cosmos-touch-min",
+      "expected": "44px"
     }
   ]
 }
