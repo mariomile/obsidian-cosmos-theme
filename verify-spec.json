@@ -134,6 +134,10 @@
     {
       "name": "anglage tooltip rule deployed",
       "ruleExists": ".tooltip"
+    },
+    {
+      "name": "serif-headings toggle rule deployed",
+      "ruleExists": ".cosmos-serif-headings"
     }
   ]
 }

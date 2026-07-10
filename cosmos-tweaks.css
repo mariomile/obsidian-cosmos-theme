@@ -135,6 +135,24 @@ body:not(.is-phone) .workspace-tab-header:active {
   transform: scale(0.8);
 }
 
+/* ==========================================================================
+   § SERIF HEADINGS (Tier 2, toggle Style Settings: cosmos-serif-headings)
+   --------------------------------------------------------------------------
+   La firma tipografica di Craft: titoli/heading nel serif DI SISTEMA Apple
+   (New York), corpo sans. `ui-serif` mappa New York su macOS e degrada a
+   Georgia/serif altrove → zero font da bundlare. Default OFF (scelta di gusto).
+   Copre inline title + heading in reading view e live preview (.cm-header /
+   .HyperMD-header). Nessun peso/size toccato: solo la famiglia. ========================================================================== */
+body.cosmos-serif-headings {
+  --cosmos-serif: ui-serif, "New York", "Iowan Old Style", Palatino, Georgia, serif;
+}
+body.cosmos-serif-headings .inline-title,
+body.cosmos-serif-headings .markdown-rendered :is(h1, h2, h3, h4, h5, h6),
+body.cosmos-serif-headings .cm-line.HyperMD-header,
+body.cosmos-serif-headings .cm-header {
+  font-family: var(--cosmos-serif);
+}
+
 /* --- Menu impostazioni: icone piatte, niente quadratini colorati macOS -------
    Baseline (input-cupertino/material) rende ogni icona del nav impostazioni come
    un box 22×22 colorato (background + gradient + inner-shadow, glifo bianco).
