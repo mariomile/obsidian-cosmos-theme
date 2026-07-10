@@ -517,7 +517,7 @@ settings:
 		id: font-interface-override
 		title: Interface font
 		type: variable-text
-		default: 'Inter'
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
 	-
 		id: density-modifier
 		title: Density
@@ -1243,7 +1243,7 @@ settings:
 		id: font-text-override
 		title: Editor font
 		type: variable-text
-		default: 'Inter'
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
 	-
 		id: font-monospace-override
 		title: Monospace font
@@ -1398,7 +1398,7 @@ settings:
 		id: inline-title-font
 		title: Inline title font
 		type: variable-text
-		default: 'Instrument Serif'
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
 	-
 		id: inline-title-size
 		title: Inline title font size
@@ -1579,7 +1579,7 @@ settings:
 		id: h1-font
 		title: H1 font
 		type: variable-text
-		default: 'Instrument Serif'
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
 	-
 		id: h1-size
 		title: H1 font size
@@ -1675,7 +1675,7 @@ settings:
 		id: h2-font
 		title: H2 font
 		type: variable-text
-		default: 'Instrument Serif'
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
 	-
 		id: h2-size
 		title: H2 font size
@@ -1771,7 +1771,7 @@ settings:
 		id: h3-font
 		title: H3 font
 		type: variable-text
-		default: 'Instrument Serif'
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
 	-
 		id: h3-size
 		title: H3 font size
@@ -1867,7 +1867,7 @@ settings:
 		id: h4-font
 		title: H4 font
 		type: variable-text
-		default: 'Instrument Serif'
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
 	-
 		id: h4-size
 		title: H4 font size
@@ -1964,7 +1964,7 @@ settings:
 		id: h5-font
 		title: H5 font
 		type: variable-text
-		default: 'Instrument Serif'
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
 	- 
 		id: h5-size
 		title: H5 font size
@@ -2060,7 +2060,7 @@ settings:
 		id: h6-font
 		title: H6 font
 		type: variable-text
-		default: 'Instrument Serif'
+		default: '-apple-system, "SF Pro Text", "SF Pro Display", sans-serif'
 	-
 		id: h6-size
 		title: H6 font size
