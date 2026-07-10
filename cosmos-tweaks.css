@@ -44,6 +44,17 @@ body:not(.is-mobile) .workspace-ribbon.mod-left .side-dock-actions {
   background-color: color-mix(in srgb, var(--text-normal) 6%, transparent);
 }
 
+/* --- Selezione col PESO (Tier 1c, 2026-07-10) -------------------------------
+   Convenzione macOS/Craft: lo stato attivo/selezionato si marca con
+   font-weight medium (500), non solo col colore. Complementa l'accent che
+   Baseline già dà → la selezione "pesa" come nel Finder / in Craft. */
+.nav-file-title.is-active,
+.nav-file-title.is-active .nav-file-title-content,
+.tree-item-self.is-active,
+.workspace-tab-header.is-active .workspace-tab-header-inner-title {
+  font-weight: 500;
+}
+
 /* --- Sidebar tab bar: icone attaccate (gap 0) -------------------------------
    Decisione di design (2026-07-09): nelle sidebar le icone stanno attaccate;
    il gap arioso è solo dell'editor (craft, scoped .mod-root). Baseline dà
