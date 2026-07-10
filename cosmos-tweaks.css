@@ -6,7 +6,9 @@
 
 /* --- Ribbon sinistra: centra le icone -------------------------------------
    Baseline le offsetta con `.workspace-ribbon.mod-left:not(.is-collapsed){padding-left:12px}`
-   → sembrano spinte a sinistra. Azzeriamo il padding e centriamo la colonna. */
+   → sembrano spinte a sinistra. Azzeriamo il padding e centriamo la colonna.
+   KEEP gate ×3 (slice 3): la ribbon sinistra non esiste come UI su phone →
+   gate corretto. Audit: docs/2026-07-11-mobile-gate-audit.md. */
 body:not(.is-mobile) .workspace-ribbon.mod-left:not(.is-collapsed) {
   padding-left: 0;
 }
@@ -78,7 +80,10 @@ body.is-phone .menu-item {
    Decisione di design (2026-07-09): nelle sidebar le icone stanno attaccate;
    il gap arioso è solo dell'editor (craft, scoped .mod-root). Baseline dà
    3px alle icon-bar compatte: da unlayered vinciamo senza !important
-   (2026-07-10, refactor @layer). */
+   (2026-07-10, refactor @layer).
+   KEEP gate (slice 3): è la geometria della icon-strip del sidedock DESKTOP;
+   l'header del drawer full-screen su phone non è una strip sidedock →
+   flippare non aggiungerebbe nulla. Audit: docs/2026-07-11-mobile-gate-audit.md. */
 body:not(.is-phone) .workspace-split.mod-sidedock .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
   gap: 0;
@@ -89,7 +94,10 @@ body:not(.is-phone) .workspace-split.mod-sidedock .workspace-tabs:not(.mod-stack
    Annullano la ricetta island di cosmos-islands.css → sidebar flush come nei
    layout non-cupertino. Il selettore SPECCHIA quello delle regole island
    (stesso gate layout + classe toggle in più) → vince per specificità e
-   ordine, senza !important — vietato dal refactor @layer (2026-07-10). */
+   ordine, senza !important — vietato dal refactor @layer (2026-07-10).
+   KEEP gate ×4 (slice 3): mirror delle regole island (cosmos-islands.css, tutte
+   KEEP): il toggle-off resta gated in lockstep con la regola che annulla.
+   Audit: docs/2026-07-11-mobile-gate-audit.md. */
 body.cosmos-right-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
   .workspace-split.mod-right-split .workspace-tab-container,
 body.cosmos-left-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
@@ -111,7 +119,10 @@ body.cosmos-left-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
    Con più leaf impilati in una sidebar, Baseline mette un border sul
    `.workspace-leaf-resize-handle` → una riga tra i pannelli. Con le island è
    ridondante (ogni pannello ha già il suo outline) e stona. La togliamo (la
-   maniglia resta funzionale per il resize, sparisce solo il bordo). 2026-07-09. */
+   maniglia resta funzionale per il resize, sparisce solo il bordo). 2026-07-09.
+   KEEP gate (slice 3): divider tra pannelli impilati in sidebar; su phone le
+   sidebar sono drawer, niente maniglie di resize impilate → gate corretto.
+   Audit: docs/2026-07-11-mobile-gate-audit.md. */
 body:not(.is-phone) .workspace-split.mod-sidedock .workspace-leaf-resize-handle {
   border: none !important;   /* beats: border del divider Baseline (selettore più specifico) */
 }
@@ -134,8 +145,12 @@ body:not(.is-phone) .workspace-split.mod-sidedock .workspace-leaf-resize-handle 
 
 /* Press feedback — micro-scale alla Apple sul pill del tab. Solo transform
    (composito). Il drag nativo usa transform INLINE → vince comunque sul
-   nostro scale: nessun conflitto col riordino dei tab. */
-body:not(.is-phone) .workspace-tab-header:active {
+   nostro scale: nessun conflitto col riordino dei tab.
+   FLIP → phone (slice 3, 2026-07-11): rimosso il gate :not(.is-phone).
+   `:active` scatta al tap su touch → è ESATTAMENTE la tattilità Craft del tap
+   tradotta su phone (hover non esiste su touch, :active sì). Zero rischio
+   layout (solo transform composito). Decisione in docs/2026-07-11-mobile-gate-audit.md. */
+.workspace-tab-header:active {
   transform: scale(var(--cosmos-press-scale));
   transition: transform var(--cosmos-t-fast) var(--mv-lift);
 }

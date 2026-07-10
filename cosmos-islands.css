@@ -32,7 +32,11 @@
 
 /* --- Isola = SOLO il tab-container (il contenuto), non la barra icone ------
    top=0: il bordo superiore combacia con l'isola dell'editor (che tocca la
-   sua tab bar). left/right/bottom → stacco dai bordi finestra e dal centro. */
+   sua tab bar). left/right/bottom → stacco dai bordi finestra e dal centro.
+   KEEP gate ×4 (slice 3): le 4 regole island sono gated :not(.is-phone). Su
+   phone le sidebar sono .workspace-drawer full-screen, non isole .mod-*-split
+   galleggianti → la ricetta island (staccare dai bordi) è priva di senso su un
+   drawer full-screen. Audit: docs/2026-07-11-mobile-gate-audit.md. */
 body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
   .workspace-split.mod-right-split .workspace-tab-container,
 body:is(.layout-cupertino, .layout-fusion):not(.is-phone)

@@ -77,7 +77,12 @@
 
 /* --- Tab bar compatta (2026-07-05) -----------------------------------------
    Niente background sempre visibile (bocciato da Mario 05-07): resta solo la
-   geometria — barra aderente ai tab, centrata, pill inset uniforme 4px. */
+   geometria — barra aderente ai tab, centrata, pill inset uniforme 4px.
+   KEEP gate ×11 (slice 3): TUTTE le regole pill floating qui sotto sono gated
+   :not(.is-phone). Baseline stesso gata ogni .mod-root .workspace-tab-header
+   dietro :not(.is-phone) — le pill floating sono un albero desktop-only; su
+   phone c'è il tab-switcher mobile, senza header pill. Flippare dipingerebbe
+   geometria su un DOM inesistente. Audit: docs/2026-07-11-mobile-gate-audit.md. */
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
