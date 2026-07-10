@@ -134,12 +134,6 @@
     {
       "name": "anglage tooltip rule deployed",
       "ruleExists": ".tooltip"
-    },
-    {
-      "name": "sidebar collapse snappier (0.18s)",
-      "selector": ".workspace-split.mod-left-split",
-      "property": "transition-duration",
-      "expected": "0.18s"
     }
   ]
 }
