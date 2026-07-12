@@ -18,6 +18,14 @@ fi
 DEST="$VAULT/.obsidian/themes/Cosmos"
 mkdir -p "$DEST"
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Safety net: backup the currently-deployed theme.css before overwriting, so
+# a bad deploy is always one `cp` away from being undone (restore.sh uses the tag).
+if [[ -f "$DEST/theme.css" ]]; then
+  cp "$DEST/theme.css" "$DEST/theme.css.bak"
+  echo "Backup → $DEST/theme.css.bak"
+fi
+
 cp "$SRC/theme.css"    "$DEST/theme.css"
 cp "$SRC/manifest.json" "$DEST/manifest.json"
 

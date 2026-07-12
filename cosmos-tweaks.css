@@ -238,3 +238,47 @@ body:is(.input-cupertino, .input-material) .modal.mod-settings .vertical-tab-nav
   color: inherit;
   stroke: currentColor;
 }
+
+/* ==========================================================================
+   § CRAFT SIDEBAR NAV (toggle: craft-nav-toggle, default OFF) — 2026-07-12
+   --------------------------------------------------------------------------
+   Porta il linguaggio Craft dei tab editor sulla NAV della sidebar. Le righe
+   Cosmos hanno già hover-wash + peso-selezione (sezioni sopra, ungated); qui
+   aggiungiamo SOLO la parte Craft "full", tutta gated su .craft-nav-toggle:
+     • riga attiva = superficie "paper" + soft lift + pill arrotondato
+       (stesso pattern del tab attivo Craft: --craft-tab-active + shadow-tactile)
+     • ritmo verticale più arioso (padding — statico, la transition nav è solo
+       su background/color quindi niente layout-thrash)
+     • top-folder come section-header UPPERCASE (ricetta --mv-label-* da Bases)
+   Reversibile-by-construction: senza la classe = look attuale, zero residui.
+   Vincoli contract: niente !important (batte la base per specificità: la body
+   class in più supera l'accent-bg base), niente gate :not(.is-phone), colori/
+   durate solo da token (no raw hex/ms). ====================================== */
+
+/* Riga attiva = document card: paper neutro + soft lift, angoli morbidi */
+body.craft-nav-toggle .tree-item-self.is-active,
+body.craft-nav-toggle .nav-file-title.is-active,
+body.craft-nav-toggle .nav-folder-title.is-active {
+  background-color: var(--craft-tab-active);
+  box-shadow: var(--shadow-tactile);
+  border-radius: var(--mv-r-card);
+}
+
+/* Ritmo più arioso: le righe respirano come in Craft (solo padding, statico) */
+body.craft-nav-toggle .nav-file-title,
+body.craft-nav-toggle .nav-folder-title {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: var(--mv-r-card);
+}
+
+/* Top-folder (figli diretti della root del file explorer) = section-header
+   UPPERCASE muto, come le sezioni "FOLDERS/STARRED" di Craft. Ricetta condivisa
+   con le micro-label di Bases (--mv-label-*). */
+body.craft-nav-toggle .nav-folder.mod-root > .tree-item-children > .nav-folder > .nav-folder-title .nav-folder-title-content {
+  color: var(--mv-label-color);
+  font-size: var(--mv-label-size);
+  font-weight: var(--mv-label-weight);
+  letter-spacing: var(--mv-label-track);
+  text-transform: uppercase;
+}
