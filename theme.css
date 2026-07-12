@@ -4308,10 +4308,11 @@ body.craft-nav-toggle .nav-folder-title {
   border-radius: var(--mv-r-card);
 }
 
-/* Top-folder (figli diretti della root del file explorer) = section-header
-   UPPERCASE muto, come le sezioni "FOLDERS/STARRED" di Craft. Ricetta condivisa
-   con le micro-label di Bases (--mv-label-*). */
-body.craft-nav-toggle .nav-folder.mod-root > .tree-item-children > .nav-folder > .nav-folder-title .nav-folder-title-content {
+/* Top-folder (path senza slash = primo livello) = section-header UPPERCASE muto,
+   come le sezioni "FOLDERS/STARRED" di Craft. Ricetta condivisa con le micro-label
+   di Bases (--mv-label-*). Selettore robusto al nesting/virtualizzazione del tree
+   (verificato live 2026-07-12): il data-path di una cartella top non ha "/". */
+body.craft-nav-toggle .nav-folder-title:not([data-path*="/"]) > .nav-folder-title-content {
   color: var(--mv-label-color);
   font-size: var(--mv-label-size);
   font-weight: var(--mv-label-weight);
