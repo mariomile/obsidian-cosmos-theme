@@ -562,12 +562,21 @@ settings:
 		max: 1.5
 		step: 0.25
 	-
+		id: cosmos-filled-icons
+		title: Filled navigation icons (Craft)
+		description: Usa glifi pieni per oggetti e destinazioni (cartelle, file, libri, archivio, persone, tag e collezioni). Azioni e controlli restano outline.
+		type: class-toggle
+		default: false
+	-
 		id: layout-style
 		title: Cosmos Flavour
 		type: class-select
 		allowEmpty: false
 		default: layout-cupertino
 		options:
+			-
+				label: Fusion Glass
+				value: layout-cosmos-fusion-glass
 			-
 				label: Standard
 				value: layout-baseline
@@ -584,6 +593,30 @@ settings:
 		id: cosmos-light
 		title: Superfici chiare (New Craft Light)
 		description: Disattiva le superfici scure Cosmos → grigi nativi più chiari. Si combina con New Craft/Apple.
+		type: class-toggle
+		default: false
+	-
+		id: cosmos-fusion-tabs
+		title: Fusion tabs (Craft)
+		description: Usa il trattamento tab capsule e translucent di Baseline Fusion senza cambiare il flavour Cosmos. Solo desktop; Standard resta invariato.
+		type: class-toggle
+		default: false
+	-
+		id: cosmos-floating-editor
+		title: Floating editor surface
+		description: Trasforma l'editor in una superficie sospesa con inset, hairline, traslucenza e shadow. Fusion Glass lo include automaticamente.
+		type: class-toggle
+		default: false
+	-
+		id: cosmos-floating-settings
+		title: Floating settings panel
+		description: Rende la navigazione delle impostazioni una island traslucida in stile Craft/macOS. Fusion Glass lo include automaticamente.
+		type: class-toggle
+		default: false
+	-
+		id: cosmos-floating-ribbon
+		title: Floating ribbon
+		description: Stacca la ribbon sinistra dai bordi con superficie, radius e shadow coordinati. Fusion Glass lo include automaticamente.
 		type: class-toggle
 		default: false
 	-
@@ -3215,9 +3248,24 @@ body {
   /* --- Radius geometry (concentrica) --------------------------------------
      Il pill dei tab eredita il raggio tab di Baseline (8px di default);
      la barra che lo contiene è SEMPRE pill + inset — mai un numero a sé. */
-  --cosmos-r-pill: var(--tab-radius, 8px);
+  --cosmos-r-pill: var(--cosmos-tab-radius, var(--tab-radius, 8px));
   --cosmos-tab-inset: 2px;
   --cosmos-r-tabbar: calc(var(--cosmos-r-pill) + var(--cosmos-tab-inset));
+  --cosmos-r-fusion-tab: 999px;
+  --cosmos-r-fusion-tabbar: calc(var(--cosmos-r-fusion-tab) + var(--cosmos-tab-inset));
+  --cosmos-fusion-tab-shadow: var(--shadow-tab, var(--shadow-s));
+  --cosmos-tab-entry-blur: 4px;
+  --cosmos-tab-entry-scale: 0.75;
+  --cosmos-hairline-width: 1px;
+
+  /* --- Fusion Glass ------------------------------------------------------
+     Un'unica ricetta per editor, settings, ribbon, drawer e overlay native.
+     I layer consumer decidono DOVE applicarla; qui vivono valori e geometria. */
+  --cosmos-glass-blur: blur(18px) saturate(115%);
+  --cosmos-glass-surface: color-mix(in srgb, var(--background-primary) 78%, transparent);
+  --cosmos-glass-surface-strong: color-mix(in srgb, var(--background-secondary) 86%, transparent);
+  --cosmos-glass-outline: 1px solid color-mix(in srgb, var(--text-muted) 16%, transparent);
+  --cosmos-r-floating-surface: var(--radius-m);
 
   /* --- Spacing rhythm (base 4) -------------------------------------------- */
   --cosmos-gap-1: 4px;
@@ -3428,7 +3476,7 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
   /* Concentricità by-construction: raggio barra = pill + inset (cosmos-tokens).
      !important: nelle sidebar la base setta radius/padding con selettore più
      specifico (il tentativo @layer è stato ritirato — vedi build.sh). */
-  border-radius: var(--cosmos-r-tabbar) !important;
+  border-radius: var(--cosmos-tabbar-radius, var(--cosmos-r-tabbar)) !important;
   padding: var(--cosmos-tab-inset) !important;
   width: fit-content;
   max-width: 100%;
@@ -3448,7 +3496,7 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked) .workspace-tab-header {
   /* !important: in sidebar la base setta 8px con selettore più specifico */
-  border-radius: var(--cosmos-r-pill) !important;
+  border-radius: var(--cosmos-tab-radius, var(--cosmos-r-pill)) !important;
   transition:
     background-color var(--anim-duration-fast) var(--anim-motion-baseline, ease),
     box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease),
@@ -3974,7 +4022,7 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .tooltip
    cosmos-islands.css
    TEMA RICHIESTO: Baseline — usa var(--tab-radius), var(--tab-outline-width),
    var(--tab-outline-color) e il meccanismo island dei layout `layout-cupertino`
-   / `layout-fusion`. Non portabile ad altri temi.
+   / `layout-fusion` / `layout-cosmos-fusion-glass`. Non portabile ad altri temi.
 
    FUNZIONE: rendere le SIDEBAR isole galleggianti identiche al main content —
    radius + outline hairline + shadow + stacco dai bordi. Destra e sinistra
@@ -4009,9 +4057,9 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .tooltip
    phone le sidebar sono .workspace-drawer full-screen, non isole .mod-*-split
    galleggianti → la ricetta island (staccare dai bordi) è priva di senso su un
    drawer full-screen. Audit: docs/2026-07-11-mobile-gate-audit.md. */
-body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-right-split .workspace-tab-container,
-body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-left-split .workspace-tab-container {
   margin: 0 var(--island-gap) var(--island-gap);
   border-radius: var(--tab-radius);
@@ -4026,9 +4074,9 @@ body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
    l'isola. Stesso margin orizzontale → bordi allineati. È un flex-item in un
    `.workspace-tabs` column: il margin orizzontale la RESTRINGE (non solo
    shift). Solo left/right: top/bottom invariati (la barra galleggia sopra). */
-body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-right-split .workspace-tab-header-container,
-body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-left-split .workspace-tab-header-container {
   margin-left: var(--island-gap);
   margin-right: var(--island-gap);
@@ -4134,18 +4182,18 @@ body:not(.is-phone) .workspace-split.mod-sidedock .workspace-tabs:not(.mod-stack
    KEEP gate ×4 (slice 3): mirror delle regole island (cosmos-islands.css, tutte
    KEEP): il toggle-off resta gated in lockstep con la regola che annulla.
    Audit: docs/2026-07-11-mobile-gate-audit.md. */
-body.cosmos-right-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+body.cosmos-right-island-off:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-right-split .workspace-tab-container,
-body.cosmos-left-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+body.cosmos-left-island-off:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-left-split .workspace-tab-container {
   margin: 0;
   border-radius: 0;
   outline: none;  /* hairline decorativa dell'isola, NON un focus ring */
   box-shadow: none;
 }
-body.cosmos-right-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+body.cosmos-right-island-off:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-right-split .workspace-tab-header-container,
-body.cosmos-left-island-off:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+body.cosmos-left-island-off:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-left-split .workspace-tab-header-container {
   margin-left: 0;
   margin-right: 0;
@@ -4177,6 +4225,18 @@ body:not(.is-phone) .workspace-split.mod-sidedock .workspace-leaf-resize-handle 
 .bases-view .bases-cards-item:focus-visible {
   outline: var(--cosmos-focus-ring);
   outline-offset: var(--cosmos-focus-offset);
+}
+
+/* Text inputs restano PIATTI in focus — niente box-shadow/glow né bordo nel
+   colore focus (il "focus box" che Mario boccia, es. il search di Sonar). La
+   base Baseline stila ogni input bare (:not(.prompt-input)) con box-shadow inset
+   + border-color: --…-border-focus; qui il focus torna a sembrare lo stato a
+   riposo. Stessa specificità della regola base, appesa dopo → vince senza
+   !important. Coerente con la linea "niente superfici decorative". */
+input:is([type=text], [type=search], [type=email], [type=password], [type=number]):not(.prompt-input):focus,
+input:is([type=text], [type=search], [type=email], [type=password], [type=number]):not(.prompt-input):focus-visible {
+  box-shadow: none;
+  border-color: var(--background-modifier-border);
 }
 
 /* Press feedback — micro-scale alla Apple sul pill del tab. Solo transform
@@ -4237,6 +4297,240 @@ body.cosmos-generous-radii {
   --radius-l: calc(24px * var(--radius-modifier));
   --radius-xl: calc(32px * var(--radius-modifier));
   --tab-radius: calc(10px * var(--radius-modifier));
+}
+
+/* ==========================================================================
+   § FUSION TABS (toggle Style Settings: cosmos-fusion-tabs)
+   --------------------------------------------------------------------------
+   Riprende il solo trattamento tab di Baseline Fusion senza trascinarsi
+   dietro il layout Fusion completo: capsule full-round, active surface
+   translucent e shadow elevata. Il toggle è ortogonale al flavour, ma resta
+   spento in Standard per mantenere il contratto "clean Baseline".
+
+   Le classi floating non sono presenti nel tab switcher phone, quindi non
+   serve un nuovo gate mobile. Invece di duplicare regole con !important, il
+   toggle cambia i tre token già consumati dal layer Craft: radius, active
+   surface e shadow. Min-width, scroll, hover, focus e press restano invariati.
+   ========================================================================== */
+body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab-floating-center):not(.layout-baseline)
+  .workspace-split.mod-root .workspace-tabs:not(.mod-stacked) {
+  --cosmos-tab-radius: var(--cosmos-r-fusion-tab);
+  --cosmos-tabbar-radius: var(--cosmos-r-fusion-tabbar);
+  --craft-tab-active: color-mix(in srgb, var(--background-primary) 75%, transparent);
+  --shadow-tactile: var(--cosmos-fusion-tab-shadow);
+}
+
+/* Fusion: ingresso delle nuove tab con fade + blur + micro-scale. Il flavour
+   completo lo include; il toggle tab lo abilita sugli altri flavour. Le durate
+   consumano i token Cosmos, quindi Reduce motion le azzera by-construction. */
+@media (hover: hover) and (pointer: fine) {
+  body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab-floating-center):not(.layout-baseline)
+    .workspace-split.mod-root .workspace-tabs:not(.mod-stacked)
+    .workspace-tab-header {
+    transition:
+      opacity var(--cosmos-t-base) var(--mv-lift),
+      filter var(--cosmos-t-base) var(--mv-lift),
+      background-color var(--cosmos-t-fast) var(--mv-lift),
+      box-shadow var(--cosmos-t-fast) var(--mv-lift),
+      transform var(--cosmos-t-fast) var(--cosmos-spring);
+  }
+
+  @starting-style {
+    body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab-floating-center):not(.layout-baseline)
+      .workspace-split.mod-root .workspace-tabs:not(.mod-stacked)
+      .workspace-tab-header {
+      filter: blur(var(--cosmos-tab-entry-blur));
+      scale: var(--cosmos-tab-entry-scale);
+      opacity: 0;
+    }
+  }
+}
+
+/* ==========================================================================
+   § FLOATING EDITOR SURFACE
+   Toggle: cosmos-floating-editor · preset: layout-cosmos-fusion-glass
+   --------------------------------------------------------------------------
+   Il contenitore dell'editor diventa una island. Il contenuto interno resta
+   trasparente per mostrare UNA sola superficie, evitando card dentro card. */
+@media (hover: hover) and (pointer: fine) {
+  body:is(.cosmos-floating-editor, .layout-cosmos-fusion-glass):not(.layout-baseline)
+    .workspace-split.mod-root > .workspace-tabs > .workspace-tab-container {
+    margin: 0 var(--island-gap) var(--island-gap);
+    border-radius: var(--cosmos-r-floating-surface);
+    outline: var(--cosmos-glass-outline);
+    background-color: var(--cosmos-glass-surface);
+    box-shadow: var(--cosmos-island-shadow);
+    backdrop-filter: var(--cosmos-glass-blur);
+    overflow: hidden;
+  }
+
+  body:is(.cosmos-floating-editor, .layout-cosmos-fusion-glass):not(.layout-baseline)
+    .workspace-split.mod-root > .workspace-tabs > .workspace-tab-header-container {
+    margin-inline: var(--island-gap);
+  }
+
+  body:is(.cosmos-floating-editor, .layout-cosmos-fusion-glass):not(.layout-baseline)
+    .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
+    :is(.workspace-leaf, .workspace-leaf-content, .view-header, .view-content, .document-search-container) {
+    background-color: transparent;
+  }
+}
+
+/* ==========================================================================
+   § FLOATING SETTINGS PANEL
+   Toggle: cosmos-floating-settings · preset: layout-cosmos-fusion-glass */
+@media (hover: hover) and (pointer: fine) {
+  body:is(.cosmos-floating-settings, .layout-cosmos-fusion-glass):not(.layout-baseline)
+    .modal.mod-settings .vertical-tab-header {
+    margin: var(--island-gap) 0 var(--island-gap) var(--island-gap);
+    border-radius: var(--cosmos-r-floating-surface);
+    outline: var(--cosmos-glass-outline);
+    background-color: var(--cosmos-glass-surface);
+    box-shadow: var(--cosmos-pop-shadow);
+    backdrop-filter: var(--cosmos-glass-blur);
+  }
+}
+
+/* ==========================================================================
+   § FLOATING RIBBON
+   Toggle: cosmos-floating-ribbon · preset: layout-cosmos-fusion-glass */
+@media (hover: hover) and (pointer: fine) {
+  body:is(.cosmos-floating-ribbon, .layout-cosmos-fusion-glass):not(.layout-baseline)
+    .workspace-ribbon.mod-left:not(.is-collapsed) {
+    margin: var(--island-gap) 0 var(--island-gap) var(--island-gap);
+    padding: 0;
+    border-radius: var(--cosmos-r-floating-surface);
+    outline: var(--cosmos-glass-outline);
+    background-color: var(--cosmos-glass-surface-strong);
+    box-shadow: var(--cosmos-pop-shadow);
+    backdrop-filter: var(--cosmos-glass-blur);
+    overflow: hidden;
+  }
+}
+
+/* ==========================================================================
+   § FUSION GLASS — full flavour
+   --------------------------------------------------------------------------
+   Preset volutamente più espressivo: oltre ai quattro moduli sopra, porta il
+   trattamento translucent/blur sulle superfici native elevate. Nessun selector
+   di plugin: solo menu, suggestion, prompt, popover, modal e drawer Obsidian. */
+body.layout-cosmos-fusion-glass:not(.layout-baseline) .workspace {
+  background-color: var(--background-secondary);
+}
+
+body.layout-cosmos-fusion-glass:not(.layout-baseline) {
+  --tab-outline-width: var(--cosmos-hairline-width);
+}
+
+body.layout-cosmos-fusion-glass:not(.layout-baseline)
+  :is(.menu, .suggestion-container, .prompt, .popover, .modal:not(.mod-settings)) {
+  background-color: var(--cosmos-glass-surface-strong);
+  box-shadow: var(--cosmos-pop-shadow);
+  backdrop-filter: var(--cosmos-glass-blur);
+}
+
+/* Tablet: Fusion Glass rende anche il drawer pinned una island. Il target
+   phone continua a usare il drawer full-screen nativo senza inset forzati. */
+body.layout-cosmos-fusion-glass.is-tablet .workspace-drawer.is-pinned.mod-left {
+  margin: var(--island-gap) 0 var(--island-gap) var(--island-gap);
+  border-radius: var(--cosmos-r-floating-surface);
+  outline: var(--cosmos-glass-outline);
+  background-color: var(--cosmos-glass-surface-strong);
+  box-shadow: var(--cosmos-island-shadow);
+  backdrop-filter: var(--cosmos-glass-blur);
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   § FILLED NAVIGATION ICONS (toggle: cosmos-filled-icons)
+   --------------------------------------------------------------------------
+   Craft distingue gli oggetti/destinazioni dalle azioni: i primi sono pieni,
+   le seconde restano outline. Obsidian espone Lucide (stroke-only), quindi un
+   `fill: currentColor` globale annerirebbe dettagli e controlli. Questa
+   whitelist sostituisce solo i glifi semantici sicuri con mask monocromatiche;
+   search/plus/x/chevron/settings e gli altri controlli non sono toccati.
+
+   Le mask ereditano `currentColor`: hover, active, muted, light/dark e plugin
+   continuano a pilotare il contrasto senza palette parallele. Nessun gate
+   mobile: la stessa grammatica visiva vale nei drawer phone. ================= */
+
+body.cosmos-filled-icons svg.svg-icon:is(.lucide-folder, .lucide-folder-open) {
+  --cosmos-filled-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M3 4h6l2 2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z'/%3E%3C/svg%3E");
+}
+
+body.cosmos-filled-icons svg.svg-icon:is(.lucide-file, .lucide-file-text) {
+  --cosmos-filled-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M5 2h9l5 5v15H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm9 1v5h5'/%3E%3C/svg%3E");
+}
+
+body.cosmos-filled-icons svg.svg-icon:is(.lucide-book, .lucide-book-open) {
+  --cosmos-filled-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M3 3h5a4 4 0 0 1 4 4v14a5 5 0 0 0-4-2H3V3Zm18 0h-5a4 4 0 0 0-4 4v14a5 5 0 0 1 4-2h5V3Z'/%3E%3C/svg%3E");
+}
+
+body.cosmos-filled-icons svg.svg-icon:is(.lucide-archive, .lucide-archive-box) {
+  --cosmos-filled-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M2 3h20v5H2V3Zm2 7h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10Zm5 3v2h6v-2H9Z'/%3E%3C/svg%3E");
+}
+
+body.cosmos-filled-icons svg.svg-icon.lucide-inbox {
+  --cosmos-filled-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M4 3h16l3 12v6H1v-6L4 3Zm1.5 2L3 15h5a4 4 0 0 0 8 0h5L18.5 5h-13Z'/%3E%3C/svg%3E");
+}
+
+body.cosmos-filled-icons svg.svg-icon:is(.lucide-user, .lucide-contact, .lucide-circle-user-round) {
+  --cosmos-filled-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='7' r='4' fill='black'/%3E%3Cpath fill='black' d='M4 22a8 8 0 0 1 16 0H4Z'/%3E%3C/svg%3E");
+}
+
+body.cosmos-filled-icons svg.svg-icon.lucide-users {
+  --cosmos-filled-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='9' cy='7' r='4' fill='black'/%3E%3Ccircle cx='18' cy='8' r='3' fill='black'/%3E%3Cpath fill='black' d='M1 22a8 8 0 0 1 16 0H1Zm15-8a7 7 0 0 1 7 7h-4a10 10 0 0 0-3-7Z'/%3E%3C/svg%3E");
+}
+
+body.cosmos-filled-icons svg.svg-icon:is(.lucide-layers, .lucide-layers-3) {
+  --cosmos-filled-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='m12 2 10 5-10 5L2 7l10-5Zm-8.5 9L12 15.25 20.5 11 22 12l-10 5-10-5 1.5-1Zm0 5L12 20.25 20.5 16 22 17l-10 5-10-5 1.5-1Z'/%3E%3C/svg%3E");
+}
+
+body.cosmos-filled-icons svg.svg-icon:is(.lucide-box, .lucide-package) {
+  --cosmos-filled-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='m12 2 10 5-10 5L2 7l10-5ZM2 9l9 4.5V22l-9-5V9Zm20 0-9 4.5V22l9-5V9Z'/%3E%3C/svg%3E");
+}
+
+body.cosmos-filled-icons svg.svg-icon:is(.lucide-tag, .lucide-tags) {
+  --cosmos-filled-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' fill-rule='evenodd' d='M2 3h8l12 12-7 7L3 10 2 3Zm5 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z'/%3E%3C/svg%3E");
+}
+
+body.cosmos-filled-icons svg.svg-icon.lucide-star {
+  --cosmos-filled-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='m12 2.5 3 6.1 6.7 1-4.9 4.7 1.2 6.7-6-3.2-6 3.2 1.2-6.7-4.9-4.7 6.7-1 3-6.1Z'/%3E%3C/svg%3E");
+}
+
+body.cosmos-filled-icons svg.svg-icon:is(
+  .lucide-folder,
+  .lucide-folder-open,
+  .lucide-file,
+  .lucide-file-text,
+  .lucide-book,
+  .lucide-book-open,
+  .lucide-archive,
+  .lucide-archive-box,
+  .lucide-inbox,
+  .lucide-user,
+  .lucide-contact,
+  .lucide-circle-user-round,
+  .lucide-users,
+  .lucide-layers,
+  .lucide-layers-3,
+  .lucide-box,
+  .lucide-package,
+  .lucide-tag,
+  .lucide-tags,
+  .lucide-star
+) {
+  background-color: currentColor;
+  -webkit-mask-image: var(--cosmos-filled-icon);
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-image: var(--cosmos-filled-icon);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  fill: none;
+  stroke: none;
 }
 
 /* ==========================================================================
