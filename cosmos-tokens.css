@@ -159,6 +159,23 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
 }
 
 /* --------------------------------------------------------------------------
+   § REALCRAFT (toggle: realcraft) — superfici sui valori REALI di Craft.
+   Campionati pixel da Craft "Newcraft": editor #242424, chrome (sidebar/
+   pannelli) #1b1b1b — più SCURO dell'editor: Craft INVERTE il modello Cosmos
+   (dove il chrome è elevato/più chiaro) — e card/superfici elevate #282828 che
+   staccano verso l'alto. Neutro puro (R=G=B), come Craft. Isolato: nessun
+   effetto senza il toggle; scheme/temi attuali invariati. Specificità (0,4,1) =
+   ai blocchi scheme, appesa dopo → vince per ordine; i --background-* pinnati
+   battono comunque il mapping globale (bassa specificità) qualunque scheme.
+   -------------------------------------------------------------------------- */
+body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light) {
+  --cosmos-surface-0: #242424;   /* editor / canvas    (--background-primary) */
+  --cosmos-surface-1: #1b1b1b;   /* sidebar + pannelli (--background-secondary) */
+  --cosmos-surface-2: #282828;   /* superfici elevate  (--background-primary-alt) */
+  --cosmos-surface-3: #2c2c2c;   /* nav attivo / card  (--background-secondary-alt) */
+}
+
+/* --------------------------------------------------------------------------
    § Reduced motion — al livello dei token, non per-selettore.
    Azzerare le durate qui rende conforme OGNI transizione che le consuma,
    incluse quelle future. --anim-speed-modifier: 0 propaga lo stesso principio

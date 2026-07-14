@@ -626,6 +626,12 @@ settings:
 		type: class-toggle
 		default: false
 	-
+		id: realcraft
+		title: Realcraft surfaces
+		description: Palette superfici ricalcata sui valori REALI di Craft (campionati da Craft Newcraft — editor #242424, chrome #1b1b1b più scuro dell'editor, card #282828 che staccano). Sperimentale, isolato — OFF = temi attuali invariati.
+		type: class-toggle
+		default: false
+	-
 		id: element-style
 		title: Personality
 		type: class-select
@@ -3367,6 +3373,23 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --cosmos-surface-1: color-mix(in srgb, var(--cosmos-surface-0), white 1.2766%);
   --cosmos-surface-2: color-mix(in srgb, var(--cosmos-surface-0), white 2.5532%);
   --cosmos-surface-3: color-mix(in srgb, var(--cosmos-surface-0), white 4.2553%);
+}
+
+/* --------------------------------------------------------------------------
+   § REALCRAFT (toggle: realcraft) — superfici sui valori REALI di Craft.
+   Campionati pixel da Craft "Newcraft": editor #242424, chrome (sidebar/
+   pannelli) #1b1b1b — più SCURO dell'editor: Craft INVERTE il modello Cosmos
+   (dove il chrome è elevato/più chiaro) — e card/superfici elevate #282828 che
+   staccano verso l'alto. Neutro puro (R=G=B), come Craft. Isolato: nessun
+   effetto senza il toggle; scheme/temi attuali invariati. Specificità (0,4,1) =
+   ai blocchi scheme, appesa dopo → vince per ordine; i --background-* pinnati
+   battono comunque il mapping globale (bassa specificità) qualunque scheme.
+   -------------------------------------------------------------------------- */
+body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light) {
+  --cosmos-surface-0: #242424;   /* editor / canvas    (--background-primary) */
+  --cosmos-surface-1: #1b1b1b;   /* sidebar + pannelli (--background-secondary) */
+  --cosmos-surface-2: #282828;   /* superfici elevate  (--background-primary-alt) */
+  --cosmos-surface-3: #2c2c2c;   /* nav attivo / card  (--background-secondary-alt) */
 }
 
 /* --------------------------------------------------------------------------
