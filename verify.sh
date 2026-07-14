@@ -3,12 +3,17 @@
 # Runs the assertions in verify-spec.json against the RUNNING Obsidian vault
 # via `obsidian-cli eval` — the theme's live-DOM oracle. Selectors not in the
 # DOM (closed modals, collapsed panes) report SKIP, not FAIL.
-# Usage: ./verify.sh          (after build.sh + deploy.sh + theme reload)
+# Usage: ./verify.sh [vault]  (after build.sh + deploy.sh + theme reload)
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 BIN="/Applications/Obsidian.app/Contents/MacOS/obsidian-cli"
 [ -x "$BIN" ] || { echo "obsidian-cli not found at $BIN"; exit 2; }
+VAULT="${1:-}"
+CLI=("$BIN")
+if [[ -n "$VAULT" ]]; then
+  CLI+=("vault=$VAULT")
+fi
 
 SPEC=$(jq -c '.assertions' verify-spec.json)
 
@@ -31,7 +36,12 @@ JS=$(cat <<JS
       return {name:a.name, status:"SKIP", note:"toggle "+a.skipIfBodyClass+" active"};
     if(a.ruleExists){
       let found=false;
-      for(const sheet of document.styleSheets){
+      // Obsidian may keep the active theme in app.customCss.styleEl without
+      // exposing that sheet through document.styleSheets. Include both and
+      // dedupe, otherwise optional theme rules report false negatives.
+      const sheets=[...document.styleSheets, app.customCss.styleEl?.sheet]
+        .filter((sheet,index,all)=>sheet && all.indexOf(sheet)===index);
+      for(const sheet of sheets){
         let rules; try{rules=sheet.cssRules}catch(e){continue;}
         // NB: con il CSS nesting ogni CSSStyleRule ha cssRules (vuota ma truthy):
         // testare selectorText SEMPRE, e ricorrere solo se la lista ha elementi.
@@ -72,7 +82,7 @@ JS=$(cat <<JS
 JS
 )
 
-RAW=$("$BIN" eval code="$JS" 2>&1 | sed 's/^=> //' | tail -1)
+RAW=$("${CLI[@]}" eval code="$JS" 2>&1 | sed 's/^=> //' | tail -1)
 
 python3 - "$RAW" <<'PY'
 import json, sys

@@ -21,6 +21,11 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 BIN="/Applications/Obsidian.app/Contents/MacOS/obsidian-cli"
 [ -x "$BIN" ] || { echo "obsidian-cli non trovato"; exit 2; }
+VAULT="${1:-}"
+CLI=("$BIN")
+if [[ -n "$VAULT" ]]; then
+  CLI+=("vault=$VAULT")
+fi
 
 SPEC=$(jq -c '.assertions' verify-mobile-spec.json)
 
@@ -66,7 +71,7 @@ JS=$(cat <<JS
 JS
 )
 
-RAW=$("$BIN" eval code="$JS" 2>&1 | sed 's/^=> //' | tail -1)
+RAW=$("${CLI[@]}" eval code="$JS" 2>&1 | sed 's/^=> //' | tail -1)
 
 python3 - "$RAW" <<'PY'
 import json,sys
