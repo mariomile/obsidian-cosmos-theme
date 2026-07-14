@@ -37,9 +37,24 @@ body {
   /* --- Radius geometry (concentrica) --------------------------------------
      Il pill dei tab eredita il raggio tab di Baseline (8px di default);
      la barra che lo contiene è SEMPRE pill + inset — mai un numero a sé. */
-  --cosmos-r-pill: var(--tab-radius, 8px);
+  --cosmos-r-pill: var(--cosmos-tab-radius, var(--tab-radius, 8px));
   --cosmos-tab-inset: 2px;
   --cosmos-r-tabbar: calc(var(--cosmos-r-pill) + var(--cosmos-tab-inset));
+  --cosmos-r-fusion-tab: 999px;
+  --cosmos-r-fusion-tabbar: calc(var(--cosmos-r-fusion-tab) + var(--cosmos-tab-inset));
+  --cosmos-fusion-tab-shadow: var(--shadow-tab, var(--shadow-s));
+  --cosmos-tab-entry-blur: 4px;
+  --cosmos-tab-entry-scale: 0.75;
+  --cosmos-hairline-width: 1px;
+
+  /* --- Fusion Glass ------------------------------------------------------
+     Un'unica ricetta per editor, settings, ribbon, drawer e overlay native.
+     I layer consumer decidono DOVE applicarla; qui vivono valori e geometria. */
+  --cosmos-glass-blur: blur(18px) saturate(115%);
+  --cosmos-glass-surface: color-mix(in srgb, var(--background-primary) 78%, transparent);
+  --cosmos-glass-surface-strong: color-mix(in srgb, var(--background-secondary) 86%, transparent);
+  --cosmos-glass-outline: 1px solid color-mix(in srgb, var(--text-muted) 16%, transparent);
+  --cosmos-r-floating-surface: var(--radius-m);
 
   /* --- Spacing rhythm (base 4) -------------------------------------------- */
   --cosmos-gap-1: 4px;

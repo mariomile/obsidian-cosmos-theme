@@ -2,7 +2,7 @@
    cosmos-islands.css
    TEMA RICHIESTO: Baseline — usa var(--tab-radius), var(--tab-outline-width),
    var(--tab-outline-color) e il meccanismo island dei layout `layout-cupertino`
-   / `layout-fusion`. Non portabile ad altri temi.
+   / `layout-fusion` / `layout-cosmos-fusion-glass`. Non portabile ad altri temi.
 
    FUNZIONE: rendere le SIDEBAR isole galleggianti identiche al main content —
    radius + outline hairline + shadow + stacco dai bordi. Destra e sinistra
@@ -37,9 +37,9 @@
    phone le sidebar sono .workspace-drawer full-screen, non isole .mod-*-split
    galleggianti → la ricetta island (staccare dai bordi) è priva di senso su un
    drawer full-screen. Audit: docs/2026-07-11-mobile-gate-audit.md. */
-body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-right-split .workspace-tab-container,
-body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-left-split .workspace-tab-container {
   margin: 0 var(--island-gap) var(--island-gap);
   border-radius: var(--tab-radius);
@@ -54,9 +54,9 @@ body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
    l'isola. Stesso margin orizzontale → bordi allineati. È un flex-item in un
    `.workspace-tabs` column: il margin orizzontale la RESTRINGE (non solo
    shift). Solo left/right: top/bottom invariati (la barra galleggia sopra). */
-body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-right-split .workspace-tab-header-container,
-body:is(.layout-cupertino, .layout-fusion):not(.is-phone)
+body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-left-split .workspace-tab-header-container {
   margin-left: var(--island-gap);
   margin-right: var(--island-gap);

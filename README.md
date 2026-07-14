@@ -10,6 +10,7 @@ Switch via **Settings → Style Settings → Cosmos → Cosmos Flavour**:
 
 | Flavour | Workspace layout | Cosmos skin | Right sidebar island |
 |---|---|---|---|
+| **Fusion Glass** | `layout-cosmos-fusion-glass` | on + full glass preset | yes |
 | **Cupertino** (default) | `layout-cupertino` | on | yes |
 | **Fusion** | `layout-fusion` | on | yes |
 | **Border** | `layout-border` | on | no |
@@ -17,11 +18,23 @@ Switch via **Settings → Style Settings → Cosmos → Cosmos Flavour**:
 
 The Cosmos skin (Craft-style compact pill tabs + a darker, uniform dark surface) is scoped `:not(.layout-baseline)`, so **Standard** falls back to a clean Baseline workspace.
 
+**Fusion Glass** is the opt-in expressive preset: Fusion capsule tabs and entrance motion, floating editor/settings/ribbon, mirrored sidebar islands, translucent native overlays, blur, and tablet pinned-drawer treatment. It uses only Obsidian-native surfaces—no Omnisearch or plugin-specific selectors. Existing flavours keep their current output because every added module is gated and defaults off.
+
 **Right sidebar island** — in Cupertino & Fusion the right sidebar becomes a floating "island" matching the editor's native island (radius + hairline outline + shadow, top-aligned).
 
 ### Cupertino Light — the "Superfici chiare" toggle
 
 A **class-toggle** in Style Settings (`cosmos-light`, off by default). When on, it disables the Cosmos *darker* surfaces → the theme falls back to Baseline's native (lighter) Cupertino greys. Combine with Cupertino/Fusion to get "Cupertino Light": same craft tabs + island, lighter surfaces. Works in dark and light mode.
+
+### Fusion tabs — optional Craft capsule treatment
+
+The **Fusion tabs (Craft)** toggle (`cosmos-fusion-tabs`, off by default) reuses Baseline Fusion's full-round capsule, translucent active surface, and elevated shadow without switching the whole workspace to the Fusion flavour. It applies to desktop editor tabs only and intentionally stays off in Standard, preserving Standard's clean-Baseline contract.
+
+Additional independent toggles—**Floating editor surface**, **Floating settings panel**, and **Floating ribbon**—apply the corresponding Fusion/Craft treatment without changing flavour. All default to off; Fusion Glass includes all three as a preset.
+
+### Filled navigation icons — optional Craft object language
+
+The **Filled navigation icons (Craft)** toggle (`cosmos-filled-icons`, off by default) uses solid monochrome glyphs for destinations and objects such as folders, files, books, archives, people, tags, and collections. Action icons such as search, add, close, chevrons, and settings remain outline, preserving control legibility. The masks inherit `currentColor`, so native hover, active, muted, light, and dark states continue to work unchanged on desktop and mobile.
 
 ## Curated Style Settings (vertical)
 
