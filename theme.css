@@ -4293,18 +4293,21 @@ body:not(.is-mobile) .workspace-ribbon.mod-left .side-dock-actions {
    identico movimento, come un'app nativa.
 
    Minimal-diff: stesso scope-proprietà di Baseline (shorthand senza property
-   = `all`), cambia SOLO la curva. Scoped ai due sidedock (.mod-left/right-split,
-   specificità (0,2,0) → batte il bare .workspace-split (0,1,0) per
-   specificità+ordine, niente !important): l'area editor (.mod-root) resta sulla
-   curva Baseline, invariata. NON tocca lo stato unfocused macOS/fusion
-   (`transition:none`, specificità più alta → vince a finestra non-a-fuoco, dove
-   comunque non serve animare). Niente gate :not(.is-phone): su phone le sidebar
-   sono .workspace-drawer, non .mod-*-split → il selettore non matcha da sé, zero
-   mobile-gate aggiunti. Reduced-motion: --cosmos-t-panel→0 (tokens) azzera by
-   construction. Ribbon lasciata a Baseline in v1 (override = !important → bump
-   del ceiling contract, follow-up separato). */
-.workspace-split.mod-left-split,
-.workspace-split.mod-right-split {
+   = `all`), cambia SOLO la curva. Scoped ai due sidedock includendo .mod-sidedock
+   → specificità (0,3,0): batte l'UNICA regola Baseline che tocca lo split,
+   `body:not(.is-mobile) .workspace-split` (0,2,1) — 3 classi > 2, il livello
+   `body` non conta perché la colonna-classi si confronta prima. (La regola
+   `input-cupertino` NON matcha lo split, mira ai tab header; verificato via
+   el.matches nel DOM live.) Niente !important, niente body-prefix, niente gate
+   :not(.is-phone) (su phone le sidebar sono .workspace-drawer, non .mod-*-split
+   → il selettore non matcha da sé, zero mobile-gate aggiunti). L'area editor
+   (.mod-root) resta sulla curva Baseline. NON tocca lo stato unfocused
+   macOS/fusion (`transition:none`, specificità più alta → vince a finestra
+   non-a-fuoco, dove comunque non serve animare). Reduced-motion:
+   --cosmos-t-panel→0 (tokens) azzera by construction. Ribbon lasciata a Baseline
+   in v1 (override = !important → bump del ceiling contract, follow-up separato). */
+.workspace-split.mod-sidedock.mod-left-split,
+.workspace-split.mod-sidedock.mod-right-split {
   transition: var(--cosmos-t-panel) var(--cosmos-native);
 }
 
