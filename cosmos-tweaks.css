@@ -529,3 +529,14 @@ body.craft-nav-toggle .nav-folder-title:not([data-path*="/"]) > .nav-folder-titl
   letter-spacing: var(--mv-label-track);
   text-transform: uppercase;
 }
+
+/* ==========================================================================
+   § REALCRAFT — fix riga attiva. L'active-line-block colora la riga corrente
+   con --background-secondary, che in Realcraft è il chrome SCURO (#1b1b1b) →
+   riga near-black sotto il testo. Portala a una superficie elevata chiara così
+   "stacca" come un block Craft invece di annerire. Scoped a body.realcraft
+   (una classe in più della regola base → vince). Solo con Realcraft attivo.
+   ========================================================================== */
+body.realcraft.active-line-block .view-content > .markdown-source-view .cm-line.cm-active:not(.cm-gutterElement, .HyperMD-callout, .HyperMD-codeblock-bg, .HyperMD-quote)::before {
+  background: var(--background-primary-alt);
+}
