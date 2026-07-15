@@ -626,11 +626,22 @@ settings:
 		type: class-toggle
 		default: false
 	-
-		id: realcraft
-		title: Realcraft surfaces
-		description: Palette superfici ricalcata sui valori REALI di Craft (campionati da Craft Newcraft — editor #242424, chrome #1b1b1b più scuro dell'editor, card #282828 che staccano). Sperimentale, isolato — OFF = temi attuali invariati.
-		type: class-toggle
-		default: false
+		id: cosmos-flavour
+		title: Palette
+		description: Il palette colori/superfici — distinto dal "Cosmos Flavour" (layout) qui sopra. Mutuamente esclusivo, torni sempre a uno. New Craft Darker = scuro di default. New Craft Lighter = superfici chiare. Real Craft = colori reali di Craft.
+		type: class-select
+		allowEmpty: false
+		default: nc-darker
+		options:
+			-
+				label: New Craft Darker
+				value: nc-darker
+			-
+				label: New Craft Lighter
+				value: cosmos-light
+			-
+				label: Real Craft
+				value: realcraft
 	-
 		id: element-style
 		title: Personality
