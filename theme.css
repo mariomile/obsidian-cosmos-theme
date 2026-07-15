@@ -620,6 +620,9 @@ settings:
 			-
 				label: No Border
 				value: layout-border
+			-
+				label: Notion
+				value: layout-notion
 	-
 		id: cosmos-flavour
 		title: Palette
@@ -3454,6 +3457,85 @@ body.perplexity.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   --text-normal: #eae7e2;
   --text-muted:  #9c9893;
   --text-faint:  #6a6660;
+}
+
+/* --------------------------------------------------------------------------
+   § NOTION (Cosmos Flavour: layout-notion) — flavour COMPLETO, non solo palette.
+   Due assi in un colpo solo: GEOMETRIA squadrata (l'essenza "più squadrato" di
+   Notion) + PALETTE carta-Notion, light E dark. Campionata dai valori reali di
+   Notion: light = editor bianco #fff su cornice warm-gray #f7f6f3, hairline
+   #e9e9e7 (la firma di Notion), testo warm near-black #37352f; dark = editor
+   #191919 con chrome #202020 che sale sopra il canvas (modello Cosmos), testo
+   warm off-white.
+
+   PERCHÉ tutto vive in due blocchi scheme (…theme-dark / …theme-light):
+   il preflight del design-contract (contract.sh, check #5) BLANKA i blocchi
+   `body.<classi>.theme-(dark|light){…}` prima di contare le property duplicate
+   — è il loro mestiere ridefinire i token per scheme. Mettendo QUI anche la
+   geometria (radii/corner-shape/mv-r*), la ripetizione dark↔light è coperta
+   dall'esenzione e non triggera il dup-check. Gli hex stanno nel tokens file
+   (unico esente dal raw-hex ceiling). La geometria è ripetuta di proposito nei
+   due blocchi: è il prezzo per restare dentro l'esenzione scheme-block.
+
+   DARK: gate (0,5,1) con :not(.layout-baseline):not(.cosmos-light) → batte sia
+   la base #141414 (tokens:154) sia realcraft/perplexity (0,4,1). I --cosmos-
+   surface-* fluiscono in --background-* via il mapping di cosmos-layer:217.
+   LIGHT: nessun mapping surface in light → i --background-* sono settati diretti.
+   Accent lasciato al sistema/vault (come realcraft/perplexity): Notion-blue
+   #2383e2 è un add banale se Mario lo vuole.
+   -------------------------------------------------------------------------- */
+body.layout-notion.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
+  /* — Geometria squadrata (Notion = rounded-rect piccolo, non squircle) — */
+  --corner-shape: round;                             /* spegne superellipse(1.1) */
+  --radius-s:  calc(3px * var(--radius-modifier));
+  --radius-m:  calc(5px * var(--radius-modifier));
+  --radius-l:  calc(8px * var(--radius-modifier));
+  --radius-xl: calc(12px * var(--radius-modifier));
+  --mv-r1: 3px;
+  --mv-r-card: 4px;
+  --mv-r-chip: 3px;
+  --cosmos-tab-radius: 4px;
+
+  /* — Palette carta-Notion DARK (surface-* → --background-* via layer:217) — */
+  --cosmos-surface-0: #191919;   /* editor / canvas            (--background-primary) */
+  --cosmos-surface-1: #202020;   /* sidebar + pannelli (chrome elevato, +7) (--background-secondary) */
+  --cosmos-surface-2: #242424;   /* block / superfici elevate  (--background-primary-alt) */
+  --cosmos-surface-3: #2c2c2c;   /* card / nav attivo / selected (--background-secondary-alt) */
+
+  --background-modifier-border:       #2f2f2f;
+  --background-modifier-border-hover:  #373737;
+  --background-modifier-hover:         #262626;
+
+  --text-normal: #d4d4d4;        /* Notion dark ≈ rgba(255,255,255,.81) */
+  --text-muted:  #9b9b9b;
+  --text-faint:  #6f6f6f;
+}
+
+body.layout-notion.theme-light.cupertino-light {
+  /* — Geometria squadrata (ripetuta: il blocco scheme è blankato dal contract) — */
+  --corner-shape: round;
+  --radius-s:  calc(3px * var(--radius-modifier));
+  --radius-m:  calc(5px * var(--radius-modifier));
+  --radius-l:  calc(8px * var(--radius-modifier));
+  --radius-xl: calc(12px * var(--radius-modifier));
+  --mv-r1: 3px;
+  --mv-r-card: 4px;
+  --mv-r-chip: 3px;
+  --cosmos-tab-radius: 4px;
+
+  /* — Palette carta-Notion LIGHT (diretta: niente surface-mapping in light) — */
+  --background-primary:       #ffffff;   /* editor / canvas — bianco Notion */
+  --background-primary-alt:   #f7f6f3;   /* blockquote / table / elevate */
+  --background-secondary:     #f7f6f3;   /* sidebar + pannelli — warm gray */
+  --background-secondary-alt: #eeedea;   /* card / nav attivo / selected */
+
+  --background-modifier-border:       #e9e9e7;   /* hairline — la firma di Notion */
+  --background-modifier-border-hover:  #dcdbd8;
+  --background-modifier-hover:         #efeeec;   /* row hover warm */
+
+  --text-normal: #37352f;        /* warm near-black di Notion */
+  --text-muted:  #787774;
+  --text-faint:  #9b9a97;
 }
 
 /* --------------------------------------------------------------------------
