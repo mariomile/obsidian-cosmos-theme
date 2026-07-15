@@ -3270,6 +3270,10 @@ body {
   --cosmos-t-fast: 140ms;
   --cosmos-t-base: 180ms;
   --cosmos-t-slow: 260ms;
+  /* panel = movimento STRUTTURALE dei pannelli (open/close sidebar left/right/
+     ribbon). Durata a sé (~macOS Finder/Mail), leggermente più snella dei 320ms
+     di Baseline. Consumata da cosmos-islands con --cosmos-native. */
+  --cosmos-t-panel: 300ms;
 
   /* Easing "Craft": molla con leggero overshoot (il control point y>1 supera
      il target e rientra → si legge "fisico/elastico"). SOLO per micro-momenti
@@ -3279,6 +3283,13 @@ body {
      impeccable-disable bounce-easing -- overshoot voluto (feel Craft), uso
      stretto ai momenti di conferma, mai su hover. Approvato da Mario 2026-07-10. */
   --cosmos-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Easing "native": ease-out deciso SENZA overshoot (curva sheet iOS/macOS,
+     già usata da sonar per gli sheet). È la curva dei PANNELLI strutturali:
+     open/close sidebar, ribbon peek. Su un pannello intero il rimbalzo si
+     leggerebbe kitsch → partenza rapida, arrivo morbido, zero settle. Meno
+     frame di reflow della cubic-bezier(0.1,0,0.1,1.25) di Baseline (che overshoota). */
+  --cosmos-native: cubic-bezier(0.32, 0.72, 0, 1);
 
   /* --- Radius geometry (concentrica) --------------------------------------
      Il pill dei tab eredita il raggio tab di Baseline (8px di default);
@@ -3549,6 +3560,7 @@ body.layout-notion.theme-light.cupertino-light {
     --cosmos-t-fast: 0ms;
     --cosmos-t-base: 0ms;
     --cosmos-t-slow: 0ms;
+    --cosmos-t-panel: 0ms;
     --anim-speed-modifier: 0;
   }
 }
@@ -4268,6 +4280,32 @@ body:not(.is-mobile) .workspace-ribbon.mod-left:not(.is-collapsed) {
 body:not(.is-mobile) .workspace-ribbon.mod-left,
 body:not(.is-mobile) .workspace-ribbon.mod-left .side-dock-actions {
   align-items: center;
+}
+
+/* ==========================================================================
+   § MOVIMENTO SIDEBAR NATIVE (2026-07-15) — open/close fisico dei sidedock
+   --------------------------------------------------------------------------
+   Baseline anima .workspace-split con `transition: var(--anim-duration-moderate)`
+   ma OMETTE la timing-function → cade su `ease` generico: è la ragione precisa
+   per cui il collasso "non sembra native". Qui forniamo la curva mancante
+   (--cosmos-native: ease-out zero-bounce, la stessa degli sheet sonar) + una
+   durata pannello dedicata (--cosmos-t-panel). Sinistra e destra: STESSO
+   identico movimento, come un'app nativa.
+
+   Minimal-diff: stesso scope-proprietà di Baseline (shorthand senza property
+   = `all`), cambia SOLO la curva. Scoped ai due sidedock (.mod-left/right-split,
+   specificità (0,2,0) → batte il bare .workspace-split (0,1,0) per
+   specificità+ordine, niente !important): l'area editor (.mod-root) resta sulla
+   curva Baseline, invariata. NON tocca lo stato unfocused macOS/fusion
+   (`transition:none`, specificità più alta → vince a finestra non-a-fuoco, dove
+   comunque non serve animare). Niente gate :not(.is-phone): su phone le sidebar
+   sono .workspace-drawer, non .mod-*-split → il selettore non matcha da sé, zero
+   mobile-gate aggiunti. Reduced-motion: --cosmos-t-panel→0 (tokens) azzera by
+   construction. Ribbon lasciata a Baseline in v1 (override = !important → bump
+   del ceiling contract, follow-up separato). */
+.workspace-split.mod-left-split,
+.workspace-split.mod-right-split {
+  transition: var(--cosmos-t-panel) var(--cosmos-native);
 }
 
 /* ==========================================================================

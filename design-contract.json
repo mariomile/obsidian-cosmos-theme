@@ -25,6 +25,7 @@
     "--cosmos-t-fast",
     "--cosmos-t-base",
     "--cosmos-t-slow",
+    "--cosmos-t-panel",
     "--mv-pill-color",
     "--cosmos-pop-shadow",
     "--cosmos-filled-icon"

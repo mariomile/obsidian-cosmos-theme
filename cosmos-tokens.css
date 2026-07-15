@@ -24,6 +24,10 @@ body {
   --cosmos-t-fast: 140ms;
   --cosmos-t-base: 180ms;
   --cosmos-t-slow: 260ms;
+  /* panel = movimento STRUTTURALE dei pannelli (open/close sidebar left/right/
+     ribbon). Durata a sé (~macOS Finder/Mail), leggermente più snella dei 320ms
+     di Baseline. Consumata da cosmos-islands con --cosmos-native. */
+  --cosmos-t-panel: 300ms;
 
   /* Easing "Craft": molla con leggero overshoot (il control point y>1 supera
      il target e rientra → si legge "fisico/elastico"). SOLO per micro-momenti
@@ -33,6 +37,13 @@ body {
      impeccable-disable bounce-easing -- overshoot voluto (feel Craft), uso
      stretto ai momenti di conferma, mai su hover. Approvato da Mario 2026-07-10. */
   --cosmos-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Easing "native": ease-out deciso SENZA overshoot (curva sheet iOS/macOS,
+     già usata da sonar per gli sheet). È la curva dei PANNELLI strutturali:
+     open/close sidebar, ribbon peek. Su un pannello intero il rimbalzo si
+     leggerebbe kitsch → partenza rapida, arrivo morbido, zero settle. Meno
+     frame di reflow della cubic-bezier(0.1,0,0.1,1.25) di Baseline (che overshoota). */
+  --cosmos-native: cubic-bezier(0.32, 0.72, 0, 1);
 
   /* --- Radius geometry (concentrica) --------------------------------------
      Il pill dei tab eredita il raggio tab di Baseline (8px di default);
@@ -303,6 +314,7 @@ body.layout-notion.theme-light.cupertino-light {
     --cosmos-t-fast: 0ms;
     --cosmos-t-base: 0ms;
     --cosmos-t-slow: 0ms;
+    --cosmos-t-panel: 0ms;
     --anim-speed-modifier: 0;
   }
 }
