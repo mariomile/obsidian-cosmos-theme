@@ -568,6 +568,37 @@ settings:
 		type: class-toggle
 		default: false
 	-
+		id: status-bar-style
+		title: Status bar
+		type: class-select
+		allowEmpty: false
+		default: status-bar-cupertino
+		options:
+			-
+				label: New Craft
+				value: status-bar-cupertino
+			-
+				label: Native
+				value: status-bar-default
+			-
+				label: Full width
+				value: status-bar-full
+			-
+				label: Plain
+				value: status-bar-baseline
+	-
+		id: cosmos-hide-status-bar
+		title: Nascondi status bar
+		description: Nasconde completamente la status bar in basso (conteggio parole, ecc.).
+		type: class-toggle
+		default: false
+	-
+		id: cosmos-h-look
+		title: Look & flavour
+		type: heading
+		level: 1
+		collapsed: false
+	-
 		id: layout-style
 		title: Cosmos Flavour
 		type: class-select
@@ -589,42 +620,6 @@ settings:
 			-
 				label: No Border
 				value: layout-border
-	-
-		id: cosmos-light
-		title: Superfici chiare (New Craft Light)
-		description: Disattiva le superfici scure Cosmos → grigi nativi più chiari. Si combina con New Craft/Apple.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-fusion-tabs
-		title: Fusion tabs (Craft)
-		description: Usa il trattamento tab capsule e translucent di Baseline Fusion senza cambiare il flavour Cosmos. Solo desktop; Standard resta invariato.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-floating-editor
-		title: Floating editor surface
-		description: Trasforma l'editor in una superficie sospesa con inset, hairline, traslucenza e shadow. Fusion Glass lo include automaticamente.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-floating-settings
-		title: Floating settings panel
-		description: Rende la navigazione delle impostazioni una island traslucida in stile Craft/macOS. Fusion Glass lo include automaticamente.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-floating-ribbon
-		title: Floating ribbon
-		description: Stacca la ribbon sinistra dai bordi con superficie, radius e shadow coordinati. Fusion Glass lo include automaticamente.
-		type: class-toggle
-		default: false
-	-
-		id: craft-nav-toggle
-		title: Craft sidebar nav
-		description: Nav sidebar in stile Craft — pill attivo, hover morbido, label di sezione uppercase. OFF = look attuale.
-		type: class-toggle
-		default: false
 	-
 		id: cosmos-flavour
 		title: Palette
@@ -671,28 +666,45 @@ settings:
 				label: Plain
 				value: input-baseline
 	-
-		id: status-bar-style
-		title: Status bar
-		type: class-select
-		allowEmpty: false
-		default: status-bar-cupertino
-		options:
-			-
-				label: New Craft
-				value: status-bar-cupertino
-			-
-				label: Native
-				value: status-bar-default
-			-
-				label: Full width
-				value: status-bar-full
-			-
-				label: Plain
-				value: status-bar-baseline
+		id: cosmos-light
+		title: Superfici chiare (New Craft Light)
+		description: Disattiva le superfici scure Cosmos → grigi nativi più chiari. Si combina con New Craft/Apple.
+		type: class-toggle
+		default: false
 	-
-		id: cosmos-hide-status-bar
-		title: Nascondi status bar
-		description: Nasconde completamente la status bar in basso (conteggio parole, ecc.).
+		id: cosmos-h-extras
+		title: Craft & Fusion extras
+		type: heading
+		level: 1
+		collapsed: false
+	-
+		id: craft-nav-toggle
+		title: Craft sidebar nav
+		description: Nav sidebar in stile Craft — pill attivo, hover morbido, label di sezione uppercase. OFF = look attuale.
+		type: class-toggle
+		default: false
+	-
+		id: cosmos-fusion-tabs
+		title: Fusion tabs (Craft)
+		description: Usa il trattamento tab capsule e translucent di Baseline Fusion senza cambiare il flavour Cosmos. Solo desktop; Standard resta invariato.
+		type: class-toggle
+		default: false
+	-
+		id: cosmos-floating-editor
+		title: Floating editor surface
+		description: Trasforma l'editor in una superficie sospesa con inset, hairline, traslucenza e shadow. Fusion Glass lo include automaticamente.
+		type: class-toggle
+		default: false
+	-
+		id: cosmos-floating-settings
+		title: Floating settings panel
+		description: Rende la navigazione delle impostazioni una island traslucida in stile Craft/macOS. Fusion Glass lo include automaticamente.
+		type: class-toggle
+		default: false
+	-
+		id: cosmos-floating-ribbon
+		title: Floating ribbon
+		description: Stacca la ribbon sinistra dai bordi con superficie, radius e shadow coordinati. Fusion Glass lo include automaticamente.
 		type: class-toggle
 		default: false
 	-
