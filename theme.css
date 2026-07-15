@@ -3439,17 +3439,17 @@ body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light) {
    sistema. Testo warm off-white, bordi warm-neutri.
    -------------------------------------------------------------------------- */
 body.perplexity.theme-dark:not(.layout-baseline):not(.cosmos-light) {
-  /* Warm come Perplexity reale. Il "più chiaro" solo sul FRAME (sidebar +
-     pannelli), la PARTE CENTRALE (editor) resta scura come Perplexity vero:
-     editor immersivo scuro dentro una cornice più chiara. I block staccano
-     appena sopra il central scuro. */
-  --cosmos-surface-0: #1a1816;   /* editor / canvas — central SCURO (--background-primary) */
-  --cosmos-surface-1: #262320;   /* sidebar + pannelli — frame più chiaro (--background-secondary) */
-  --cosmos-surface-2: #221f1d;   /* block / elevate — pop leggero sul central (--background-primary-alt) */
-  --cosmos-surface-3: #2e2b28;   /* card / nav attivo — frame (--background-secondary-alt) */
+  /* Allineato ai valori REALI di Perplexity (campionati): warm, uniforme-scuro
+     e SOTTILE. Central scuro come il vero (#171615), frame appena +8 (non un
+     salto), block/nav con pop minimo — la cornice si distingue di poco, come
+     Perplexity davvero. */
+  --cosmos-surface-0: #181716;   /* editor / canvas — central scuro (--background-primary) */
+  --cosmos-surface-1: #1f1e1d;   /* sidebar + pannelli — frame +8 sottile (--background-secondary) */
+  --cosmos-surface-2: #201f1e;   /* block / elevate — pop minimo (--background-primary-alt) */
+  --cosmos-surface-3: #262523;   /* card / nav attivo (--background-secondary-alt) */
 
-  --background-modifier-border:       #302d2a;
-  --background-modifier-border-hover:  #3a3733;
+  --background-modifier-border:       #2a2826;
+  --background-modifier-border-hover:  #333130;
 
   --text-normal: #eae7e2;
   --text-muted:  #9c9893;
