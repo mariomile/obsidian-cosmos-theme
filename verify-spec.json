@@ -119,6 +119,30 @@
       "ruleExists": ".workspace-tab-header:focus-visible"
     },
     {
+      "name": "optional Fusion tabs rule deployed",
+      "ruleExists": ".cosmos-fusion-tabs"
+    },
+    {
+      "name": "optional floating editor rule deployed",
+      "ruleExists": ".cosmos-floating-editor"
+    },
+    {
+      "name": "optional floating settings rule deployed",
+      "ruleExists": ".cosmos-floating-settings"
+    },
+    {
+      "name": "optional floating ribbon rule deployed",
+      "ruleExists": ".cosmos-floating-ribbon"
+    },
+    {
+      "name": "Fusion Glass flavour rule deployed",
+      "ruleExists": ".layout-cosmos-fusion-glass"
+    },
+    {
+      "name": "optional filled navigation icons rule deployed",
+      "ruleExists": ".cosmos-filled-icons svg.svg-icon"
+    },
+    {
       "name": "menu elevated to surface-2",
       "resolveVar": "--menu-background",
       "expected": "rgb(26, 26, 26)"

@@ -37,9 +37,24 @@ body {
   /* --- Radius geometry (concentrica) --------------------------------------
      Il pill dei tab eredita il raggio tab di Baseline (8px di default);
      la barra che lo contiene è SEMPRE pill + inset — mai un numero a sé. */
-  --cosmos-r-pill: var(--tab-radius, 8px);
+  --cosmos-r-pill: var(--cosmos-tab-radius, var(--tab-radius, 8px));
   --cosmos-tab-inset: 2px;
   --cosmos-r-tabbar: calc(var(--cosmos-r-pill) + var(--cosmos-tab-inset));
+  --cosmos-r-fusion-tab: 999px;
+  --cosmos-r-fusion-tabbar: calc(var(--cosmos-r-fusion-tab) + var(--cosmos-tab-inset));
+  --cosmos-fusion-tab-shadow: var(--shadow-tab, var(--shadow-s));
+  --cosmos-tab-entry-blur: 4px;
+  --cosmos-tab-entry-scale: 0.75;
+  --cosmos-hairline-width: 1px;
+
+  /* --- Fusion Glass ------------------------------------------------------
+     Un'unica ricetta per editor, settings, ribbon, drawer e overlay native.
+     I layer consumer decidono DOVE applicarla; qui vivono valori e geometria. */
+  --cosmos-glass-blur: blur(18px) saturate(115%);
+  --cosmos-glass-surface: color-mix(in srgb, var(--background-primary) 78%, transparent);
+  --cosmos-glass-surface-strong: color-mix(in srgb, var(--background-secondary) 86%, transparent);
+  --cosmos-glass-outline: 1px solid color-mix(in srgb, var(--text-muted) 16%, transparent);
+  --cosmos-r-floating-surface: var(--radius-m);
 
   /* --- Spacing rhythm (base 4) -------------------------------------------- */
   --cosmos-gap-1: 4px;
@@ -141,6 +156,61 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --cosmos-surface-1: color-mix(in srgb, var(--cosmos-surface-0), white 1.2766%);
   --cosmos-surface-2: color-mix(in srgb, var(--cosmos-surface-0), white 2.5532%);
   --cosmos-surface-3: color-mix(in srgb, var(--cosmos-surface-0), white 4.2553%);
+}
+
+/* --------------------------------------------------------------------------
+   § REALCRAFT (toggle: realcraft) — superfici sui valori REALI di Craft.
+   Campionati pixel da Craft "Newcraft": editor #242424, chrome (sidebar/
+   pannelli) #1b1b1b — più SCURO dell'editor: Craft INVERTE il modello Cosmos
+   (dove il chrome è elevato/più chiaro) — e card/superfici elevate #282828 che
+   staccano verso l'alto. Neutro puro (R=G=B), come Craft. Isolato: nessun
+   effetto senza il toggle; scheme/temi attuali invariati. Specificità (0,4,1) =
+   ai blocchi scheme, appesa dopo → vince per ordine; i --background-* pinnati
+   battono comunque il mapping globale (bassa specificità) qualunque scheme.
+   -------------------------------------------------------------------------- */
+body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light) {
+  /* Superfici — campionate da Craft. Chrome più SCURO dell'editor (Craft
+     inverte il modello Cosmos); block/card che STACCANO più chiari del canvas. */
+  --cosmos-surface-0: #242424;   /* editor / canvas    (--background-primary) */
+  --cosmos-surface-1: #1b1b1b;   /* sidebar + pannelli (--background-secondary) */
+  --cosmos-surface-2: #2d2d2d;   /* block / superfici elevate (--background-primary-alt) — pop sopra il canvas */
+  --cosmos-surface-3: #333333;   /* card / nav attivo  (--background-secondary-alt) */
+
+  /* Bordi — Craft: hairline neutro appena percettibile. */
+  --background-modifier-border:       #303030;
+  --background-modifier-border-hover:  #3a3a3a;
+
+  /* Testo — neutro chiaro come Craft (nessun cast). */
+  --text-normal: #e8e8e8;
+  --text-muted:  #a0a0a0;
+  --text-faint:  #6e6e6e;
+
+  /* Accent — lasciato quello di sistema/vault (niente tasti blu). */
+}
+
+/* --------------------------------------------------------------------------
+   § PERPLEXITY (Palette option) — campionato pixel dall'app Perplexity.
+   WARM-dark (R>G>B di ~2-3, NON neutro come Craft): canvas #171615, chrome
+   #1e1d1b che sale sopra il canvas (modello Cosmos, chrome elevato → nessun
+   fix active-line necessario), block/card via via più chiari. Accent di
+   sistema. Testo warm off-white, bordi warm-neutri.
+   -------------------------------------------------------------------------- */
+body.perplexity.theme-dark:not(.layout-baseline):not(.cosmos-light) {
+  /* Allineato ai valori REALI di Perplexity (campionati): warm, uniforme-scuro
+     e SOTTILE. Central scuro come il vero (#171615), frame appena +8 (non un
+     salto), block/nav con pop minimo — la cornice si distingue di poco, come
+     Perplexity davvero. */
+  --cosmos-surface-0: #181716;   /* editor / canvas — central scuro (--background-primary) */
+  --cosmos-surface-1: #1f1e1d;   /* sidebar + pannelli — frame +8 sottile (--background-secondary) */
+  --cosmos-surface-2: #201f1e;   /* block / elevate — pop minimo (--background-primary-alt) */
+  --cosmos-surface-3: #262523;   /* card / nav attivo (--background-secondary-alt) */
+
+  --background-modifier-border:       #2a2826;
+  --background-modifier-border-hover:  #333130;
+
+  --text-normal: #eae7e2;
+  --text-muted:  #9c9893;
+  --text-faint:  #6a6660;
 }
 
 /* --------------------------------------------------------------------------
