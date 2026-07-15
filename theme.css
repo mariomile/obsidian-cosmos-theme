@@ -3466,10 +3466,10 @@ body.perplexity.theme-dark:not(.layout-baseline):not(.cosmos-light) {
    resta scuro e immersivo (#181716); il frame sale a ~#2a/#32 per staccare.
    -------------------------------------------------------------------------- */
 body.perplexity-light.theme-dark:not(.layout-baseline):not(.cosmos-light) {
-  --cosmos-surface-0: #181716;   /* editor / canvas — central scuro (--background-primary) */
-  --cosmos-surface-1: #2a2825;   /* sidebar + pannelli — frame CHIARO per contrasto (--background-secondary) */
-  --cosmos-surface-2: #232120;   /* block / elevate — pop sul central (--background-primary-alt) */
-  --cosmos-surface-3: #322f2c;   /* card / nav attivo — frame chiaro (--background-secondary-alt) */
+  --cosmos-surface-0: #181716;   /* MAIN editor — scuro (--background-primary) */
+  --cosmos-surface-1: #2a2825;   /* SIDEBAR + background — CHIARO per contrasto (--background-secondary) */
+  --cosmos-surface-2: #1f1e1d;   /* block del MAIN — resta SCURO (pop minimo, --background-primary-alt) */
+  --cosmos-surface-3: #322f2c;   /* nav attivo nella SIDEBAR — chiaro (--background-secondary-alt) */
 
   --background-modifier-border:       #383430;
   --background-modifier-border-hover:  #454039;
