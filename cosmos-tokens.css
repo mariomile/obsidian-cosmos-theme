@@ -196,13 +196,16 @@ body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light) {
    sistema. Testo warm off-white, bordi warm-neutri.
    -------------------------------------------------------------------------- */
 body.perplexity.theme-dark:not(.layout-baseline):not(.cosmos-light) {
-  --cosmos-surface-0: #171615;   /* editor / canvas    (--background-primary) */
-  --cosmos-surface-1: #1e1d1b;   /* sidebar + pannelli (--background-secondary) — raised */
-  --cosmos-surface-2: #262523;   /* block / elevate    (--background-primary-alt) */
-  --cosmos-surface-3: #2e2d2b;   /* card / nav attivo  (--background-secondary-alt) */
+  /* Perplexity reale è warm ma MOLTO scuro (canvas #171615). Alzato di ~+9 su
+     tutta la scala per usabilità, tenendo tinta warm e gerarchia; gli elevati
+     arrivano al livello reale dell'hover Perplexity (~#36). */
+  --cosmos-surface-0: #1e1c1a;   /* editor / canvas    (--background-primary) */
+  --cosmos-surface-1: #262320;   /* sidebar + pannelli (--background-secondary) — raised */
+  --cosmos-surface-2: #2e2b28;   /* block / elevate    (--background-primary-alt) — pop */
+  --cosmos-surface-3: #363330;   /* card / nav attivo  (--background-secondary-alt) ≈ hover reale */
 
-  --background-modifier-border:       #2e2b28;
-  --background-modifier-border-hover:  #3a3733;
+  --background-modifier-border:       #363330;
+  --background-modifier-border-hover:  #423e3a;
 
   --text-normal: #eae7e2;
   --text-muted:  #9c9893;

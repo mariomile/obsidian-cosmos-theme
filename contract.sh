@@ -54,11 +54,20 @@ total_focus = sum(strip_comments(c).count(':focus-visible') for c in texts.value
 if total_focus < contract['focus_visible_min']:
     failures.append(f":focus-visible x{total_focus} < floor {contract['focus_visible_min']}")
 
-# 5. New duplicate custom-property definitions (outside allowlist)
+# 5. New duplicate custom-property definitions (outside allowlist).
+#    Scope-aware: scheme/palette ROOT blocks (body.<scheme>.theme-dark{…},
+#    body.<palette>.theme-light{…}, …) are BUILT to redefine the same palette
+#    tokens per scheme — that's their job, not an accidental dup. Blank those
+#    blocks out before counting, so the check still catches genuine accidental
+#    dups everywhere else without allowlisting every palette token by hand.
 allow = set(contract['duplicate_prop_allowlist'])
 all_css = '\n'.join(strip_comments(c) for c in texts.values() if c)
+scheme_block = re.compile(
+    r'body(?:\.[\w-]+)*\.theme-(?:dark|light)(?:\.[\w-]+)*(?::not\([^)]*\))*\s*\{[^{}]*\}',
+    re.S)
+counted_css = scheme_block.sub('', all_css)
 from collections import Counter
-props = Counter(re.findall(r'(--[a-z0-9-]+)\s*:', all_css))
+props = Counter(re.findall(r'(--[a-z0-9-]+)\s*:', counted_css))
 for p, n in props.items():
     if n > 1 and p not in allow:
         failures.append(f"custom property {p} defined x{n} (not in duplicate allowlist)")
