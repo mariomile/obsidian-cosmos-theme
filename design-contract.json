@@ -31,7 +31,12 @@
     "--cosmos-surface-0",
     "--cosmos-surface-1",
     "--cosmos-surface-2",
-    "--cosmos-surface-3"
+    "--cosmos-surface-3",
+    "--background-modifier-border",
+    "--background-modifier-border-hover",
+    "--text-normal",
+    "--text-muted",
+    "--text-faint"
   ],
   "duplicate_prop_allowlist_comment": "craft-tab-active & island-shadow: theme-branch override; cosmos-t-*: azzerati nel media query reduced-motion; mv-pill-color: 9 varianti colore; cosmos-filled-icon: una mask per ciascuna famiglia semantica whitelisted.",
   "outline_none_requires_comment": true,
