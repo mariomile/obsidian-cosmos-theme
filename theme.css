@@ -3467,12 +3467,12 @@ body.perplexity.theme-dark:not(.layout-baseline):not(.cosmos-light) {
    -------------------------------------------------------------------------- */
 body.perplexity-light.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   --cosmos-surface-0: #181716;   /* MAIN editor — scuro (--background-primary) */
-  --cosmos-surface-1: #2a2825;   /* SIDEBAR + background — CHIARO per contrasto (--background-secondary) */
+  --cosmos-surface-1: #383530;   /* SIDEBAR + background — CHIARO come il settings panel (--background-secondary) */
   --cosmos-surface-2: #1f1e1d;   /* block del MAIN — resta SCURO (pop minimo, --background-primary-alt) */
-  --cosmos-surface-3: #322f2c;   /* nav attivo nella SIDEBAR — chiaro (--background-secondary-alt) */
+  --cosmos-surface-3: #423e39;   /* nav attivo nella SIDEBAR — chiaro (--background-secondary-alt) */
 
-  --background-modifier-border:       #383430;
-  --background-modifier-border-hover:  #454039;
+  --background-modifier-border:       #4a453f;
+  --background-modifier-border-hover:  #565049;
 
   --text-normal: #eae7e2;
   --text-muted:  #9c9893;
