@@ -3386,10 +3386,25 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
    battono comunque il mapping globale (bassa specificità) qualunque scheme.
    -------------------------------------------------------------------------- */
 body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light) {
+  /* Superfici — campionate da Craft. Chrome più SCURO dell'editor (Craft
+     inverte il modello Cosmos); block/card che STACCANO più chiari del canvas. */
   --cosmos-surface-0: #242424;   /* editor / canvas    (--background-primary) */
   --cosmos-surface-1: #1b1b1b;   /* sidebar + pannelli (--background-secondary) */
-  --cosmos-surface-2: #282828;   /* superfici elevate  (--background-primary-alt) */
-  --cosmos-surface-3: #2c2c2c;   /* nav attivo / card  (--background-secondary-alt) */
+  --cosmos-surface-2: #2d2d2d;   /* block / superfici elevate (--background-primary-alt) — pop sopra il canvas */
+  --cosmos-surface-3: #333333;   /* card / nav attivo  (--background-secondary-alt) */
+
+  /* Bordi — Craft: hairline neutro appena percettibile. */
+  --background-modifier-border:       #303030;
+  --background-modifier-border-hover:  #3a3a3a;
+
+  /* Testo — neutro chiaro come Craft (nessun cast). */
+  --text-normal: #e8e8e8;
+  --text-muted:  #a0a0a0;
+  --text-faint:  #6e6e6e;
+
+  /* Accent — blu sobrio alla Craft (link, selezione, stati attivi). */
+  --interactive-accent:       #4079e6;
+  --interactive-accent-hover: #5688ea;
 }
 
 /* --------------------------------------------------------------------------
