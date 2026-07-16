@@ -618,6 +618,19 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   white-space: normal;
   overflow: visible;
 }
+/* Espansione su hover: un valore lungo troncato si apre in overlay e mostra
+   il testo intero (va a capo), SENZA spostare le altre righe — le celle sono
+   absolute, quindi z-index le porta sopra e non c'è reflow. */
+.bases-view .bases-tbody .bases-td:hover {
+  z-index: 5;
+  overflow: visible;
+}
+.bases-view .bases-td:not([data-property$="name"])
+  .metadata-input-longtext:not(:empty):hover {
+  white-space: normal;
+  overflow: visible;
+  box-shadow: var(--cosmos-pop-shadow);
+}
 /* Header di colonna in normal-case (Craft) — override mirato della recipe §0
    uppercase, che resta valida per card-label e group-property. */
 .bases-view .bases-table-header-name {

@@ -762,7 +762,7 @@ settings:
 		title: Mobile interface font size
 		description: Extra size added to sidebar/tab/menu text on phone & tablet only — desktop stays on the scale above.
 		type: variable-number-slider
-		default: 2
+		default: 0
 		min: -2
 		max: 10
 		step: 1
@@ -772,7 +772,7 @@ settings:
 		title: Mobile editor font size
 		description: Note/editor body text on phone & tablet only — desktop keeps using Appearance → Font size.
 		type: variable-number-slider
-		default: 26
+		default: 16
 		min: 16
 		max: 40
 		step: 1
@@ -4214,6 +4214,19 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   white-space: normal;
   overflow: visible;
 }
+/* Espansione su hover: un valore lungo troncato si apre in overlay e mostra
+   il testo intero (va a capo), SENZA spostare le altre righe — le celle sono
+   absolute, quindi z-index le porta sopra e non c'è reflow. */
+.bases-view .bases-tbody .bases-td:hover {
+  z-index: 5;
+  overflow: visible;
+}
+.bases-view .bases-td:not([data-property$="name"])
+  .metadata-input-longtext:not(:empty):hover {
+  white-space: normal;
+  overflow: visible;
+  box-shadow: var(--cosmos-pop-shadow);
+}
 /* Header di colonna in normal-case (Craft) — override mirato della recipe §0
    uppercase, che resta valida per card-label e group-property. */
 .bases-view .bases-table-header-name {
@@ -4921,9 +4934,11 @@ body.realcraft.active-line-block .view-content > .markdown-source-view .cm-line.
    Due slider in @settings (heading "Mobile", theme.css — vive nel base
    pre-marker insieme a font-ui-modifier/icon-size-modifier, stesso motivo:
    non è generato da nessuno dei 4 layer file, va editato lì a mano):
-     • font-mobile-ui-modifier (default 2px) — sommato alla scala UI desktop
-       LITERALE di Cosmos (12/13/14/16/18, non al calc di Baseline).
-     • font-mobile-text-size (default 26px) — valore assoluto per l'editor.
+     • font-mobile-ui-modifier (default 0px) — sommato alla scala UI desktop
+       LITERALE di Cosmos (12/13/14/16/18, non al calc di Baseline). Default 0
+       = font mobile al DEFAULT (nessun bump); lo slider resta per alzarlo.
+     • font-mobile-text-size (default 16px = --font-text-size desktop) — valore
+       assoluto per l'editor mobile; default = come desktop, slider per cambiarlo.
 
    --font-ui-*: sidebar, tab, menu, impostazioni. Gated body.is-mobile,
    specificità (0,2,1) — una classe in più della base (0,1,1) — batte la base
@@ -4954,10 +4969,10 @@ body.realcraft.active-line-block .view-content > .markdown-source-view .cm-line.
    un bug — sign-off finale da fare su device reale (stesso limite dichiarato
    in verify-mobile.sh). */
 body.is-mobile.theme-dark, body.is-mobile.theme-light {
-  --font-ui-smaller: calc(12px + var(--font-mobile-ui-modifier, 2px));
-  --font-ui-small: calc(13px + var(--font-mobile-ui-modifier, 2px));
-  --font-ui-medium: calc(14px + var(--font-mobile-ui-modifier, 2px));
-  --font-ui-large: calc(16px + var(--font-mobile-ui-modifier, 2px));
-  --font-ui-larger: calc(18px + var(--font-mobile-ui-modifier, 2px));
-  --font-text-size: var(--font-mobile-text-size, 26px) !important;
+  --font-ui-smaller: calc(12px + var(--font-mobile-ui-modifier, 0px));
+  --font-ui-small: calc(13px + var(--font-mobile-ui-modifier, 0px));
+  --font-ui-medium: calc(14px + var(--font-mobile-ui-modifier, 0px));
+  --font-ui-large: calc(16px + var(--font-mobile-ui-modifier, 0px));
+  --font-ui-larger: calc(18px + var(--font-mobile-ui-modifier, 0px));
+  --font-text-size: var(--font-mobile-text-size, 16px) !important;
 }
