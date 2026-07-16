@@ -16,7 +16,7 @@ fi
 cp "$SNIP"/marioverse-*.css reference/
 
 python3 - "$SNIP" <<'PY'
-import sys
+import sys, re
 SNIP=sys.argv[1]
 def read(n): return open(f"{SNIP}/marioverse-{n}.css").read()
 
@@ -24,6 +24,12 @@ craft  = read("craft").replace(":not(.is-phone)", ":not(.is-phone):not(.layout-b
 darker = read("darker").replace("body.theme-dark.cupertino-dark",
                                 "body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light)")
 tabs, bases = read("tabs"), read("bases")
+# Il §0 dello snippet bases ridefinisce --mv-* su body{}: utile stand-alone
+# (senza Cosmos), ma nel bake i token vivono in cosmos-tokens.css (layer zero).
+# Strippa quel body{} per non reintrodurre la duplicazione — arrivando dopo
+# tokens per source-order, scavalcherebbe i valori flavour-aware (es. i radii
+# di Notion). I nomi --mv-* restano consumati; qui rimuoviamo solo la ri-def.
+bases = re.sub(r"\nbody \{[^}]*\}\n", "\n", bases, count=1, flags=re.S)
 
 header = """
 /* ==========================================================================
