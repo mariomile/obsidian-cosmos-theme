@@ -752,6 +752,32 @@ settings:
 		step: 1
 		format: px
 	-
+		id: mobile-typography
+		title: Mobile
+		type: heading
+		level: 2
+		collapsed: true
+	-
+		id: font-mobile-ui-modifier
+		title: Mobile interface font size
+		description: Extra size added to sidebar/tab/menu text on phone & tablet only — desktop stays on the scale above.
+		type: variable-number-slider
+		default: 2
+		min: -2
+		max: 10
+		step: 1
+		format: px
+	-
+		id: font-mobile-text-size
+		title: Mobile editor font size
+		description: Note/editor body text on phone & tablet only — desktop keeps using Appearance → Font size.
+		type: variable-number-slider
+		default: 26
+		min: 16
+		max: 40
+		step: 1
+		format: px
+	-
 		id: animation
 		title: Animation
 		type: heading
@@ -4846,4 +4872,52 @@ body.craft-nav-toggle .nav-folder-title:not([data-path*="/"]) > .nav-folder-titl
    ========================================================================== */
 body.realcraft.active-line-block .view-content > .markdown-source-view .cm-line.cm-active:not(.cm-gutterElement, .HyperMD-callout, .HyperMD-codeblock-bg, .HyperMD-quote)::before {
   background: var(--background-primary-alt);
+}
+
+/* ==========================================================================
+   § FONT SIZE MOBILE (2026-07-16) — testo (chrome UI + corpo editor) più
+   grande solo su phone/tablet, regolabile da Style Settings
+   --------------------------------------------------------------------------
+   Due slider in @settings (heading "Mobile", theme.css — vive nel base
+   pre-marker insieme a font-ui-modifier/icon-size-modifier, stesso motivo:
+   non è generato da nessuno dei 4 layer file, va editato lì a mano):
+     • font-mobile-ui-modifier (default 2px) — sommato alla scala UI desktop
+       LITERALE di Cosmos (12/13/14/16/18, non al calc di Baseline).
+     • font-mobile-text-size (default 26px) — valore assoluto per l'editor.
+
+   --font-ui-*: sidebar, tab, menu, impostazioni. Gated body.is-mobile,
+   specificità (0,2,1) — una classe in più della base (0,1,1) — batte la base
+   per cascata naturale, niente !important. is-mobile (non is-phone): copre
+   sia phone che tablet.
+
+   --font-text-size (corpo editor/nota) è un caso diverso: Obsidian lo setta
+   come inline style sul body ("Appearance → Font size", sincronizzato
+   cross-device — nessuna regola CSS, per quanto specifica, vince un inline
+   style senza !important). Decisione esplicita di Mario (2026-07-16): spende
+   l'unico slot !important aggiuntivo del tema (design-contract.json
+   important_max cosmos-tweaks.css 1→2, vedi important_max_bump_log) per
+   questo fight — coerente col vincolo del contract ("!important solo nei
+   fight documentati"), qui contro un inline style della piattaforma anziché
+   contro Baseline.
+
+   La scala desktop (base, pre-marker: 12/13/14/16/18px UI + 24px editor)
+   resta INTATTA — su desktop nessuna delle due regole matcha.
+
+   Verificato live in test-vault via dev:css (class-injection): --font-ui-larger
+   risolve pulito a base+modifier. --font-ui-smaller/small/medium/large risultano
+   invece contesi dalla regola dynamic-type di Baseline
+   `body.is-mobile.mod-macos:not(.dynamic-type-off)` (specificità 0,3,1, più
+   alta della mia) quando il test gira su macOS con le classi is-mobile
+   iniettate — combinazione che NON esiste su device reale (iOS non porta
+   mod-macos). Su iPhone/iPad reale questa regola non è in gioco e il bump si
+   applica pulito; il conflitto è un artefatto del test-harness desktop, non
+   un bug — sign-off finale da fare su device reale (stesso limite dichiarato
+   in verify-mobile.sh). */
+body.is-mobile.theme-dark, body.is-mobile.theme-light {
+  --font-ui-smaller: calc(12px + var(--font-mobile-ui-modifier, 2px));
+  --font-ui-small: calc(13px + var(--font-mobile-ui-modifier, 2px));
+  --font-ui-medium: calc(14px + var(--font-mobile-ui-modifier, 2px));
+  --font-ui-large: calc(16px + var(--font-mobile-ui-modifier, 2px));
+  --font-ui-larger: calc(18px + var(--font-mobile-ui-modifier, 2px));
+  --font-text-size: var(--font-mobile-text-size, 26px) !important;
 }
