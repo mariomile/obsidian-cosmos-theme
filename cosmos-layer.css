@@ -352,6 +352,7 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   position: relative;
   border: 1px solid var(--background-modifier-border);
   border-radius: var(--mv-r-card);
+  corner-shape: var(--corner-shape, round);   /* eredita lo squircle Cosmos per flavour */
   background: var(--mv-card-bg);
   box-shadow: none;
   transition:
@@ -404,6 +405,7 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   padding: 1px 6px;
   border: 1px solid var(--background-modifier-border);
   border-radius: var(--mv-r-chip);
+  corner-shape: var(--corner-shape, round);   /* squircle Cosmos sui chip per flavour */
   color: var(--text-muted);
   font-family: var(--font-interface);
   font-size: 0.68rem;

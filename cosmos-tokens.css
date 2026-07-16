@@ -89,13 +89,16 @@ body {
   --mv-r-card: 11px;                               /* = --masonry-radius */
   --mv-r-chip: 5px;                                /* = .masonry-tag-chip */
 
-  --mv-wash: cubic-bezier(0.25, 1, 0.5, 1);        /* = --masonry-ease · colore/bg */
-  --mv-lift: cubic-bezier(0.22, 1, 0.36, 1);       /* = exo --mva-ease-out · fisico */
+  --mv-wash: var(--cosmos-native);                 /* wash/reveal Bases = curva canonica del tema */
+  --mv-lift: cubic-bezier(0.22, 1, 0.36, 1);       /* = exo --mva-ease-out · fisico (hover benedetto) */
   --mv-t: var(--cosmos-t-fast);                    /* = exo --mva-t (0.14s) */
 
   --mv-hairline: color-mix(in srgb, var(--text-muted) 14%, transparent);
-  --mv-card-bg: color-mix(in srgb, var(--background-primary) 92%, var(--background-secondary));
-  --mv-card-bg-hover: color-mix(in srgb, var(--background-primary) 82%, var(--background-secondary));
+  /* Card = surface-3 (livello "card/nav attivo" della scala Cosmos) quando la
+     scala è attiva; fallback al color-mix storico dove surface-* non è definita
+     (Standard / cosmos-light / baseline). Hover derivato via modifier del tema. */
+  --mv-card-bg: var(--cosmos-surface-3, color-mix(in srgb, var(--background-primary) 92%, var(--background-secondary)));
+  --mv-card-bg-hover: color-mix(in srgb, var(--mv-card-bg), var(--background-modifier-hover) 55%);
   --mv-card-lift: 0 5px 16px color-mix(in srgb, var(--background-modifier-box-shadow) 18%, transparent);
   --mv-ring: color-mix(in srgb, var(--interactive-accent) 16%, transparent);
 
