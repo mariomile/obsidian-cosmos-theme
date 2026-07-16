@@ -316,6 +316,12 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
 .bases-view .bases-tbody .bases-tr:hover .bases-td {
   background-color: var(--background-modifier-hover);
 }
+/* Righe orizzontali (come Craft): hairline sotto ogni cella del corpo. Le
+   celle sono absolute e coprono la larghezza colonna → linea continua per
+   riga. --mv-hairline è troppo tenue per un separatore; usa il border nativo. */
+.bases-view .bases-tbody .bases-td {
+  border-bottom: 1px solid var(--background-modifier-border);
+}
 
 .bases-view .bases-table-header-icon {
   color: color-mix(in srgb, var(--text-muted) 60%, transparent);
