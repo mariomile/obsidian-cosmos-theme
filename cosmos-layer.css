@@ -301,11 +301,19 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   --table-border-color: var(--mv-hairline);
 }
 
+/* height:auto sulla .bases-tr (NON un valore fisso): le celle sono
+   position:absolute e Bases virtualizza le righe con top incrementale
+   (passo = altezza cella, ~30px). Una height sulla riga (relative) si SOMMA
+   al top → gap fantasma (es. 30px height + 30px top-step = 60px render-step).
+   Azzerandola (auto→0) la riga non contribuisce al flow e il passo resta
+   denso ~30px (look Craft). L'hover-bg va sulle celle, non sulla riga (0px). */
 .bases-view .bases-tr {
-  height: 36px;
+  height: auto;
+}
+.bases-view .bases-tr .bases-td {
   transition: background-color var(--mv-t) var(--mv-wash);
 }
-.bases-view .bases-tbody .bases-tr:hover {
+.bases-view .bases-tbody .bases-tr:hover .bases-td {
   background-color: var(--background-modifier-hover);
 }
 
