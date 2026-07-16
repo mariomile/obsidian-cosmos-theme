@@ -4182,6 +4182,45 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
 }
 
 /* --------------------------------------------------------------------------
+   § 7.5 — Craft-native cell chips: i valori testo (metadata-input-longtext)
+   diventano chip su superficie elevata di SISTEMA (--mv-card-bg = surface-3,
+   lo stesso token delle card) — NON un box outlined (quello era il tell
+   "CSS sopra Obsidian"). Stretti sul contenuto (fit-content), niente bordo.
+   Solo il DIV interno del valore, non il contenitore cella (che è flex 100%).
+   Esclusa la 1a colonna (name/title): resta testo bold nudo. I link
+   (.metadata-link, es. company) restano nudi — il chip è solo per il testo.
+   -------------------------------------------------------------------------- */
+.bases-view .bases-td:not([data-property$="name"])
+  .metadata-input-longtext:not(:empty) {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border-radius: var(--mv-r-chip);
+  corner-shape: var(--corner-shape, round);
+  background: var(--mv-card-bg);
+  color: var(--text-normal);
+  font-size: var(--font-ui-smaller);
+  line-height: 1.45;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* in edit (focus) il chip si apre per leggere/scrivere tutto */
+.bases-view .metadata-input-longtext:focus {
+  white-space: normal;
+  overflow: visible;
+}
+/* Header di colonna in normal-case (Craft) — override mirato della recipe §0
+   uppercase, che resta valida per card-label e group-property. */
+.bases-view .bases-table-header-name {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* --------------------------------------------------------------------------
    § 8 — Reduced motion: gestito AL LIVELLO DEI TOKEN in cosmos-tokens.css
    (azzera --cosmos-t-* e --anim-speed-modifier) → ogni transizione che
    consuma la scala è conforme by-construction, incluse quelle future.
