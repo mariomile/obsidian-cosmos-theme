@@ -316,11 +316,13 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
 .bases-view .bases-tbody .bases-tr:hover .bases-td {
   background-color: var(--background-modifier-hover);
 }
-/* Righe orizzontali (come Craft): hairline sotto ogni cella del corpo. Le
-   celle sono absolute e coprono la larghezza colonna → linea continua per
-   riga. --mv-hairline è troppo tenue per un separatore; usa il border nativo. */
+/* Griglia (come Craft): hairline sotto e a destra di ogni cella del corpo.
+   Le celle sono absolute e coprono la loro colonna → linee continue per riga
+   e per colonna. --mv-hairline è troppo tenue per un separatore; usa il
+   border nativo Obsidian. */
 .bases-view .bases-tbody .bases-td {
   border-bottom: 1px solid var(--background-modifier-border);
+  border-right: 1px solid var(--background-modifier-border);
 }
 
 .bases-view .bases-table-header-icon {
@@ -572,18 +574,11 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
 /* --------------------------------------------------------------------------
    § 7 — Toolbar: quiet text-items (radius r1), stato vista corrente
    -------------------------------------------------------------------------- */
+/* Il .text-icon-button INTERNO (nativo Obsidian) gestisce già hover+radius;
+   NON dare background/radius al wrapper .bases-toolbar-item → altrimenti
+   doppio box su hover (wrapper esterno + button interno). Qui solo il tono. */
 .bases-header .bases-toolbar-item {
-  border-radius: var(--mv-r1);
   color: var(--text-muted);
-  transition: background-color var(--mv-t) var(--mv-wash),
-    color var(--mv-t) var(--mv-wash);
-}
-.bases-header .bases-toolbar-item:hover {
-  background-color: var(--background-modifier-hover);
-  color: var(--text-normal);
-}
-.bases-header .bases-toolbar-item:active {
-  background-color: color-mix(in srgb, var(--background-modifier-hover) 70%, var(--background-primary));
 }
 /* Selettore vista corrente: peso da tab attivo */
 .bases-header .bases-toolbar-views-menu {
@@ -612,7 +607,7 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   corner-shape: var(--corner-shape, round);
   background: var(--mv-card-bg);
   color: var(--text-normal);
-  font-size: var(--font-ui-smaller);
+  font-size: var(--font-ui-small);
   line-height: 1.45;
   overflow: hidden;
   text-overflow: ellipsis;
