@@ -3948,13 +3948,20 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
    inset accent-ring su hover)
    -------------------------------------------------------------------------- */
 /* Il container cards è nativamente display:block → le card (in-flow, relative)
-   si IMPILANO in colonna (layout "sballato"). Layout a righe che wrappano,
-   rispettando la larghezza delle card. */
+   si IMPILANO in una colonna sola (layout "sballato"). Le card hanno altezze
+   diverse (property vuote vs piene) → il layout giusto è MASONRY: colonne che
+   si riempiono indipendentemente, le card si incastrano senza gap. CSS puro
+   via multi-column (nessun JS). Generale: vale per OGNI Bases card view. */
 .bases-view .bases-cards-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: 10px;
+  column-width: 280px;
+  column-gap: 10px;
+  display: block;
+}
+.bases-view .bases-cards-container .bases-cards-item {
+  width: 100%;
+  margin: 0 0 10px 0;
+  break-inside: avoid;          /* la card non si spezza tra due colonne */
+  -webkit-column-break-inside: avoid;
 }
 .bases-view .bases-cards-item {
   position: relative;
