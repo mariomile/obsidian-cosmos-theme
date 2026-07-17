@@ -301,11 +301,17 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   --table-border-color: var(--mv-hairline);
 }
 
+/* height:auto (non un valore fisso): le celle sono position:absolute e Bases
+   virtualizza le righe con top incrementale (passo = altezza cella). Una height
+   sulla riga (relative) si SOMMA al top → gap fantasma. Azzerandola il passo
+   resta denso. L'hover-bg va sulle celle (la riga è 0px). */
 .bases-view .bases-tr {
-  height: 36px;
+  height: auto;
+}
+.bases-view .bases-tr .bases-td {
   transition: background-color var(--mv-t) var(--mv-wash);
 }
-.bases-view .bases-tbody .bases-tr:hover {
+.bases-view .bases-tbody .bases-tr:hover .bases-td {
   background-color: var(--background-modifier-hover);
 }
 
@@ -348,6 +354,15 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
    § 3 — Cards: identiche alle card masonry (bordo quieto, bg mix, lift +
    inset accent-ring su hover)
    -------------------------------------------------------------------------- */
+/* Il container cards è nativamente display:block → le card (in-flow, relative)
+   si IMPILANO in colonna (layout "sballato"). Layout a righe che wrappano,
+   rispettando la larghezza delle card. */
+.bases-view .bases-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 10px;
+}
 .bases-view .bases-cards-item {
   position: relative;
   border: 1px solid var(--background-modifier-border);
