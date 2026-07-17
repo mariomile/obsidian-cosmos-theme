@@ -3361,16 +3361,13 @@ body {
   --mv-r-card: 11px;                               /* = --masonry-radius */
   --mv-r-chip: 5px;                                /* = .masonry-tag-chip */
 
-  --mv-wash: var(--cosmos-native);                 /* wash/reveal Bases = curva canonica del tema */
-  --mv-lift: cubic-bezier(0.22, 1, 0.36, 1);       /* = exo --mva-ease-out · fisico (hover benedetto) */
+  --mv-wash: cubic-bezier(0.25, 1, 0.5, 1);        /* = --masonry-ease · colore/bg */
+  --mv-lift: cubic-bezier(0.22, 1, 0.36, 1);       /* = exo --mva-ease-out · fisico */
   --mv-t: var(--cosmos-t-fast);                    /* = exo --mva-t (0.14s) */
 
   --mv-hairline: color-mix(in srgb, var(--text-muted) 14%, transparent);
-  /* Card = surface-3 (livello "card/nav attivo" della scala Cosmos) quando la
-     scala è attiva; fallback al color-mix storico dove surface-* non è definita
-     (Standard / cosmos-light / baseline). Hover derivato via modifier del tema. */
-  --mv-card-bg: var(--cosmos-surface-3, color-mix(in srgb, var(--background-primary) 92%, var(--background-secondary)));
-  --mv-card-bg-hover: color-mix(in srgb, var(--mv-card-bg), var(--background-modifier-hover) 55%);
+  --mv-card-bg: color-mix(in srgb, var(--background-primary) 92%, var(--background-secondary));
+  --mv-card-bg-hover: color-mix(in srgb, var(--background-primary) 82%, var(--background-secondary));
   --mv-card-lift: 0 5px 16px color-mix(in srgb, var(--background-modifier-box-shadow) 18%, transparent);
   --mv-ring: color-mix(in srgb, var(--interactive-accent) 16%, transparent);
 
@@ -3897,28 +3894,12 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   --table-border-color: var(--mv-hairline);
 }
 
-/* height:auto sulla .bases-tr (NON un valore fisso): le celle sono
-   position:absolute e Bases virtualizza le righe con top incrementale
-   (passo = altezza cella, ~30px). Una height sulla riga (relative) si SOMMA
-   al top → gap fantasma (es. 30px height + 30px top-step = 60px render-step).
-   Azzerandola (auto→0) la riga non contribuisce al flow e il passo resta
-   denso ~30px (look Craft). L'hover-bg va sulle celle, non sulla riga (0px). */
 .bases-view .bases-tr {
-  height: auto;
-}
-.bases-view .bases-tr .bases-td {
+  height: 36px;
   transition: background-color var(--mv-t) var(--mv-wash);
 }
-.bases-view .bases-tbody .bases-tr:hover .bases-td {
+.bases-view .bases-tbody .bases-tr:hover {
   background-color: var(--background-modifier-hover);
-}
-/* Griglia (come Craft): hairline sotto e a destra di ogni cella del corpo.
-   Le celle sono absolute e coprono la loro colonna → linee continue per riga
-   e per colonna. --mv-hairline è troppo tenue per un separatore; usa il
-   border nativo Obsidian. */
-.bases-view .bases-tbody .bases-td {
-  border-bottom: 1px solid var(--background-modifier-border);
-  border-right: 1px solid var(--background-modifier-border);
 }
 
 .bases-view .bases-table-header-icon {
@@ -3964,7 +3945,6 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   position: relative;
   border: 1px solid var(--background-modifier-border);
   border-radius: var(--mv-r-card);
-  corner-shape: var(--corner-shape, round);   /* eredita lo squircle Cosmos per flavour */
   background: var(--mv-card-bg);
   box-shadow: none;
   transition:
@@ -4017,7 +3997,6 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   padding: 1px 6px;
   border: 1px solid var(--background-modifier-border);
   border-radius: var(--mv-r-chip);
-  corner-shape: var(--corner-shape, round);   /* squircle Cosmos sui chip per flavour */
   color: var(--text-muted);
   font-family: var(--font-interface);
   font-size: 0.68rem;
@@ -4170,68 +4149,23 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
 /* --------------------------------------------------------------------------
    § 7 — Toolbar: quiet text-items (radius r1), stato vista corrente
    -------------------------------------------------------------------------- */
-/* Il .text-icon-button INTERNO (nativo Obsidian) gestisce già hover+radius;
-   NON dare background/radius al wrapper .bases-toolbar-item → altrimenti
-   doppio box su hover (wrapper esterno + button interno). Qui solo il tono. */
 .bases-header .bases-toolbar-item {
+  border-radius: var(--mv-r1);
   color: var(--text-muted);
+  transition: background-color var(--mv-t) var(--mv-wash),
+    color var(--mv-t) var(--mv-wash);
+}
+.bases-header .bases-toolbar-item:hover {
+  background-color: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+.bases-header .bases-toolbar-item:active {
+  background-color: color-mix(in srgb, var(--background-modifier-hover) 70%, var(--background-primary));
 }
 /* Selettore vista corrente: peso da tab attivo */
 .bases-header .bases-toolbar-views-menu {
   color: var(--text-normal);
   font-weight: 600;
-}
-
-/* --------------------------------------------------------------------------
-   § 7.5 — Craft-native cell chips: i valori testo (metadata-input-longtext)
-   diventano chip su superficie elevata di SISTEMA (--mv-card-bg = surface-3,
-   lo stesso token delle card) — NON un box outlined (quello era il tell
-   "CSS sopra Obsidian"). Stretti sul contenuto (fit-content), niente bordo.
-   Solo il DIV interno del valore, non il contenitore cella (che è flex 100%).
-   Esclusa la 1a colonna (name/title): resta testo bold nudo. I link
-   (.metadata-link, es. company) restano nudi — il chip è solo per il testo.
-   -------------------------------------------------------------------------- */
-.bases-view .bases-td:not([data-property$="name"])
-  .metadata-input-longtext:not(:empty) {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  max-width: 100%;
-  flex: 0 0 auto;
-  padding: 2px 8px;
-  border-radius: var(--mv-r-chip);
-  corner-shape: var(--corner-shape, round);
-  background: var(--mv-card-bg);
-  color: var(--text-normal);
-  font-size: var(--font-ui-small);
-  line-height: 1.45;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-/* in edit (focus) il chip si apre per leggere/scrivere tutto */
-.bases-view .metadata-input-longtext:focus {
-  white-space: normal;
-  overflow: visible;
-}
-/* Espansione su hover: un valore lungo troncato si apre in overlay e mostra
-   il testo intero (va a capo), SENZA spostare le altre righe — le celle sono
-   absolute, quindi z-index le porta sopra e non c'è reflow. */
-.bases-view .bases-tbody .bases-td:hover {
-  z-index: 5;
-  overflow: visible;
-}
-.bases-view .bases-td:not([data-property$="name"])
-  .metadata-input-longtext:not(:empty):hover {
-  white-space: normal;
-  overflow: visible;
-  box-shadow: var(--cosmos-pop-shadow);
-}
-/* Header di colonna in normal-case (Craft) — override mirato della recipe §0
-   uppercase, che resta valida per card-label e group-property. */
-.bases-view .bases-table-header-name {
-  text-transform: none;
-  letter-spacing: 0;
 }
 
 /* --------------------------------------------------------------------------
