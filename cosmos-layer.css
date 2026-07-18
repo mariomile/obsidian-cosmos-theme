@@ -354,22 +354,13 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
    § 3 — Cards: identiche alle card masonry (bordo quieto, bg mix, lift +
    inset accent-ring su hover)
    -------------------------------------------------------------------------- */
-/* Il container cards è nativamente display:block → le card (in-flow, relative)
-   si IMPILANO in una colonna sola (layout "sballato"). Le card hanno altezze
-   diverse (property vuote vs piene) → il layout giusto è MASONRY: colonne che
-   si riempiono indipendentemente, le card si incastrano senza gap. CSS puro
-   via multi-column (nessun JS). Generale: vale per OGNI Bases card view. */
-.bases-view .bases-cards-container {
-  column-width: 280px;
-  column-gap: 10px;
-  display: block;
-}
-.bases-view .bases-cards-container .bases-cards-item {
-  width: 100%;
-  margin: 0 0 10px 0;
-  break-inside: avoid;          /* la card non si spezza tra due colonne */
-  -webkit-column-break-inside: avoid;
-}
+/* NB: il layout della card view (posizione/griglia) è gestito da Bases in JS
+   — .bases-cards-container ha height inline fissa e i .bases-cards-group sono
+   position:absolute con coordinate inline. Il CSS del tema NON deve toccare il
+   container/layout (columns/flex/grid/top lo ROMPONO): qui stiliamo SOLO
+   l'aspetto della singola card. Il "sballato" quando il pane è idle è il
+   render-loop JS che va stale (vedi memory obsidian-raf-starves); per un
+   layout card robusto usare il plugin masonry della suite (type: masonry). */
 .bases-view .bases-cards-item {
   position: relative;
   border: 1px solid var(--background-modifier-border);

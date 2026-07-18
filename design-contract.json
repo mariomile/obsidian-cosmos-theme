@@ -6,7 +6,7 @@
     "cosmos-islands.css": 0,
     "cosmos-tweaks.css": 2
   },
-  "important_max_bump_log": "2026-07-16: cosmos-tweaks.css 1→2, decisione esplicita di Mario. Il nuovo slot fight-a contro un inline style di Obsidian stesso (--font-text-size sul body, Appearance→Font size), non contro Baseline — nessuna regola CSS senza !important può vincere un inline style. Vedi § FONT SIZE MOBILE.",
+  "important_max_bump_log": "2026-07-16: cosmos-tweaks.css 1→2, decisione esplicita di Mario. Il nuovo slot fight-a contro un inline style di Obsidian stesso (--font-text-size sul body, Appearance→Font size), non contro Baseline — nessuna regola CSS senza !important può vincere un inline style. Vedi § FONT SIZE MOBILE. (Il bump cosmos-layer 10→11 del 2026-07-18 per il layout card è stato RITIRATO: le card view Bases sono posizionate absolute da JS, il CSS non le ridispone — fix rimosso, budget tornato a 10.)",
   "raw_hex_max": {
     "comment": "Raw color hexes outside cosmos-tokens.css (comments stripped). Tokenized 2026-07-10.",
     "cosmos-layer.css": 0,
