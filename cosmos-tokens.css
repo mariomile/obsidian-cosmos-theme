@@ -127,6 +127,25 @@ body {
   --cosmos-press-scale: 0.98;
 }
 
+/* --- Accent default (Cosmos ship) -----------------------------------------
+   Cosmos spedisce uno SLATE desaturato come accent di DEFAULT — colora link,
+   --text-accent e selezione. Gli elementi interactive (bottoni, toggle)
+   restano MONOCROMI: cosmos-base fissa --interactive-accent: var(--color-base-100),
+   quindi lo slate tocca solo link/selezione, mai i tasti (la firma "niente tasti
+   blu" resta intatta).
+
+   Cascata: specificità 0,1,1 (body.theme-*) per BATTERE il default di app.css
+   (.theme-dark{--accent-h:258}, 0,1,0) e diventare il nuovo default di Cosmos,
+   restando SOTTO l'iniezione inline del picker Obsidian (style su <body>, 1,0,0,0)
+   → chi imposta un accent custom lo mantiene, il default lo eredita chi non tocca
+   il picker. hsl(220,15%,58%) = blue-grey calmo, intenzionale, non "grigio rotto". */
+body.theme-light,
+body.theme-dark {
+  --accent-h: 220;
+  --accent-s: 15%;
+  --accent-l: 58%;
+}
+
 /* Island shadow — variante light (più tenue del dark). */
 body.theme-light {
   --cosmos-island-shadow:
