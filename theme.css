@@ -21,6 +21,14 @@ settings:
 		description: Use color scheme preset accent color.
 		type: class-toggle
 	-
+		id: accent
+		title: Accent color
+		description: Cosmos ships a desaturated slate. Change it here to set the app accent (links, selection). The native Appearance › Accent color picker still wins if you set one there.
+		type: variable-color
+		opacity: false
+		format: hsl-split
+		default: '#848fa4'
+	-
 		id: color-scheme-light
 		title: Light color scheme
 		type: class-select
