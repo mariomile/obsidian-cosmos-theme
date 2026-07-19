@@ -1,0 +1,12 @@
+{
+  "name": "obsidian-cosmos-theme",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.17.1",
+  "scripts": {
+    "build": "bash ./build.sh",
+    "test": "bash ./contract.sh",
+    "check:reproducible": "bash ./check-build.sh",
+    "release:check": "pnpm check:reproducible"
+  }
+}

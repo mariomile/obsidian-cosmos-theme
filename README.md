@@ -63,11 +63,12 @@ The `COSMOS LAYER` at the end of `theme.css` is assembled from local `marioverse
 
 ## Build & sync
 
-`theme.css` = pruned Baseline base + three layer sources. No compile step.
+`theme.css` = pinned [`cosmos-base.css`](cosmos-base.css) + four Cosmos layer sources. The generated file never acts as a build input, so a clean checkout is reproducible.
 
 ```bash
 ./sync-snippets.sh /path/to/vault/.obsidian/snippets
 ./build.sh                      # rebuild theme.css from the layer sources only
+pnpm release:check              # rebuild twice + prove byte-for-byte stability
 ./deploy.sh /path/to/your/vault # copy theme.css + manifest.json into a vault
 ```
 
