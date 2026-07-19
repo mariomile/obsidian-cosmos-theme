@@ -4,6 +4,22 @@
    § COSMOS TWEAKS — micro-fix generali (tutti i flavour)
    ========================================================================== */
 
+/* --- Accent presets (Style Settings → Colors → Accent) ---------------------
+   Ogni preset setta le var native --accent-h/-s/-l → colora link / --text-accent
+   / selezione. Gli interactive restano monocromi (--interactive-accent =
+   color-base-100 in cosmos-base), quindi i preset NON toccano i bottoni.
+   Tutti volutamente SMORZATI (saturazione media, mai neon) per restare nel
+   registro calmo di Cosmos. Specificità body.cosmos-accent-* (0,1,1) = pari al
+   default in cosmos-tokens, ma questo layer carica DOPO → vince (slate === default).
+   Il Custom accent picker (css-settings-manager, 0,2,1) e il picker nativo
+   Appearance (inline, 1,0,0,0) restano sopra, nell'ordine. */
+body.cosmos-accent-slate  { --accent-h: 220; --accent-s: 15%; --accent-l: 58%; }
+body.cosmos-accent-blue   { --accent-h: 214; --accent-s: 45%; --accent-l: 56%; }
+body.cosmos-accent-teal   { --accent-h: 184; --accent-s: 40%; --accent-l: 44%; }
+body.cosmos-accent-purple { --accent-h: 260; --accent-s: 32%; --accent-l: 63%; }
+body.cosmos-accent-amber  { --accent-h:  36; --accent-s: 52%; --accent-l: 54%; }
+body.cosmos-accent-rose   { --accent-h:   8; --accent-s: 48%; --accent-l: 62%; }
+
 /* --- Ribbon sinistra: centra le icone -------------------------------------
    Baseline le offsetta con `.workspace-ribbon.mod-left:not(.is-collapsed){padding-left:12px}`
    → sembrano spinte a sinistra. Azzeriamo il padding e centriamo la colonna.

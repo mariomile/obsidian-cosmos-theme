@@ -21,9 +21,35 @@ settings:
 		description: Use color scheme preset accent color.
 		type: class-toggle
 	-
+		id: accent-preset
+		title: Accent
+		description: Curated Cosmos accents — all muted to stay in the calm register. Slate is the default. "Custom accent" below overrides a preset; the native Appearance › Accent color picker wins over both.
+		type: class-select
+		allowEmpty: false
+		default: cosmos-accent-slate
+		options:
+			-
+				label: Slate (default)
+				value: cosmos-accent-slate
+			-
+				label: Blue
+				value: cosmos-accent-blue
+			-
+				label: Teal
+				value: cosmos-accent-teal
+			-
+				label: Purple
+				value: cosmos-accent-purple
+			-
+				label: Amber
+				value: cosmos-accent-amber
+			-
+				label: Rose
+				value: cosmos-accent-rose
+	-
 		id: accent
-		title: Accent color
-		description: Cosmos ships a desaturated slate. Change it here to set the app accent (links, selection). The native Appearance › Accent color picker still wins if you set one there.
+		title: Custom accent
+		description: Pick any color to override the preset above. Leave it at the default slate swatch to follow the preset. The native Appearance › Accent color picker still wins if you set one there.
 		type: variable-color
 		opacity: false
 		format: hsl-split
@@ -4334,6 +4360,22 @@ body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-
 /* ==========================================================================
    § COSMOS TWEAKS — micro-fix generali (tutti i flavour)
    ========================================================================== */
+
+/* --- Accent presets (Style Settings → Colors → Accent) ---------------------
+   Ogni preset setta le var native --accent-h/-s/-l → colora link / --text-accent
+   / selezione. Gli interactive restano monocromi (--interactive-accent =
+   color-base-100 in cosmos-base), quindi i preset NON toccano i bottoni.
+   Tutti volutamente SMORZATI (saturazione media, mai neon) per restare nel
+   registro calmo di Cosmos. Specificità body.cosmos-accent-* (0,1,1) = pari al
+   default in cosmos-tokens, ma questo layer carica DOPO → vince (slate === default).
+   Il Custom accent picker (css-settings-manager, 0,2,1) e il picker nativo
+   Appearance (inline, 1,0,0,0) restano sopra, nell'ordine. */
+body.cosmos-accent-slate  { --accent-h: 220; --accent-s: 15%; --accent-l: 58%; }
+body.cosmos-accent-blue   { --accent-h: 214; --accent-s: 45%; --accent-l: 56%; }
+body.cosmos-accent-teal   { --accent-h: 184; --accent-s: 40%; --accent-l: 44%; }
+body.cosmos-accent-purple { --accent-h: 260; --accent-s: 32%; --accent-l: 63%; }
+body.cosmos-accent-amber  { --accent-h:  36; --accent-s: 52%; --accent-l: 54%; }
+body.cosmos-accent-rose   { --accent-h:   8; --accent-s: 48%; --accent-l: 62%; }
 
 /* --- Ribbon sinistra: centra le icone -------------------------------------
    Baseline le offsetta con `.workspace-ribbon.mod-left:not(.is-collapsed){padding-left:12px}`
