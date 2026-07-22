@@ -9,7 +9,7 @@ python3 - <<'PY'
 import json, re, sys
 
 contract = json.load(open('design-contract.json'))
-LAYERS = ['cosmos-tokens.css', 'cosmos-layer.css', 'cosmos-islands.css', 'cosmos-tweaks.css']
+LAYERS = ['cosmos-tokens.css', 'cosmos-layer.css', 'cosmos-islands.css', 'cosmos-tweaks.css', 'cosmos-phone.css']
 failures, warnings = [], []
 
 def read(f):

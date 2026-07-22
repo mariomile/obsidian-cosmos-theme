@@ -11,7 +11,7 @@ python3 - <<'PY'
 import os
 base = open('cosmos-base.css').read().rstrip('\n').split('\n')
 parts = base + ['']
-LAYERS = ['cosmos-tokens.css','cosmos-layer.css','cosmos-islands.css','cosmos-tweaks.css']
+LAYERS = ['cosmos-tokens.css','cosmos-layer.css','cosmos-islands.css','cosmos-tweaks.css','cosmos-phone.css']
 used = [fn for fn in LAYERS if os.path.exists(fn)]
 for fn in used:
     parts += open(fn).read().split('\n')

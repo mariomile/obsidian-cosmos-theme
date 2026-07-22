@@ -1,0 +1,114 @@
+/* @settings
+name: Cosmos Phone
+id: cosmos-phone
+settings:
+    -
+        id: cosmos-phone-edition
+        title: Phone Edition — native mobile feel
+        description: Rifiniture touch native in stile Craft/Notion (navbar a pillola, bottoni header circolari, feedback al tap, safe-area, momentum scroll). Attive SOLO su iPhone. Spegni questo toggle per tornare in un tap al mobile attuale. Suggerito insieme a Impostazioni → (mobile) → "Floating navigation bar".
+        type: class-toggle
+        default: false
+*/
+
+/* ==========================================================================
+   COSMOS PHONE EDITION — layer additivo `is-phone`.
+   --------------------------------------------------------------------------
+   Polarity POSITIVA: qui non si de-gata desktop, si DISEGNA per il phone.
+   Riferimento visivo: Craft + Notion mobile (thumb-zone, pillole flottanti,
+   bottoni circolari, feedback tattile). Vault:
+   Atlas/Concepts/Product/Design/Design references.md §Mobile.
+
+   Doppio gate su OGNI regola: `body.cosmos-phone-edition.is-phone`
+     - .is-phone            → desktop e tablet mai toccati (Mario: solo iPhone)
+     - .cosmos-phone-edition → toggle Style Settings, default OFF = opt-in;
+                               spegnerlo = revert soft immediato dal telefono.
+   Contract: 0 !important (theme.css carica DOPO app.css → source-order vince),
+   0 hex/ms raw (tutto da token). Consuma i token già in cosmos-tokens.css
+   (--cosmos-safe-*, --cosmos-touch-min, --cosmos-press-scale, --cosmos-native)
+   e i token nativi di Obsidian (--raised-*, --navbar-*, --touch-size-*).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   § A — Navbar flottante a pillola (la firma nativa Craft/Notion).
+   Obsidian ha GIÀ la modalità `is-floating-nav` (Impostazioni mobile →
+   "Floating navigation bar"): navbar fit-content, max 316px, radius pill,
+   position fixed, --raised-blur + --raised-shadow. Qui NON la ricostruiamo:
+   alziamo solo l'elevazione alla polish Craft (ombra Cosmos morbida) e
+   garantiamo il respiro safe-area. Se il setting è OFF, questo blocco è inerte
+   (nessun .is-floating-nav) → zero rischio.
+   -------------------------------------------------------------------------- */
+body.cosmos-phone-edition.is-phone.is-floating-nav {
+  /* Ombra Cosmos (già definita in cosmos-tokens) al posto di --shadow-xs:
+     capsula che "galleggia" come in Craft, non un filo d'ombra. */
+  --raised-shadow: var(--cosmos-pop-shadow);
+}
+
+/* Transizione pill in easing iOS (zero-bounce) invece del transform lineare. */
+body.cosmos-phone-edition.is-phone .mobile-navbar {
+  transition:
+    opacity var(--cosmos-t-base) var(--cosmos-native),
+    transform var(--cosmos-t-panel) var(--cosmos-native);
+}
+
+/* --------------------------------------------------------------------------
+   § B — Header: bottoni azione circolari (back / more / share).
+   Craft/Notion: capsula circolare attorno all'icona, non icona nuda. Diamo un
+   target 44pt e uno sfondo capsula che appare al tap (:active). Solo geometria
+   + colore su superficie ridondante → nessun rischio di layout.
+   -------------------------------------------------------------------------- */
+body.cosmos-phone-edition.is-phone .view-header .view-action,
+body.cosmos-phone-edition.is-phone .view-header .clickable-icon {
+  min-width: var(--cosmos-touch-min);
+  min-height: var(--cosmos-touch-min);
+  border-radius: 999px;
+}
+
+body.cosmos-phone-edition.is-phone .view-header .clickable-icon:active {
+  background-color: var(--background-modifier-hover);
+}
+
+/* --------------------------------------------------------------------------
+   § E — Feedback tattile + safe-area (il "risponde al tocco" nativo).
+   -------------------------------------------------------------------------- */
+
+/* Via il flash grigio iOS al tap: Craft/Notion non lo mostrano mai. */
+body.cosmos-phone-edition.is-phone {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Press-scale al tap sui tappabili — solo transform (composito), zero layout.
+   Riusa --cosmos-press-scale (0.98) e l'easing iOS già nel tema. */
+body.cosmos-phone-edition.is-phone :is(
+  .clickable-icon,
+  .nav-file-title,
+  .nav-folder-title,
+  .menu-item,
+  .suggestion-item,
+  .mobile-navbar-action,
+  .mobile-toolbar-option
+):active {
+  transform: scale(var(--cosmos-press-scale));
+  transition: transform var(--cosmos-t-fast) var(--cosmos-native);
+}
+
+/* Momentum scroll nativo su tutti gli scroller principali (iOS WebKit). */
+body.cosmos-phone-edition.is-phone :is(
+  .cm-scroller,
+  .markdown-preview-view,
+  .nav-files-container,
+  .menu,
+  .suggestion-container,
+  .mobile-toolbar-options-list
+) {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Editor: scroll verticale pulito, niente jank orizzontale al drag del pollice. */
+body.cosmos-phone-edition.is-phone .cm-scroller {
+  touch-action: pan-y;
+}
+
+/* Safe-area: il menu contestuale mobile non finisce sotto l'home-indicator. */
+body.cosmos-phone-edition.is-phone .menu {
+  padding-bottom: max(var(--cosmos-safe-bottom), var(--size-4-2));
+}
