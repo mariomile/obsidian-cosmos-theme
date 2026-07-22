@@ -635,3 +635,33 @@ body.is-mobile.theme-dark, body.is-mobile.theme-light {
   --font-ui-larger: calc(18px + var(--font-mobile-ui-modifier, 0px));
   --font-text-size: var(--font-mobile-text-size, 16px) !important;
 }
+
+/* ==========================================================================
+   § CHROME — via superfici ridondanti (graph controls, divider backlinks)
+   --------------------------------------------------------------------------
+   Due elementi di app.css che disegnano una superficie di troppo. Li togliamo
+   per source-order (theme.css carica DOPO app.css → a pari specificità vince),
+   niente !important: il budget del contract resta intatto. 2026-07-22. ========================================================================== */
+
+/* --- Graph view: via il box dietro il gear dei controlli (collassato) --------
+   In un pannello Graph i controlli, quando collassati (.is-close), diventano un
+   box (background + radius 16px) attorno alla sola icona settings → una capsula
+   scura che stona sopra il grafo. app.css lo dipinge in due contesti: in sidebar
+   `.workspace-split:not(.mod-root) … .is-close` (--background-secondary, 0,4,0)
+   e nel pannello root `.graph-controls.is-close` (--background-primary, 0,2,0).
+   Trasparente in entrambi + via bordo/shadow. Solo da collassato: col pannello
+   APERTO il background serve alla leggibilità dei controlli sopra il grafo. */
+.workspace-split:not(.mod-root) .graph-controls.is-close,
+.graph-controls.is-close {
+  background: transparent;   /* beats: app.css --background-secondary/-primary, per source-order */
+  border: none;
+  box-shadow: none;
+}
+
+/* --- Backlinks-in-document: via il divisore sopra "Linked mentions" ----------
+   app.css mette un `border-top` su `.embedded-backlinks` → una riga piena tra
+   il corpo nota e il pannello Linked/Unlinked mentions. Ridondante con lo
+   spacing verticale → la togliamo (0,2,0 batte lo 0,1,0 della base). */
+.workspace-leaf-content .embedded-backlinks {
+  border-top: none;   /* beats: app.css border-top var(--background-modifier-border) */
+}
