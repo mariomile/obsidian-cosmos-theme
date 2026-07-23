@@ -5062,11 +5062,32 @@ body.is-mobile.theme-dark, body.is-mobile.theme-light {
    316, radius pill), solo triggerati dal toggle invece che dal setting nativo.
    -------------------------------------------------------------------------- */
 body.cosmos-phone-edition.is-phone {
-  --navbar-width: fit-content;            /* da 100% → si stringe sul contenuto */
-  /* max-width NON dichiarato: Baseline lo pinna (body.is-mobile { auto !important })
-     e il contract vieta di combattere !important; fit-content basta per la pillola. */
   --navbar-height: var(--touch-size-l);   /* 52px: compatta come Craft */
   --navbar-radius: var(--touch-size-l);   /* capsula piena */
+}
+
+/* Geometria pillola: i token --navbar-* NON bastano — Baseline pinna la
+   floating navbar sull'ELEMENTO (body.is-phone.is-floating-nav .mobile-navbar
+   { width:auto; margin:... } a (0,3,1)), quindi il var di app.css lì è morto
+   (verificato sul device 2026-07-23: navbar identica). Si vince a (0,4,1) +
+   source-order, su ENTRAMBI i rami floating/non-floating. Il margin-inline
+   auto centra la capsula; il bottom margin resta di Baseline (safe-area). */
+body.cosmos-phone-edition.is-phone.is-floating-nav .mobile-navbar,
+body.cosmos-phone-edition.is-phone:not(.is-floating-nav) .mobile-navbar {
+  width: fit-content;
+  margin-inline: auto;
+  border-radius: var(--touch-size-l);
+}
+
+/* Craft non duplica la navigazione nella bottom bar: back vive nell'header
+   (+ swipe-back iOS), forward è quasi sempre disabled. Via entrambi → la
+   pillola diventa DAVVERO compatta (4 azioni: search, +, tab, menu).
+   Ordine DOM Obsidian: back, forward, search, +, tabs, menu — nth-child è
+   dichiaratamente posizionale; se un update lo cambia, il danno è cosmetico
+   e il toggle OFF ripristina tutto. */
+body.cosmos-phone-edition.is-phone .mobile-navbar-action:nth-child(1),
+body.cosmos-phone-edition.is-phone .mobile-navbar-action:nth-child(2) {
+  display: none;
 }
 
 /* Elevazione: la barra "galleggia" (ombra Cosmos morbida) + easing iOS. */
@@ -5186,18 +5207,22 @@ body.cosmos-phone-edition.is-phone {
 
 /* "+" primario alla Craft: cerchio pieno ad alto contrasto dentro la pillola.
    In Craft il "+" è il SOLO elemento chiaro della barra: gerarchia immediata
-   ("questa è l'azione primaria"). Selettore robusto: l'azione new-note è
-   l'unica con longpress menu (classe nativa .has-longpress-menu), niente
-   nth-child fragile. Inversione via token: text-normal su background-primary
-   → funziona in dark E light senza hex. */
-body.cosmos-phone-edition.is-phone .mobile-navbar-action.has-longpress-menu .clickable-icon {
+   ("questa è l'azione primaria"). LEZIONE dal device (2026-07-23): il
+   selettore "robusto" .has-longpress-menu prendeva il ☰ menu, non il "+" —
+   meglio nth-child(4) posizionale e DICHIARATO fragile che una classe che
+   sembra semantica e non lo è. Il "+" resta 4° nel DOM anche con back/forward
+   nascosti (display:none non cambia gli indici). Shape vincolata su icona E
+   button (l'inner del device può essere l'uno o l'altro). Inversione via
+   token: text-normal su background-primary → dark e light senza hex. */
+body.cosmos-phone-edition.is-phone .mobile-navbar-action:nth-child(4) :is(.clickable-icon, button) {
   --icon-color: var(--background-primary);
   --icon-color-active: var(--background-primary);
   --icon-color-focus: var(--background-primary);
   background-color: var(--text-normal);
   border-radius: 999px;
-  width: var(--touch-size-m);
-  height: var(--touch-size-m);
+  width: var(--cosmos-touch-min);
+  height: var(--cosmos-touch-min);
+  flex: 0 0 auto;
   margin: auto;
 }
 

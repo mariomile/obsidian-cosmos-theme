@@ -24,10 +24,11 @@
       "notEqualsVar": "--cosmos-surface-0"
     },
     {
-      "name": "phone-edition: navbar a pillola (fit-content)",
-      "selector": "body",
-      "property": "--navbar-width",
-      "expected": "fit-content"
+      "name": "phone-edition: navbar a pillola (fit-content, element-level)",
+      "comment": "Da 2026-07-23 la pillola è una regola sull'ELEMENTO (Baseline pinna width:auto a (0,3,1) — il token era morto sul device). .mobile-navbar esiste solo su mobile reale → su desktop questo è uno SKIP onesto, non un pass.",
+      "selector": ".mobile-navbar",
+      "property": "width",
+      "contains": "fit-content"
     },
     {
       "name": "phone-edition: selezione accent-tinted (alpha 0.24, accent-agnostico)",
