@@ -41,5 +41,7 @@
   "outline_none_requires_comment": true,
   "mobile_excluding_gates_max": 24,
   "mobile_excluding_gates_comment": "Gate :not(.is-phone)/:not(.is-mobile) nei 4 layer. Può solo SCENDERE (polarity flip in corso). Slice 3 (2026-07-11): 25→24 (flip press-scale del tab); i 24 restanti sono KEEP documentati in docs/2026-07-11-mobile-gate-audit.md.",
-  "raw_100vh_max": 0
+  "raw_100vh_max": 0,
+  "style_settings_first_block_required_ids": ["cosmos-phone-edition"],
+  "style_settings_first_block_comment": "Style Settings legge SOLO il primo blocco @settings di un foglio (bug reale 2026-07-23: toggle in un secondo blocco = mai registrato, classe mai applicata, feature silenziosamente inerte). Ogni toggle consumato dai layer va dichiarato nel blocco principale di cosmos-base.css; questo check lo verifica sul theme.css buildato."
 }

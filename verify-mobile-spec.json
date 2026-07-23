@@ -1,5 +1,6 @@
 {
-  "comment": "Asserzioni mobile (verify-mobile.sh v2: class-injection is-mobile/is-phone sul body, MAI EmulateMobile — il footgun plugin-Node è impossibile by design). Target: iPhone Pro Max. Engine Chromium: i gate CSS si testano qui, i bug WebKit-only sul device reale.",
+  "comment": "Asserzioni mobile (verify-mobile.sh v2: class-injection sul body, MAI EmulateMobile — il footgun plugin-Node è impossibile by design). Target: iPhone Pro Max. Engine Chromium: i gate CSS si testano qui, i bug WebKit-only sul device reale. Le asserzioni surface sono RELAZIONALI (equalsVar/notEqualsVar), non colori assoluti: Mario cambia flavour di continuo (Newcraft Darker/Lighter/Perplexity) — pinnare un rgb rompe la harness a ogni switch (successo con Cupertino, 3 fail permanenti = alarm fatigue). injectClasses include cosmos-phone-edition: le asserzioni phone-edition testano il payload del toggle.",
+  "injectClasses": ["is-mobile", "is-phone", "cosmos-phone-edition"],
   "assertions": [
     {
       "name": "class-injection attiva (is-phone)",
@@ -13,19 +14,26 @@
       "expected": "44px"
     },
     {
-      "name": "canvas Cosmos su phone (surface-0)",
+      "name": "mapping canvas vivo (background-primary = surface-0, flavour-agnostico)",
       "resolveVar": "--background-primary",
-      "expected": "rgb(20, 20, 20)"
+      "equalsVar": "--cosmos-surface-0"
     },
     {
-      "name": "menu elevato su phone (surface-2)",
-      "resolveVar": "--menu-background",
-      "expected": "rgb(26, 26, 26)"
-    },
-    {
-      "name": "scala superfici viva su phone",
+      "name": "scala superfici viva (surface-1 ≠ surface-0: elevazione presente)",
       "resolveVar": "--cosmos-surface-1",
-      "expected": "rgb(23, 23, 23)"
+      "notEqualsVar": "--cosmos-surface-0"
+    },
+    {
+      "name": "phone-edition: navbar a pillola (fit-content)",
+      "selector": "body",
+      "property": "--navbar-width",
+      "expected": "fit-content"
+    },
+    {
+      "name": "phone-edition: selezione accent-tinted (alpha 0.24, accent-agnostico)",
+      "selector": "body",
+      "property": "--text-selection",
+      "contains": "0.24"
     },
     {
       "name": "one-thumb: nav row ≥44pt su phone",
@@ -40,8 +48,14 @@
       "expected": "44px"
     },
     {
+      "name": "phone-edition: hairline 0.5px sotto inline-title",
+      "selector": ".inline-title",
+      "property": "border-bottom-width",
+      "contains": "0.5"
+    },
+    {
       "name": "press-scale flip: token vivo su phone (:active tab)",
-      "comment": "Slice 3: il gate press-scale è stato flippato → il tab reagisce al tap anche su phone. Chromium non triggera :active da script, ma il payload del gate (--cosmos-press-scale) DEVE risolvere su phone. Sign-off del tap reale su iPhone.",
+      "comment": "Chromium non triggera :active da script; l'asserzione prova che il token risolve su phone. Tap reale = sign-off iPhone.",
       "selector": "body",
       "property": "--cosmos-press-scale",
       "expected": "0.98"

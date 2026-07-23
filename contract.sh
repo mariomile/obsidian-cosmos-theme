@@ -97,6 +97,17 @@ if 'raw_100vh_max' in contract:
     if n>contract['raw_100vh_max']:
         failures.append(f"100vh x{n} > ceiling {contract['raw_100vh_max']} (usare dvh: 100vh e' rotto su iOS)")
 
+# 8. Toggle Style Settings nel PRIMO blocco @settings del theme.css buildato.
+#    Style Settings ignora i blocchi successivi: un toggle fuori dal primo
+#    blocco non si registra mai → feature silenziosamente inerte (2026-07-23).
+if 'style_settings_first_block_required_ids' in contract:
+    theme = read('theme.css') or ''
+    m = re.search(r'/\*\s*@settings(.*?)\*/', theme, re.S)
+    first = m.group(1) if m else ''
+    for rid in contract['style_settings_first_block_required_ids']:
+        if not re.search(r'^\s*id:\s*' + re.escape(rid) + r'\s*$', first, re.M):
+            failures.append(f"Style Settings: id '{rid}' assente dal PRIMO blocco @settings di theme.css (i blocchi successivi sono ignorati dal plugin)")
+
 if warnings:
     print("contract warnings:")
     for w in warnings: print(f"  ⚠ {w}")

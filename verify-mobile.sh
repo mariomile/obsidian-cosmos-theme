@@ -27,15 +27,16 @@ if [[ -n "$VAULT" ]]; then
   CLI+=("vault=$VAULT")
 fi
 
-SPEC=$(jq -c '.assertions' verify-mobile-spec.json)
+SPEC=$(jq -c '.' verify-mobile-spec.json)
 
 JS=$(cat <<JS
 (()=>{
-  const spec = ${SPEC};
+  const spec = (${SPEC}).assertions;
+  const inject = (${SPEC}).injectClasses || ["is-mobile","is-phone"];
   document.getAnimations().forEach(a=>{ try{ a.finish(); }catch(e){} });
-  // Inietta le classi phone (i gate CSS del tema si attivano), misura, pulisci.
+  // Inietta le classi phone + toggle (i gate CSS del tema si attivano), misura, pulisci.
   const added=[];
-  for(const c of ["is-mobile","is-phone"]) if(!document.body.classList.contains(c)){ document.body.classList.add(c); added.push(c); }
+  for(const c of inject) if(!document.body.classList.contains(c)){ document.body.classList.add(c); added.push(c); }
   let out;
   try{
     const probe = document.createElement("div");
@@ -46,6 +47,15 @@ JS=$(cat <<JS
       if(a.bodyClass){
         const has=document.body.classList.contains(a.bodyClass);
         return has===(a.expected!==false) ? {name:a.name,status:"PASS"} : {name:a.name,status:"FAIL",expected:"body."+a.bodyClass+"="+(a.expected!==false),actual:String(has)};
+      }
+      if(a.resolveVar && (a.equalsVar || a.notEqualsVar)){
+        // Asserzione RELAZIONALE: il mapping tra due token è vivo (o distinto),
+        // qualunque flavour sia attivo — mai colori assoluti (flavour-pinned).
+        const actual = resolveVar(a.resolveVar);
+        const other  = resolveVar(a.equalsVar || a.notEqualsVar);
+        const bothOk = actual!=="" && other!=="" && actual!=="rgba(0, 0, 0, 0)";
+        const pass = a.equalsVar ? (bothOk && actual===other) : (bothOk && actual!==other);
+        return pass?{name:a.name,status:"PASS"}:{name:a.name,status:"FAIL",expected:(a.equalsVar?"== ":"!= ")+other,actual};
       }
       if(a.resolveVar){
         const actual = resolveVar(a.resolveVar);
@@ -59,6 +69,7 @@ JS=$(cat <<JS
       if(!el) return {name:a.name,status:"SKIP",note:"selector not in DOM"};
       const cs=getComputedStyle(el);
       const actual=cs.getPropertyValue(a.property).trim();
+      if(a.contains) return actual.includes(a.contains)?{name:a.name,status:"PASS"}:{name:a.name,status:"FAIL",expected:"contains "+a.contains,actual};
       return actual===a.expected?{name:a.name,status:"PASS"}:{name:a.name,status:"FAIL",expected:a.expected,actual};
     });
     probe.remove();

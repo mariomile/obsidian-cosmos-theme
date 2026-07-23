@@ -5063,7 +5063,8 @@ body.is-mobile.theme-dark, body.is-mobile.theme-light {
    -------------------------------------------------------------------------- */
 body.cosmos-phone-edition.is-phone {
   --navbar-width: fit-content;            /* da 100% → si stringe sul contenuto */
-  --navbar-max-width: 316px;
+  /* max-width NON dichiarato: Baseline lo pinna (body.is-mobile { auto !important })
+     e il contract vieta di combattere !important; fit-content basta per la pillola. */
   --navbar-height: var(--touch-size-l);   /* 52px: compatta come Craft */
   --navbar-radius: var(--touch-size-l);   /* capsula piena */
 }
