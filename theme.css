@@ -5251,3 +5251,43 @@ body.cosmos-phone-edition.is-phone .markdown-preview-view {
   --line-height-normal: 1.55;
   --file-margins: var(--size-4-5);
 }
+
+/* --------------------------------------------------------------------------
+   § M — Motion di stato (entrate chrome). Regole: solo transform+opacity,
+   ease-out esponenziale (--cosmos-native, zero bounce), durate dai token
+   (→ prefers-reduced-motion le azzera già a livello token). Vincolo scoperto
+   in app.css: menu e drawer su phone sono DRAG-DRIVEN (transform inline JS)
+   → animarne il transform combatterebbe il gesto; lì solo opacity. Modal e
+   suggestion non hanno motion nativo → enter completo. Le transizioni tra
+   PAGINE vivono in Portal (installNoteEnter): un tema non può agganciare il
+   file-open, il plugin sì.
+   -------------------------------------------------------------------------- */
+
+/* Popover suggerimenti (link/tag/comandi): pop-in rapido — remount a ogni
+   apertura, posizionato via top/left inline → il transform non confligge. */
+body.cosmos-phone-edition.is-phone .suggestion-container {
+  animation: cosmos-pop-in var(--cosmos-t-base) var(--cosmos-native) both;
+}
+
+/* Modal: rise da sheet (12px, durata pannello) — su phone appare secco. */
+body.cosmos-phone-edition.is-phone .modal {
+  animation: cosmos-sheet-rise var(--cosmos-t-panel) var(--cosmos-native) both;
+}
+
+/* Menu bottom-sheet: SOLO fade veloce — il transform è del drag JS. */
+body.cosmos-phone-edition.is-phone .menu {
+  animation: cosmos-fade-in var(--cosmos-t-fast) var(--cosmos-native) both;
+}
+
+@keyframes cosmos-pop-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes cosmos-sheet-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes cosmos-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
