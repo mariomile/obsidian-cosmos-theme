@@ -184,11 +184,14 @@ body.cosmos-phone-edition.is-phone {
    nascosti (display:none non cambia gli indici). Shape vincolata su icona E
    button (l'inner del device può essere l'uno o l'altro). Inversione via
    token: text-normal su background-primary → dark e light senza hex. */
+/* Colore: NON bianco (bocciato da Mario 2026-07-23) — coppia canonica accent
+   di Obsidian: segue i preset accent (con lo slate desaturato = grafite
+   elegante, non un faro) e resta corretta in dark E light. */
 body.cosmos-phone-edition.is-phone .mobile-navbar-action:nth-child(4) :is(.clickable-icon, button) {
-  --icon-color: var(--background-primary);
-  --icon-color-active: var(--background-primary);
-  --icon-color-focus: var(--background-primary);
-  background-color: var(--text-normal);
+  --icon-color: var(--text-on-accent);
+  --icon-color-active: var(--text-on-accent);
+  --icon-color-focus: var(--text-on-accent);
+  background-color: var(--interactive-accent);
   border-radius: 999px;
   width: var(--cosmos-touch-min);
   height: var(--cosmos-touch-min);
@@ -285,4 +288,39 @@ body.cosmos-phone-edition.is-phone .menu {
 @keyframes cosmos-fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   § G2 — Coda nota quieta + blocchi morbidi (feedback device 2026-07-23).
+   -------------------------------------------------------------------------- */
+
+/* "Linked/Unlinked mentions" in fondo nota: stessa ricetta di PROPERTIES —
+   da titoli pieni a micro-label di sezione. Il contenuto (risultati, bottoni
+   list/sort/search) resta intatto. */
+body.cosmos-phone-edition.is-phone .embedded-backlinks .backlink-pane > .tree-item-self .tree-item-inner {
+  font-size: var(--font-ui-smaller);
+  font-weight: var(--font-medium);
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* "No backlinks found": sussurro, non messaggio. */
+body.cosmos-phone-edition.is-phone .embedded-backlinks .search-empty-state {
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+}
+
+/* Blocchi morbidi via token nativi (niente fight col DOM di CM6): callout e
+   code block ereditano il raggio card della Craft-parity. */
+body.cosmos-phone-edition.is-phone {
+  --callout-radius: var(--radius-xl);
+  --code-radius: var(--radius-xl);
+}
+
+/* Embed di note: card di superficie senza bordo — delimita il contrasto,
+   non la riga. */
+body.cosmos-phone-edition.is-phone .markdown-embed {
+  border: none;
+  border-radius: var(--radius-xl);
 }
