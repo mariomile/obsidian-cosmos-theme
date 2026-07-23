@@ -30,21 +30,25 @@ settings:
 
 /* --------------------------------------------------------------------------
    § A — Navbar flottante a pillola (la firma nativa Craft/Notion).
-   Obsidian ha GIÀ la modalità `is-floating-nav` (Impostazioni mobile →
-   "Floating navigation bar"): navbar fit-content, max 316px, radius pill,
-   position fixed, --raised-blur + --raised-shadow. Qui NON la ricostruiamo:
-   alziamo solo l'elevazione alla polish Craft (ombra Cosmos morbida) e
-   garantiamo il respiro safe-area. Se il setting è OFF, questo blocco è inerte
-   (nessun .is-floating-nav) → zero rischio.
+   Obsidian ha la modalità `is-floating-nav` (setting mobile-only "Floating
+   navigation"), ma NON ci affidiamo a quel secondo interruttore: applichiamo
+   NOI i token che disegnano la pillola, così appena accendi Phone Edition la
+   navbar diventa una capsula centrata — nessun setting nascosto da cercare.
+   Restiamo nel FLUSSO (niente position:fixed): la barra si limita a stringersi
+   e arrotondarsi al suo posto in basso → nessun contenuto nascosto sotto, zero
+   rischio di layout. Sono gli STESSI token di is-floating-nav (fit-content, max
+   316, radius pill), solo triggerati dal toggle invece che dal setting nativo.
    -------------------------------------------------------------------------- */
-body.cosmos-phone-edition.is-phone.is-floating-nav {
-  /* Ombra Cosmos (già definita in cosmos-tokens) al posto di --shadow-xs:
-     capsula che "galleggia" come in Craft, non un filo d'ombra. */
-  --raised-shadow: var(--cosmos-pop-shadow);
+body.cosmos-phone-edition.is-phone {
+  --navbar-width: fit-content;            /* da 100% → si stringe sul contenuto */
+  --navbar-max-width: 316px;
+  --navbar-height: var(--touch-size-l);   /* 52px: compatta come Craft */
+  --navbar-radius: var(--touch-size-l);   /* capsula piena */
 }
 
-/* Transizione pill in easing iOS (zero-bounce) invece del transform lineare. */
+/* Elevazione: la barra "galleggia" (ombra Cosmos morbida) + easing iOS. */
 body.cosmos-phone-edition.is-phone .mobile-navbar {
+  box-shadow: var(--cosmos-pop-shadow);
   transition:
     opacity var(--cosmos-t-base) var(--cosmos-native),
     transform var(--cosmos-t-panel) var(--cosmos-native);
