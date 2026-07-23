@@ -587,6 +587,11 @@ settings:
 		description: Raggi base più ampi (pill/card/pannelli/modali) per un look più morbido alla Craft. Si combina con Roundness.
 		type: class-toggle
 	-
+		id: cosmos-phone-edition
+		title: Phone Edition (mobile nativo)
+		description: Rifiniture touch native su iPhone (navbar a pillola flottante, header circolare, selezione accent, feedback al tap, safe-area). Solo su telefono. Spegni per tornare al mobile attuale.
+		type: class-toggle
+	-
 		id: icon-stroke-modifier
 		title: Icon thickness
 		type: variable-number-slider
@@ -5023,20 +5028,12 @@ body.is-mobile.theme-dark, body.is-mobile.theme-light {
   border-top: none;   /* beats: app.css border-top var(--background-modifier-border) */
 }
 
-/* @settings
-name: Cosmos Phone
-id: cosmos-phone
-settings:
-    -
-        id: cosmos-phone-edition
-        title: Phone Edition — native mobile feel
-        description: Rifiniture touch native in stile Craft/Notion (navbar a pillola, bottoni header circolari, feedback al tap, safe-area, momentum scroll). Attive SOLO su iPhone. Spegni questo toggle per tornare in un tap al mobile attuale. Suggerito insieme a Impostazioni → (mobile) → "Floating navigation bar".
-        type: class-toggle
-        default: false
-*/
-
 /* ==========================================================================
    COSMOS PHONE EDITION — layer additivo `is-phone`.
+   Il toggle Style Settings ("Phone Edition") vive nel blocco @settings
+   PRINCIPALE (cosmos-base.css), NON qui: Style Settings legge solo il primo
+   blocco @settings del foglio → un secondo blocco separato veniva ignorato
+   (bug diagnosticato 2026-07-23: la classe non si applicava mai su mobile).
    --------------------------------------------------------------------------
    Polarity POSITIVA: qui non si de-gata desktop, si DISEGNA per il phone.
    Riferimento visivo: Craft + Notion mobile (thumb-zone, pillole flottanti,

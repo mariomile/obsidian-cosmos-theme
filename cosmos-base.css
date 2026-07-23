@@ -587,6 +587,11 @@ settings:
 		description: Raggi base più ampi (pill/card/pannelli/modali) per un look più morbido alla Craft. Si combina con Roundness.
 		type: class-toggle
 	-
+		id: cosmos-phone-edition
+		title: Phone Edition (mobile nativo)
+		description: Rifiniture touch native su iPhone (navbar a pillola flottante, header circolare, selezione accent, feedback al tap, safe-area). Solo su telefono. Spegni per tornare al mobile attuale.
+		type: class-toggle
+	-
 		id: icon-stroke-modifier
 		title: Icon thickness
 		type: variable-number-slider
