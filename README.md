@@ -74,6 +74,10 @@ pnpm release:check              # rebuild twice + prove byte-for-byte stability
 
 Then: **Settings → Appearance → Themes → Cosmos**. Cosmos needs the **Style Settings** community plugin for the flavour dropdown + Cupertino Light toggle.
 
+## Try it
+
+See it running in the [Obsidianverse sample vault](https://github.com/mariomile/obsidianverse-sample-vault) — a small, fictional vault with the whole plugin suite pre-configured.
+
 ## Credits & license
 
 Forked from **Baseline** (Alexis C, MIT). Cosmos is MIT — see [LICENSE](LICENSE). All original Baseline capability and Style Settings are preserved.
