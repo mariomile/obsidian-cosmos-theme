@@ -145,3 +145,78 @@ body.cosmos-phone-edition.is-phone .menu {
 body.cosmos-phone-edition.is-phone {
   --text-selection: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.24);
 }
+
+/* --------------------------------------------------------------------------
+   § G — Craft polish pass (confronto diretto screenshot 2026-07-23:
+   vista nota Obsidian vs doc view Craft in Design references §Mobile).
+   Quattro firme Craft che mancavano: "+" primario ad alto contrasto,
+   micro-label quieti, hairline 0.5px, respiro tipografico.
+   -------------------------------------------------------------------------- */
+
+/* "+" primario alla Craft: cerchio pieno ad alto contrasto dentro la pillola.
+   In Craft il "+" è il SOLO elemento chiaro della barra: gerarchia immediata
+   ("questa è l'azione primaria"). Selettore robusto: l'azione new-note è
+   l'unica con longpress menu (classe nativa .has-longpress-menu), niente
+   nth-child fragile. Inversione via token: text-normal su background-primary
+   → funziona in dark E light senza hex. */
+body.cosmos-phone-edition.is-phone .mobile-navbar-action.has-longpress-menu .clickable-icon {
+  --icon-color: var(--background-primary);
+  --icon-color-active: var(--background-primary);
+  --icon-color-focus: var(--background-primary);
+  background-color: var(--text-normal);
+  border-radius: 999px;
+  width: var(--touch-size-m);
+  height: var(--touch-size-m);
+  margin: auto;
+}
+
+/* Respiro dentro la pillola: 6 azioni in fit-content stringono; un filo di
+   padding orizzontale + gap le fa respirare come i cluster Craft. */
+body.cosmos-phone-edition.is-phone .mobile-navbar {
+  padding-inline: var(--size-4-3);
+}
+body.cosmos-phone-edition.is-phone .mobile-navbar-actions {
+  gap: var(--size-4-1);
+}
+
+/* "Properties" da titolo urlato a micro-label: in Craft questa label non
+   esiste proprio — i metadati si presentano da soli. La portiamo a etichetta
+   di sezione quieta (small-caps faint), il contenuto resta intatto. */
+body.cosmos-phone-edition.is-phone .metadata-properties-heading .metadata-properties-title {
+  font-size: var(--font-ui-smaller);
+  font-weight: var(--font-medium);
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Property rows: 44pt + hairline 0.5px tra le righe (iOS non usa mai 1px:
+   il mezzo pixel retina è la differenza tra "web app" e "nativo"). */
+body.cosmos-phone-edition.is-phone .metadata-property {
+  min-height: var(--cosmos-touch-min);
+  align-items: center;
+}
+body.cosmos-phone-edition.is-phone .metadata-property + .metadata-property {
+  border-top: 0.5px solid var(--background-modifier-border);
+}
+
+/* Hairline sotto il titolo della nota, come il divider sotto il blocco
+   titolo nel doc view di Craft: chiude la testata, apre il contenuto. */
+body.cosmos-phone-edition.is-phone .inline-title {
+  border-bottom: 0.5px solid var(--background-modifier-border);
+  padding-bottom: var(--size-4-3);
+}
+
+/* Menu separators a mezzo pixel: divisori che suggeriscono, non dividono. */
+body.cosmos-phone-edition.is-phone .menu-separator {
+  border-top-width: 0.5px;
+}
+
+/* Respiro di lettura alla Craft: line-height generosa e margini che non
+   fanno mai toccare il testo ai bordi. Solo ritmo — le DIMENSIONI dei font
+   restano al preset NC-Tight (territorio di Mario, non di questo layer). */
+body.cosmos-phone-edition.is-phone .markdown-source-view,
+body.cosmos-phone-edition.is-phone .markdown-preview-view {
+  --line-height-normal: 1.55;
+  --file-margins: var(--size-4-5);
+}
