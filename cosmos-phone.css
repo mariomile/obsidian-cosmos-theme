@@ -112,3 +112,40 @@ body.cosmos-phone-edition.is-phone .cm-scroller {
 body.cosmos-phone-edition.is-phone .menu {
   padding-bottom: max(var(--cosmos-safe-bottom), var(--size-4-2));
 }
+
+/* --------------------------------------------------------------------------
+   § C — Selezione & formattazione (il cuore dello "scrivere/selezionare bene").
+   Obsidian mobile ha GIÀ: la toolbar di formattazione come pill sopra la
+   tastiera (.mobile-toolbar-options-list, --touch-background, radius
+   touch-size-m) e il menu come bottom-sheet con grabber + safe-area. Qui non
+   li ricostruiamo: li ELEVIAMO a capsula/sheet flottante stile Craft/Notion e
+   rendiamo la selezione deliberata (accent-tinted invece che grigia).
+   -------------------------------------------------------------------------- */
+
+/* Toolbar di formattazione: la stacchiamo dal fondo con elevazione Cosmos →
+   legge come capsula che galleggia, non barra incollata alla tastiera. */
+body.cosmos-phone-edition.is-phone .mobile-toolbar-options-list,
+body.cosmos-phone-edition.is-phone .mobile-toolbar-floating-options {
+  box-shadow: var(--cosmos-pop-shadow);
+}
+
+/* Opzioni toolbar: pollice comodo (44pt HIG). */
+body.cosmos-phone-edition.is-phone .mobile-toolbar-option {
+  min-height: var(--cosmos-touch-min);
+}
+
+/* Bottom-sheet menu: angoli superiori generosi (sheet Craft) + elevazione.
+   Grabber e safe-area restano nativi (già ok), non li tocchiamo. */
+body.cosmos-phone-edition.is-phone .menu {
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
+  box-shadow: var(--cosmos-pop-shadow);
+}
+
+/* Selezione testo accent-tinted: deliberata come in Craft/Notion, non grigia.
+   Alpha via i token accent HSL già esposti (nessun hex raw). --text-selection
+   vive in cosmos-base.css (fuori dai layer del contract) → qui è una singola
+   ridefinizione, nessun dup. */
+body.cosmos-phone-edition.is-phone {
+  --text-selection: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.24);
+}
