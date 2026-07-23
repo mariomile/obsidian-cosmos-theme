@@ -592,6 +592,11 @@ settings:
 		description: Rifiniture touch native su iPhone (navbar a pillola flottante, header circolare, selezione accent, feedback al tap, safe-area). Solo su telefono. Spegni per tornare al mobile attuale.
 		type: class-toggle
 	-
+		id: cosmos-craft-care
+		title: Craft care (desktop)
+		description: La stessa cura della Phone Edition portata su desktop — selezione accent, label Properties/Linked mentions quiete, motion di stato su menu/modal/popover, press al click. Solo su desktop (pointer fine). Spegni per tornare al desktop attuale.
+		type: class-toggle
+	-
 		id: icon-stroke-modifier
 		title: Icon thickness
 		type: variable-number-slider
@@ -5026,6 +5031,56 @@ body.is-mobile.theme-dark, body.is-mobile.theme-light {
    spacing verticale → la togliamo (0,2,0 batte lo 0,1,0 della base). */
 .workspace-leaf-content .embedded-backlinks {
   border-top: none;   /* beats: app.css border-top var(--background-modifier-border) */
+}
+
+/* ==========================================================================
+   § CRAFT CARE (desktop) — toggle Style Settings `cosmos-craft-care`.
+   --------------------------------------------------------------------------
+   Il porting selettivo della Phone Edition: viaggia solo ciò che è invariante
+   rispetto all'input (gerarchia visiva + motion di stato), non la geometria
+   touch. Desktop-ness via @media (hover:hover) and (pointer:fine) — NON via
+   :not(.is-phone), che gonfierebbe il ratchet dei gate mobile-escludenti.
+   Qui i menu NON sono drag-driven (nessun transform inline JS) → a differenza
+   del phone si può animare anche il transform. Keyframes riusati da
+   cosmos-phone.css (le @keyframes sono globali nel theme.css buildato).
+   ========================================================================== */
+@media (hover: hover) and (pointer: fine) {
+  /* Selezione accent-tinted: deliberata, non grigia (come su phone). */
+  body.cosmos-craft-care {
+    --text-selection: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.24);
+  }
+
+  /* Micro-label: PROPERTIES e Linked/Unlinked mentions da titoli a etichette
+     di sezione quiete — seconda metà del chrome-cleanup del 2026-07-22. */
+  body.cosmos-craft-care .metadata-properties-heading .metadata-properties-title,
+  body.cosmos-craft-care .embedded-backlinks .backlink-pane > .tree-item-self .tree-item-inner {
+    font-size: var(--font-ui-smaller);
+    font-weight: var(--font-medium);
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  body.cosmos-craft-care .embedded-backlinks .search-empty-state {
+    color: var(--text-faint);
+    font-size: var(--font-ui-smaller);
+  }
+
+  /* Motion di stato: menu/popover pop-in rapido, modal e palette rise.
+     Entrate secche oggi → 140/180ms con l'easing iOS zero-bounce del tema. */
+  body.cosmos-craft-care .menu,
+  body.cosmos-craft-care .suggestion-container {
+    animation: cosmos-pop-in var(--cosmos-t-fast) var(--cosmos-native) both;
+  }
+  body.cosmos-craft-care .modal,
+  body.cosmos-craft-care .prompt {
+    animation: cosmos-sheet-rise var(--cosmos-t-base) var(--cosmos-native) both;
+  }
+
+  /* Tattilità anche col mouse: press-scale sui clickable (già sui tab). */
+  body.cosmos-craft-care .clickable-icon:active {
+    transform: scale(var(--cosmos-press-scale));
+    transition: transform var(--cosmos-t-fast) var(--cosmos-native);
+  }
 }
 
 /* ==========================================================================

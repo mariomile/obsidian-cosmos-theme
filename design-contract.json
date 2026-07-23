@@ -35,13 +35,14 @@
     "--cosmos-filled-icon",
     "--accent-h",
     "--accent-s",
-    "--accent-l"
+    "--accent-l",
+    "--text-selection"
   ],
   "duplicate_prop_allowlist_comment": "craft-tab-active & island-shadow: theme-branch override; cosmos-t-*: azzerati nel media query reduced-motion; mv-pill-color: 9 varianti colore; cosmos-filled-icon: una mask per ciascuna famiglia semantica whitelisted; accent-h/-s/-l: 6 preset accent (body.cosmos-accent-*) + il default, Style Settings.",
   "outline_none_requires_comment": true,
   "mobile_excluding_gates_max": 24,
   "mobile_excluding_gates_comment": "Gate :not(.is-phone)/:not(.is-mobile) nei 4 layer. Può solo SCENDERE (polarity flip in corso). Slice 3 (2026-07-11): 25→24 (flip press-scale del tab); i 24 restanti sono KEEP documentati in docs/2026-07-11-mobile-gate-audit.md.",
   "raw_100vh_max": 0,
-  "style_settings_first_block_required_ids": ["cosmos-phone-edition"],
+  "style_settings_first_block_required_ids": ["cosmos-phone-edition", "cosmos-craft-care"],
   "style_settings_first_block_comment": "Style Settings legge SOLO il primo blocco @settings di un foglio (bug reale 2026-07-23: toggle in un secondo blocco = mai registrato, classe mai applicata, feature silenziosamente inerte). Ogni toggle consumato dai layer va dichiarato nel blocco principale di cosmos-base.css; questo check lo verifica sul theme.css buildato."
 }
