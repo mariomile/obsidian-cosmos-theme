@@ -324,3 +324,15 @@ body.cosmos-phone-edition.is-phone .markdown-embed {
   border: none;
   border-radius: var(--radius-xl);
 }
+
+/* --------------------------------------------------------------------------
+   § Master switch — il toggle spegne TUTTA l'esperienza phone, plugin inclusi.
+   La transizione note-enter vive in Portal (gated solo Platform.isPhone: la
+   suite è theme-independent e non può dipendere da una classe del tema).
+   Quando Cosmos c'è ed il toggle è OFF, è il TEMA a sopprimerla: così
+   "Phone Edition" è un interruttore unico e onesto. Nota contract: il gate è
+   :not(.cosmos-phone-edition), non un mobile-excluding gate (:not(.is-phone)).
+   -------------------------------------------------------------------------- */
+body.is-phone:not(.cosmos-phone-edition) .portal-note-enter {
+  animation: none;
+}
