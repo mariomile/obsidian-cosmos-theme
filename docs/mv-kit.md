@@ -74,27 +74,28 @@ Source: `cosmos-tokens.css`.
 Source: `cosmos-tokens.css` (durations, easings) + `cosmos-phone.css`
 (animation recipes).
 
-| Token | Canonical value | Use |
-|---|---|---|
-| `--cosmos-t-fast` | `140ms` | Micro feedback (hover wash, colour, press-scale) |
-| `--cosmos-t-base` | `180ms` | Physical lift (card shadow, pill), popover pop-in |
-| `--cosmos-t-slow` | `260ms` | Progress / extensions |
-| `--cosmos-t-panel` | `300ms` | Structural panel movement (sidebar open/close, ribbon peek, modal sheet-rise) |
-| `--cosmos-native` | `cubic-bezier(0.32, 0.72, 0, 1)` | Default easing for panels/structural motion — no overshoot |
-| `--cosmos-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` | Confirmation micro-moments ONLY (press-release of a tab, checkbox tap) — never on hover/reveal |
-| `--mv-lift` | `cubic-bezier(0.22, 1, 0.36, 1)` | Physical hover/reveal easing (suite-wide, = exo `--mva-ease-out`) |
-| `--mv-wash` | `cubic-bezier(0.25, 1, 0.5, 1)` | Colour/background wash easing (= masonry `--masonry-ease`) |
-| `--mv-t` | `var(--cosmos-t-fast)` (0.14s) | Bridge alias consumed by exo (`--mva-t`) |
-| `--cosmos-press-scale` | `0.98` | Tap press-scale transform on phone |
+| Token | Canonical value | Desktop | Phone |
+|---|---|---|---|
+| `--cosmos-t-fast` | `140ms` | Micro feedback (hover wash, colour, press-scale) | Same — also drives `cosmos-fade-in` |
+| `--cosmos-t-base` | `180ms` | Physical lift (card shadow, pill), popover pop-in | Same — also drives `cosmos-pop-in` |
+| `--cosmos-t-slow` | `260ms` | Progress / extensions | Same, no phone-only usage |
+| `--cosmos-t-panel` | `300ms` | Structural panel movement (sidebar open/close, ribbon peek) | Same — also drives `cosmos-sheet-rise` (modal/bottom-sheet entrance) |
+| `--cosmos-native` | `cubic-bezier(0.32, 0.72, 0, 1)` | Default easing for panels/structural motion — no overshoot | Same — the easing for all three phone entrance keyframes |
+| `--cosmos-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` | Confirmation micro-moments ONLY (press-release of a tab, checkbox tap) — never on hover/reveal | Same rule; no phone-only carve-out |
+| `--mv-lift` | `cubic-bezier(0.22, 1, 0.36, 1)` | Physical hover/reveal easing (suite-wide, = exo `--mva-ease-out`) | Same — hover is rare on touch but the token still applies to press/reveal transitions |
+| `--mv-wash` | `cubic-bezier(0.25, 1, 0.5, 1)` | Colour/background wash easing (= masonry `--masonry-ease`) | Same |
+| `--mv-t` | `var(--cosmos-t-fast)` (0.14s) | Bridge alias consumed by exo (`--mva-t`) | Same |
+| `--cosmos-press-scale` | `0.98` | N/A (no press-scale defined for pointer/desktop) | **MUST**: tap targets apply `transform: scale(var(--cosmos-press-scale, 0.98))` on active/press |
 
 Phone animation recipes (`cosmos-phone.css`, keyframes `cosmos-pop-in`,
-`cosmos-sheet-rise`, `cosmos-fade-in`):
+`cosmos-sheet-rise`, `cosmos-fade-in`) — desktop has no equivalent
+chrome-entrance requirement, these are phone-only:
 
-| Recipe | Duration + easing | Property |
-|---|---|---|
-| `cosmos-pop-in` | `var(--cosmos-t-base) var(--cosmos-native)` | `opacity` + `transform: translateY(4px) → none` |
-| `cosmos-sheet-rise` | `var(--cosmos-t-panel) var(--cosmos-native)` | `opacity` + `transform: translateY(12px) → none` |
-| `cosmos-fade-in` | `var(--cosmos-t-fast) var(--cosmos-native)` | `opacity` only |
+| Recipe | Duration + easing | Property | Desktop | Phone |
+|---|---|---|---|---|
+| `cosmos-pop-in` | `var(--cosmos-t-base) var(--cosmos-native)` | `opacity` + `transform: translateY(4px) → none` | N/A — no entrance-animation requirement | **MUST** on popover/menu chrome entrance |
+| `cosmos-sheet-rise` | `var(--cosmos-t-panel) var(--cosmos-native)` | `opacity` + `transform: translateY(12px) → none` | N/A | **MUST** on modal/bottom-sheet entrance |
+| `cosmos-fade-in` | `var(--cosmos-t-fast) var(--cosmos-native)` | `opacity` only | N/A | **MUST** on lightweight chrome entrance (tooltips, small overlays) |
 
 > MUST: animate only `transform` and `opacity` (composited properties) —
 > never `width`/`height`/`top`/`left`/layout-triggering properties.
@@ -103,17 +104,14 @@ Phone animation recipes (`cosmos-phone.css`, keyframes `cosmos-pop-in`,
 > fallback), never a raw `ms` value or bezier hardcoded outside a `var()`
 > fallback.
 > MUST: `--cosmos-spring` (overshoot) is reserved for confirmation
-> micro-moments only — never hover or reveal.
-> MUST: `prefers-reduced-motion: reduce` is respected. Cosmos zeroes all
-> `--cosmos-t-*` tokens (and `--anim-speed-modifier`) at the token level
-> under that media query — a plugin that consumes the duration tokens
-> (rather than hardcoding `ms`) inherits this automatically. Audit rule:
-> grep the plugin's stylesheet for raw `ms` durations outside a `var()`
-> fallback; any hit is a reduced-motion violation.
-> Desktop vs phone: same tokens, same rule — no separate desktop motion
-> vocabulary. Phone additionally defines the three keyframes above for
-> chrome entrance (popover/modal/menu); desktop has no equivalent
-> entrance-animation requirement.
+> micro-moments only — never hover or reveal. No desktop/phone distinction.
+> MUST: `prefers-reduced-motion: reduce` is respected on both desktop and
+> phone. Cosmos zeroes all `--cosmos-t-*` tokens (and
+> `--anim-speed-modifier`) at the token level under that media query — a
+> plugin that consumes the duration tokens (rather than hardcoding `ms`)
+> inherits this automatically on every surface, desktop and phone alike.
+> Audit rule: grep the plugin's stylesheet for raw `ms` durations outside a
+> `var()` fallback; any hit is a reduced-motion violation.
 
 ---
 
