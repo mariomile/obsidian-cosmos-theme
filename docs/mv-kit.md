@@ -23,6 +23,16 @@ inline fallback so the plugin still looks correct with Cosmos absent:
 > MUST NOT: a plugin stylesheet redefines `--mv-*` or `--cosmos-*` on
 > `:root` / `body`.
 
+> ⚠️ **MUST NOT: write a token glob immediately followed by a slash inside a
+> CSS comment.** That character pair closes the comment early; everything
+> after it parses as garbage and the browser **silently drops the enclosing
+> rule**. This is invisible to eslint, tsc and to the raw-value scan — it cost
+> Sonar its `.sonar-modal { width: 880px }` in the 2026-07 audit wave (the
+> modal collapsed to Obsidian's 560px default and the filter row clipped).
+> In prose write "the `--cosmos-` and `--mv-` tokens", never the glob-slash
+> pair. Guarded by the `no CSS comment terminates early` assertion in each
+> repo's style contract — port it when adding a contract to a new repo.
+
 ---
 
 ## 1. Radius + surfaces scale
