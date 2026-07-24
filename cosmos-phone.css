@@ -49,6 +49,18 @@ body.cosmos-phone-edition.is-phone:not(.is-floating-nav) .mobile-navbar {
   border-radius: var(--touch-size-l);
 }
 
+/* Non-markdown leaf (All Docs / masonry, the empty new-tab): Baseline pins
+   margin-right to --navbar-side-offset via a high-specificity :has() rule
+   (0,14,1). Against our margin-inline:auto that leaves margin-left:auto, which
+   shoves the pill to the right edge (visible as the navbar jumping off-centre).
+   Re-assert centred auto margins by mirroring that exact :has() guard plus our
+   .cosmos-phone-edition class (0,15,1) so we win on source-order too — no
+   !important (phone cap = 0). If Baseline reshapes this chain the pill just
+   falls back to its offset: cosmetic, and the edition toggle OFF restores all. */
+body.cosmos-phone-edition.is-phone.is-floating-nav > .app-container > .horizontal-main-container:has(.workspace > .mod-root > .workspace-tabs.mod-visible > .workspace-tab-container > .workspace-leaf.mod-active > .workspace-leaf-content:not([data-type=markdown])) ~ .mobile-navbar {
+  margin-inline: auto;
+}
+
 /* Craft non duplica la navigazione nella bottom bar: back vive nell'header
    (+ swipe-back iOS), forward è quasi sempre disabled. Via entrambi → la
    pillola diventa DAVVERO compatta (4 azioni: search, +, tab, menu).
