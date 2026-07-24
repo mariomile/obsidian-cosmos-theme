@@ -5402,6 +5402,19 @@ body.cosmos-phone-edition.is-phone .embedded-backlinks .backlink-pane > .tree-it
   letter-spacing: 0.06em;
 }
 
+/* Le icone list/sort/search del pannello mentions sono position:absolute e
+   ancorate in cima alla sezione (top:12px, height fissa). Su desktop combaciano
+   col titolo, ma su phone la riga-titolo è più alta (touch) e noi rimpiccioliamo
+   il label → le icone galleggiano SOPRA di esso. Diamo alla fila-icone l'altezza
+   della riga-titolo e la centriamo, così i centri verticali coincidono. Altezza
+   in em (scala col font); se il device mostra ancora scarto, si ritocca qui. */
+body.cosmos-phone-edition.is-phone .embedded-backlinks .nav-buttons-container {
+  top: 12px;
+  bottom: auto;
+  height: 2.5em;
+  align-items: center;
+}
+
 /* "No backlinks found": sussurro, non messaggio. */
 body.cosmos-phone-edition.is-phone .embedded-backlinks .search-empty-state {
   color: var(--text-faint);
