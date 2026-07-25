@@ -111,10 +111,22 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked) .workspace-tab-header {
   /* !important: in sidebar la base setta 8px con selettore più specifico */
   border-radius: var(--cosmos-tab-radius, var(--cosmos-r-pill)) !important;
+  /* 2026-07-25 — dynamics-and-depth §B: attivazione ancora di scatto nonostante
+     questa transition (misurato via obsidian-cli eval + getAnimations(): al
+     flip di .is-active correvano SOLO background-color/box-shadow — transform
+     restava "none", zero componente fisica). Il transform QUI (--cosmos-native,
+     mai --cosmos-spring: non è un momento di press-confirm) governa SOLO il
+     lift di attivazione: il press-scale su :active vive in un'altra regola
+     (cosmos-tweaks.css) con il proprio `transition: transform …` locale, che
+     rimpiazza per intero questo durante :active — nessun conflitto, sono due
+     momenti che non si sovrappongono mai nello stesso istante di cascata.
+     Il drag nativo (transform inline su ogni tab durante il riordino) vince
+     comunque sulla nostra transition per la stessa ragione del press-scale:
+     stessa property, l'inline vince sempre — zero fight, solo precedenza. */
   transition:
     background-color var(--anim-duration-fast) var(--anim-motion-baseline, ease),
     box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease),
-    transform        var(--cosmos-t-fast) var(--cosmos-spring);   /* pop-back elastico al rilascio del press */
+    transform        var(--cosmos-t-fast) var(--cosmos-native);
 }
 
 /* --- Gap compatto tra i tab — SOLO editor (2026-07-10: la sidebar vuole le
@@ -152,6 +164,7 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
   .workspace-tab-header.is-active {
   background-color: var(--craft-tab-active) !important;  /* beats: hard-set base per-selettore */
   box-shadow: var(--shadow-tactile);
+  transform: scale(1);
 }
 
 /* --- Inattivi: kill del ghost (opacity .5) → flat, testo muto ------------- */
@@ -160,6 +173,14 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
   .workspace-tab-header:not(.is-active) {
   opacity: 1 !important;                    /* beats: ghost opacity .5 della base */
   background-color: transparent !important;
+  /* 2026-07-25 — dynamics-and-depth §B: riposo dell'attivazione, leggermente
+     sotto scala, cosicché il flip a .is-active abbia un delta transform
+     reale da animare (misurato prima: transform restava "none" su ENTRAMBI
+     gli stati → zero motion). Micro-scale quasi subliminale (stessa
+     disciplina del --cosmos-press-scale): non è un salto, è un settle.
+     Riuso di questa regola già gated (non una nuova) per non alzare il
+     conteggio dei gate mobile-excluding (ratchet: mai sopra 24). */
+  transform: scale(0.99);
 }
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)

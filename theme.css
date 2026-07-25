@@ -3767,10 +3767,22 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked) .workspace-tab-header {
   /* !important: in sidebar la base setta 8px con selettore più specifico */
   border-radius: var(--cosmos-tab-radius, var(--cosmos-r-pill)) !important;
+  /* 2026-07-25 — dynamics-and-depth §B: attivazione ancora di scatto nonostante
+     questa transition (misurato via obsidian-cli eval + getAnimations(): al
+     flip di .is-active correvano SOLO background-color/box-shadow — transform
+     restava "none", zero componente fisica). Il transform QUI (--cosmos-native,
+     mai --cosmos-spring: non è un momento di press-confirm) governa SOLO il
+     lift di attivazione: il press-scale su :active vive in un'altra regola
+     (cosmos-tweaks.css) con il proprio `transition: transform …` locale, che
+     rimpiazza per intero questo durante :active — nessun conflitto, sono due
+     momenti che non si sovrappongono mai nello stesso istante di cascata.
+     Il drag nativo (transform inline su ogni tab durante il riordino) vince
+     comunque sulla nostra transition per la stessa ragione del press-scale:
+     stessa property, l'inline vince sempre — zero fight, solo precedenza. */
   transition:
     background-color var(--anim-duration-fast) var(--anim-motion-baseline, ease),
     box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease),
-    transform        var(--cosmos-t-fast) var(--cosmos-spring);   /* pop-back elastico al rilascio del press */
+    transform        var(--cosmos-t-fast) var(--cosmos-native);
 }
 
 /* --- Gap compatto tra i tab — SOLO editor (2026-07-10: la sidebar vuole le
@@ -3808,6 +3820,7 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
   .workspace-tab-header.is-active {
   background-color: var(--craft-tab-active) !important;  /* beats: hard-set base per-selettore */
   box-shadow: var(--shadow-tactile);
+  transform: scale(1);
 }
 
 /* --- Inattivi: kill del ghost (opacity .5) → flat, testo muto ------------- */
@@ -3816,6 +3829,14 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
   .workspace-tab-header:not(.is-active) {
   opacity: 1 !important;                    /* beats: ghost opacity .5 della base */
   background-color: transparent !important;
+  /* 2026-07-25 — dynamics-and-depth §B: riposo dell'attivazione, leggermente
+     sotto scala, cosicché il flip a .is-active abbia un delta transform
+     reale da animare (misurato prima: transform restava "none" su ENTRAMBI
+     gli stati → zero motion). Micro-scale quasi subliminale (stessa
+     disciplina del --cosmos-press-scale): non è un salto, è un settle.
+     Riuso di questa regola già gated (non una nuova) per non alzare il
+     conteggio dei gate mobile-excluding (ratchet: mai sopra 24). */
+  transform: scale(0.99);
 }
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
@@ -4416,32 +4437,72 @@ body:not(.is-mobile) .workspace-ribbon.mod-left .side-dock-actions {
 }
 
 /* ==========================================================================
-   § MOVIMENTO SIDEBAR NATIVE (2026-07-15) — open/close fisico dei sidedock
+   § MOVIMENTO SIDEBAR NATIVE (2026-07-15 · rifinito 2026-07-25)
    --------------------------------------------------------------------------
-   Baseline anima .workspace-split con `transition: var(--anim-duration-moderate)`
-   ma OMETTE la timing-function → cade su `ease` generico: è la ragione precisa
-   per cui il collasso "non sembra native". Qui forniamo la curva mancante
-   (--cosmos-native: ease-out zero-bounce, la stessa degli sheet sonar) + una
-   durata pannello dedicata (--cosmos-t-panel). Sinistra e destra: STESSO
-   identico movimento, come un'app nativa.
+   MISURA 2026-07-25 (dynamics-and-depth §B — harness Chromium sul theme.css
+   buildato, DOM e sequenza JS reali di Obsidian 1.12.7 riprodotti dal
+   sorgente dell'app): l'open/close del sidedock NON è governato dal CSS.
+   A ogni toggle Obsidian scrive una transition INLINE sullo split
+   (`transition: width 140ms ease-in-out`, dal suo helper di animazione) e la
+   cancella a fine corsa. Un inline batte qualunque regola d'autore senza
+   !important — vietato dal contract — quindi la curva dichiarata qui non è
+   mai andata in scena: computed style misurato DURANTE il toggle =
+   `width 0.14s ease-in-out`, non `0.3s var(--cosmos-native)`.
 
-   Minimal-diff: stesso scope-proprietà di Baseline (shorthand senza property
-   = `all`), cambia SOLO la curva. Scoped ai due sidedock includendo .mod-sidedock
-   → specificità (0,3,0): batte l'UNICA regola Baseline che tocca lo split,
-   `body:not(.is-mobile) .workspace-split` (0,2,1) — 3 classi > 2, il livello
-   `body` non conta perché la colonna-classi si confronta prima. (La regola
-   `input-cupertino` NON matcha lo split, mira ai tab header; verificato via
-   el.matches nel DOM live.) Niente !important, niente body-prefix, niente gate
-   :not(.is-phone) (su phone le sidebar sono .workspace-drawer, non .mod-*-split
-   → il selettore non matcha da sé, zero mobile-gate aggiunti). L'area editor
-   (.mod-root) resta sulla curva Baseline. NON tocca lo stato unfocused
-   macOS/fusion (`transition:none`, specificità più alta → vince a finestra
-   non-a-fuoco, dove comunque non serve animare). Reduced-motion:
-   --cosmos-t-panel→0 (tokens) azzera by construction. Ribbon lasciata a Baseline
-   in v1 (override = !important → bump del ceiling contract, follow-up separato). */
+   Cosa governava davvero lo shorthand senza property (= `all`): ogni ALTRO
+   cambio sullo split, width compresa — cioè i momenti in cui la width viene
+   settata FUORI dall'animazione dell'app (restore del layout, setSize di un
+   plugin, clamp al resize della finestra). Lì una transition non è motion, è
+   lag: il pannello insegue per un terzo di secondo un valore già applicato.
+   Rifinitura: la transition resta, ma SCOPED alla sola proprietà che il tema
+   dipinge davvero su questa superficie. La width torna istantanea quando non
+   è l'app ad animarla; il movimento del pannello resta quello nativo (140ms),
+   e la fase Cosmos si gioca sul contenuto del pannello (regola sotto).
+
+   Invariati: nessun !important, nessun gate mobile (su phone le sidebar sono
+   .workspace-drawer, non .mod-*-split → il selettore non matcha da sé),
+   specificità (0,3,0) che batte `body:not(.is-mobile) .workspace-split`
+   (0,2,1). Reduced-motion: --cosmos-t-panel → 0 nei token, azzerato by
+   construction. Ribbon lasciata a Baseline (i suoi due token di sfondo,
+   normale e collapsed, sono entrambi transparent: non c'è nulla da sfumare). */
 .workspace-split.mod-sidedock.mod-left-split,
 .workspace-split.mod-sidedock.mod-right-split {
-  transition: var(--cosmos-t-panel) var(--cosmos-native);
+  transition: background-color var(--cosmos-t-panel) var(--cosmos-native);
+}
+
+/* --- Entrata del contenuto del pannello (rifinitura 2026-07-25) ------------
+   Baseline anima il leaf del sidedock a ogni comparsa:
+   `animation: workspaceLeafIn var(--anim-duration-moderate)
+   var(--anim-motion-baseline) forwards`, keyframes
+   `from { opacity: 0; transform: scale(0.95) }`. Quella comparsa capita in
+   due momenti: al cambio di tab in sidebar, e quando il pannello si RIAPRE
+   (lo split esce da display:none e il subtree torna renderizzato → le
+   animation ripartono; le transition no, ed è esattamente il gotcha
+   documentato in cosmos-native-sidebar-motion, motivo per cui qui si usa una
+   animation e NON una transition su stato).
+
+   Due difetti misurati sul movimento esistente:
+   1. FUORI FASE — 320ms di contenuto contro i 140ms reali di scorrimento del
+      pannello: il pannello è già fermo e il contenuto sta ancora arrivando.
+   2. CURVA SBAGLIATA — --anim-motion-baseline è cubic-bezier(0.1, 0, 0.1, 1.25),
+      cioè un overshoot. Su un pannello intero il rimbalzo si legge kitsch: è
+      la ragione per cui in cosmos-tokens esiste --cosmos-native (ease-out
+      zero-settle) come curva dei movimenti strutturali.
+
+   Rifinitura: stessa durata del movimento nativo del pannello
+   (--cosmos-t-fast, che è esattamente la durata usata dall'app), curva
+   strutturale, e SOLO opacity — la componente fisica ce l'ha già il pannello
+   che scorre, raddoppiarla con uno scale del 5% è una seconda storia sullo
+   stesso gesto. Una regola sola normalizza anche la variante Baseline
+   `workspaceLeafInFluent` (translateY 16px), stessa deriva per-flavour che
+   §A ha chiuso sull'elevazione. Specificità (0,5,0) > (0,4,1) di entrambe le
+   regole Baseline: vince per specificità e ordine, zero !important. Il guard
+   sullo style inline rispecchia Baseline (l'animazione vale per il leaf
+   visibile). Nessun gate mobile aggiunto. Reduced-motion: durata da token,
+   azzerata by construction. */
+.workspace-split.mod-sidedock .workspace-tab-container
+  .workspace-leaf:not([style*="display: none"]) {
+  animation: cosmos-fade-in var(--cosmos-t-fast) var(--cosmos-native) forwards;
 }
 
 /* ==========================================================================
