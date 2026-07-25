@@ -423,15 +423,15 @@ body.layout-cosmos-fusion-glass:not(.layout-baseline) {
   --tab-outline-width: var(--cosmos-hairline-width);
 }
 
-/* 2026-07-25 — elevation ladder unificata (dynamics-and-depth §A): la base
-   flavour-agnostica (cosmos-layer.css § ANGLAGE) già copre .menu/.modal/
-   .prompt/.suggestion-container/.popover (bare, hover-popover incluso) con
-   background + box-shadow: var(--cosmos-pop-shadow). Fusion Glass
-   SOVRASCRIVE (non ridichiara la base): qui resta solo ciò che aggiunge la
-   sua personalità — surface glass più forte + blur. .modal:not(.mod-settings)
-   perché .modal.mod-settings ha il proprio trattamento glass dedicato
-   sul pannello interno (§ FLOATING SETTINGS PANEL sopra), non sul
-   .modal esterno. */
+/* 2026-07-25 — elevation ladder unificata (dynamics-and-depth §A): l'ombra
+   base delle superfici flottanti arriva dall'UNICA regola flavour-agnostica
+   in cosmos-layer.css § ANGLAGE, che copre tutte e sei le classi (menu,
+   suggestion-container, prompt, popover, tooltip, modal). Fusion Glass qui è
+   puro DELTA: aggiunge solo la sua personalità — surface glass più forte +
+   blur — e non ridichiara l'elevazione (contract check #9 lo impedisce).
+   .modal:not(.mod-settings) perché .modal.mod-settings ha il proprio
+   trattamento glass dedicato sul pannello interno (§ FLOATING SETTINGS
+   PANEL sopra), non sul .modal esterno. */
 body.layout-cosmos-fusion-glass:not(.layout-baseline)
   :is(.menu, .suggestion-container, .prompt, .popover, .modal:not(.mod-settings)) {
   background-color: var(--cosmos-glass-surface-strong);

@@ -624,44 +624,77 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
    modal/prompt = canvas (zero elevazione). Fluent/Material: in dark
    l'elevazione si comunica con superfici PIÙ CHIARE, non solo con l'ombra.
    Scala: flottanti = surface-2 (+6), tooltip = surface-3 (+10, più leggibile).
-   Gate identico al darker (in light/cosmos-light Baseline è già coerente).
+   Gate identico al darker (in light/cosmos-light Baseline è già coerente) —
+   vale per le SUPERFICI, che restano dark-only; l'ombra invece dal 2026-07-25
+   è flavour- e schema-agnostica (vedi sotto).
 
    2026-07-25 — ELEVATION LADDER UNIFICATA (design doc dynamics-and-depth §A).
-   Prima: questa ricetta era scritta due volte con coperture diverse (qui
+   Prima: la stessa ricetta era scritta due volte con coperture diverse (qui
    senza .menu, in cosmos-tweaks § FUSION GLASS con .menu ma senza tooltip) —
    sulla flavour attiva di Mario (cupertino-dark, fusion off) i menu
-   contestuali non ricevevano MAI elevazione Cosmos. Ora: UNA base
-   flavour-agnostica copre l'intero insieme di superfici flottanti
-   (.menu incluso); Fusion Glass in cosmos-tweaks resta libera di
-   SOVRASCRIVERE (blur/glass) ma non ridichiara più la base. */
+   contestuali non ricevevano MAI elevazione Cosmos.
+
+   Ora la scala è separata in DUE strati con responsabilità distinte:
+     1. BASE FLAVOUR-AGNOSTICA (qui sotto) — il gradino della scala, cioè
+        l'OMBRA: canvas → pannello elevato (--cosmos-island-shadow) →
+        superficie flottante (--cosmos-pop-shadow) → overlay. Una sola
+        regola, nessun gate di flavour: qualunque flavour, qualunque schema
+        (il token ha già la variante light), l'elevazione c'è.
+     2. DELTA PER-FLAVOUR (sotto e in cosmos-tweaks) — solo ciò che la
+        flavour AGGIUNGE: cupertino-dark rifinisce le superfici
+        (surface-2 per i flottanti, surface-3 per il tooltip), Fusion Glass
+        mette glass + blur. Nessuno dei due ridichiara l'ombra base.
+   Unico gate ESCLUDENTE della base: :not(.layout-baseline) — Baseline resta
+   com'è, senza elevazione Cosmos (verification point 4 del design doc), e non
+   tocchiamo superfici che una flavour tiene deliberatamente piatte. Il
+   contract check #9 impedisce che l'ombra base venga ridichiarata altrove.
+   Conseguenza voluta e misurata: in schema light le sei superfici passano
+   dalle ombre Baseline alla variante light di --cosmos-pop-shadow (più
+   tenue). Cambio visibile, reversibile (git + restore.sh). */
+
+/* BASE — elevazione flottante flavour-agnostica. Sei classi, un gradino.
+
+   Perché :is(.theme-dark, .theme-light) e non solo `body`: è il peso di
+   specificità, misurato sui concorrenti reali, non decorazione. Ogni body
+   Obsidian ha sempre una delle due classi, quindi il gate non esclude
+   nulla — ma porta il selettore a (0,3,1), che è quanto serve per battere:
+     · app.css   `.modal-container.mod-dim .modal`  (0,3,0) → vinciamo
+       sull'ultimo termine (1 elemento vs 0) a parità di classi;
+     · Baseline  `body.input-cupertino .tooltip` box-shadow:none (0,2,1);
+     · Baseline  `body.input-cupertino.is-phone .prompt` (0,3,1) → pari
+       specificità, vinciamo per source order (i layer Cosmos sono
+       concatenati DOPO cosmos-base.css da build.sh).
+   Con il solo `body` saremmo stati a (0,2,1) e i modal avrebbero perso
+   contro app.css: elevazione silenziosamente assente — lo stesso genere di
+   difetto invisibile che questo cantiere sta chiudendo. Zero important.
+   I delta di flavour restano sopra: cupertino-dark (0,5,1), Fusion Glass
+   (0,3,1) su proprietà diverse. */
+body:is(.theme-dark, .theme-light):not(.layout-baseline)
+  :is(.menu, .suggestion-container, .prompt, .popover, .tooltip, .modal) {
+  box-shadow: var(--cosmos-pop-shadow);
+}
 
 /* Menu contestuali — via variabile: Style Settings può ancora sovrascrivere. */
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --menu-background: var(--cosmos-surface-2);
 }
 
-/* Menu, modal, prompt (quick switcher), suggestion popover, ogni popover
-   (hover-popover incluso: .popover copre il sovrainsieme) — element-level:
-   la base pinna --modal-background con important layered, quindi la
-   variabile non basta. .menu incluso qui (era assente: bug misurato del
-   design doc, finding 1). .popover bare (non solo .hover-popover) copre
-   anche i popover non-hover — sovrainsieme richiesto perché Fusion Glass
-   applicava --cosmos-pop-shadow anche lì: unificato qui invece di
-   ridichiararlo come override. */
+/* DELTA cupertino-dark — SOLO le superfici (l'ombra arriva dalla base).
+   Element-level e non via variabile perché la base pinna --modal-background
+   con important layered, quindi la variabile non basta. .popover bare (non
+   solo .hover-popover) copre anche i popover non-hover. */
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .menu,
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .modal,
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .prompt,
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .suggestion-container,
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .popover {
   background-color: var(--cosmos-surface-2);
-  box-shadow: var(--cosmos-pop-shadow);
 }
 
 /* Tooltip — piccolo e transiente: uno step più su per leggibilità. */
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .tooltip {
   background-color: var(--cosmos-surface-3);
   color: var(--text-normal);
-  box-shadow: var(--cosmos-pop-shadow);
 }
 
 /* --------------------------------------------------------------------------

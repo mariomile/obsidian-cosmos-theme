@@ -164,12 +164,14 @@ body.cosmos-phone-edition.is-phone .mobile-toolbar-option {
   min-height: var(--cosmos-touch-min);
 }
 
-/* Bottom-sheet menu: angoli superiori generosi (sheet Craft) + elevazione.
-   Grabber e safe-area restano nativi (già ok), non li tocchiamo. */
+/* Bottom-sheet menu: angoli superiori generosi (sheet Craft). Grabber e
+   safe-area restano nativi (già ok), non li tocchiamo. L'elevazione NON si
+   dichiara qui: dal 2026-07-25 arriva dalla base flavour-agnostica in
+   cosmos-layer.css § ANGLAGE, che copre .menu su ogni flavour e su ogni
+   target (dynamics-and-depth §A). Qui resta la sola geometria del delta. */
 body.cosmos-phone-edition.is-phone .menu {
   border-top-left-radius: var(--radius-xl);
   border-top-right-radius: var(--radius-xl);
-  box-shadow: var(--cosmos-pop-shadow);
 }
 
 /* Selezione testo accent-tinted: deliberata come in Craft/Notion, non grigia.

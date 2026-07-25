@@ -108,50 +108,65 @@ if 'style_settings_first_block_required_ids' in contract:
         if not re.search(r'^\s*id:\s*' + re.escape(rid) + r'\s*$', first, re.M):
             failures.append(f"Style Settings: id '{rid}' assente dal PRIMO blocco @settings di theme.css (i blocchi successivi sono ignorati dal plugin)")
 
-# 9. Anti-duplicazione elevazione (dynamics-and-depth §A/Contract#1). Le
+# 9. Elevazione: UNA sola sede (dynamics-and-depth §A/Contract#1). Le sei
 #    superfici flottanti (.menu, .suggestion-container, .prompt, .popover,
-#    .modal, .tooltip) ricevono la loro ombra BASE (background-color +
-#    box-shadow: var(--cosmos-pop-shadow) nello stesso blocco di regola) da
-#    UNA sola sede flavour-agnostica: cosmos-layer.css § ANGLAGE
-#    (gate `body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light)`,
-#    che è il gate "qualunque flavour scuro Cosmos non-Baseline/non-Light" —
-#    l'unico consentito a dichiarare la base). Qualsiasi ALTRO blocco che
-#    ridichiari ENTRAMBE le proprietà sullo stesso selettore flottante è una
-#    duplicazione: le flavour possono SOVRASCRIVERE proprietà additive (es.
-#    backdrop-filter) ma non re-includere box-shadow insieme a un
-#    background sullo stesso selettore — quello è il pattern che ha causato
-#    la deriva di copertura misurata (finding 1).
+#    .modal, .tooltip) prendono il loro gradino di elevazione — cioè
+#    `box-shadow: var(--cosmos-pop-shadow)` — da UNA sola regola
+#    flavour-agnostica in cosmos-layer.css § ANGLAGE, gated
+#    `body:is(.theme-dark, .theme-light):not(.layout-baseline)` (il gate di
+#    schema non esclude nulla — ogni body Obsidian ha una delle due classi —
+#    serve al PESO di specificità: porta la base a (0,3,1), quanto basta per
+#    battere `.modal-container.mod-dim .modal` di app.css senza important).
+#    Ogni altra dichiarazione della stessa
+#    ombra su una di quelle sei classi è una duplicazione: le flavour
+#    possono AGGIUNGERE (surface, backdrop-filter, geometria), non
+#    ridichiarare la base. È il difetto misurato del design doc (finding 1):
+#    due copie della stessa ricetta con coperture divergenti → .menu senza
+#    elevazione sulla flavour attiva.
+#    Nota: superfici NON flottanti che usano lo stesso token (mobile-navbar,
+#    toolbar, ribbon, pannelli interni) restano libere — la scala è un
+#    linguaggio condiviso, il vincolo è solo sulle sei classi.
 if contract.get('elevation_anti_dup_check'):
-    floating_selectors = ['.menu', '.suggestion-container', '.prompt',
-                           '.popover', '.modal', '.tooltip']
+    floating_selectors = {'.menu', '.suggestion-container', '.prompt',
+                          '.popover', '.modal', '.tooltip'}
     allowed_file = 'cosmos-layer.css'
-    allowed_gate = 'body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light)'
+    allowed_gate = 'body:is(.theme-dark, .theme-light):not(.layout-baseline)'
     rule_re = re.compile(r'([^{}]+)\{([^{}]*)\}', re.S)
+    base_sites = 0
     for f, css in texts.items():
         if css is None: continue
         for sel_block, decl in rule_re.findall(strip_comments(css)):
-            has_bg = re.search(r'\bbackground(?:-color)?\s*:', decl)
-            has_pop_shadow = re.search(r'box-shadow\s*:\s*var\(--cosmos-pop-shadow\)', decl)
-            if not (has_bg and has_pop_shadow):
+            if not re.search(r'box-shadow\s*:\s*var\(\s*--cosmos-pop-shadow\s*\)', decl):
                 continue
-            # Solo il selettore RIGHTMOST di ogni comma-branch conta: una
+            # Solo il compound RIGHTMOST di ogni comma-branch conta: una
             # regola su `.modal.mod-settings .vertical-tab-header` non sta
             # ridichiarando l'elevazione di `.modal` — sta stilando un
-            # discendente più specifico e diverso. Guardiamo solo l'ultimo
-            # simple-selector di ogni branch (dopo l'ultimo combinatore).
-            branches = sel_block.split(',')
-            rightmost = [b.strip().split()[-1] if b.strip().split() else '' for b in branches]
-            targets = sorted({s for s in floating_selectors
-                               for r in rightmost if s in r})
+            # discendente diverso. E il match è per TOKEN di classe esatto,
+            # non per sottostringa: `.menu-item` non è `.menu`.
+            targets = set()
+            for branch in sel_block.split(','):
+                parts = branch.strip().split()
+                if not parts: continue
+                targets |= floating_selectors.intersection(
+                    re.findall(r'\.[-\w]+', parts[-1]))
             if not targets:
                 continue
-            is_allowed_site = (f == allowed_file and allowed_gate in sel_block)
-            if not is_allowed_site:
+            if f == allowed_file and allowed_gate in sel_block:
+                base_sites += 1
+            else:
                 failures.append(
-                    f"{f}: elevazione base (background+--cosmos-pop-shadow) ridichiarata per {targets} "
-                    f"fuori dalla sede unica ({allowed_file}, gate '{allowed_gate}') — le flavour devono "
-                    f"sovrascrivere/aggiungere, non ridichiarare la base"
+                    f"{f}: elevazione base (box-shadow: var(--cosmos-pop-shadow)) ridichiarata per "
+                    f"{sorted(targets)} fuori dalla sede unica ({allowed_file}, gate '{allowed_gate}') — "
+                    f"le flavour devono aggiungere i propri delta, non ridichiarare la base"
                 )
+    # UNA regola significa UNA: una seconda copia dentro il file consentito e
+    # con lo stesso gate passerebbe il controllo di sede pur ricreando
+    # esattamente la duplicazione che questo check esiste per vietare.
+    if base_sites != 1:
+        failures.append(
+            f"elevazione base dichiarata da {base_sites} regole in {allowed_file} (attesa: 1) — "
+            f"la scala di elevazione ha UNA sola sede flavour-agnostica"
+        )
 
 if warnings:
     print("contract warnings:")
