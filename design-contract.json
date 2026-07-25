@@ -44,5 +44,7 @@
   "mobile_excluding_gates_comment": "Gate :not(.is-phone)/:not(.is-mobile) nei 4 layer. Può solo SCENDERE (polarity flip in corso). Slice 3 (2026-07-11): 25→24 (flip press-scale del tab); i 24 restanti sono KEEP documentati in docs/2026-07-11-mobile-gate-audit.md.",
   "raw_100vh_max": 0,
   "style_settings_first_block_required_ids": ["cosmos-phone-edition", "cosmos-craft-care"],
-  "style_settings_first_block_comment": "Style Settings legge SOLO il primo blocco @settings di un foglio (bug reale 2026-07-23: toggle in un secondo blocco = mai registrato, classe mai applicata, feature silenziosamente inerte). Ogni toggle consumato dai layer va dichiarato nel blocco principale di cosmos-base.css; questo check lo verifica sul theme.css buildato."
+  "style_settings_first_block_comment": "Style Settings legge SOLO il primo blocco @settings di un foglio (bug reale 2026-07-23: toggle in un secondo blocco = mai registrato, classe mai applicata, feature silenziosamente inerte). Ogni toggle consumato dai layer va dichiarato nel blocco principale di cosmos-base.css; questo check lo verifica sul theme.css buildato.",
+  "elevation_anti_dup_check": true,
+  "elevation_anti_dup_comment": "dynamics-and-depth §A/Contract#1 (2026-07-25). Le superfici flottanti (.menu/.suggestion-container/.prompt/.popover/.modal/.tooltip) prendono la loro ombra base da UNA sola regola flavour-agnostica in cosmos-layer.css § ANGLAGE; una seconda dichiarazione di background+--cosmos-pop-shadow sullo stesso selettore fuori da quella sede è una violazione (le flavour sovrascrivono/aggiungono, non ridichiarano). Codifica il difetto misurato (finding 1): .menu assente dalla base, presente solo in fusion-glass."
 }

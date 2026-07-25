@@ -603,20 +603,35 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
    modal/prompt = canvas (zero elevazione). Fluent/Material: in dark
    l'elevazione si comunica con superfici PIÙ CHIARE, non solo con l'ombra.
    Scala: flottanti = surface-2 (+6), tooltip = surface-3 (+10, più leggibile).
-   Gate identico al darker (in light/cosmos-light Baseline è già coerente). */
+   Gate identico al darker (in light/cosmos-light Baseline è già coerente).
+
+   2026-07-25 — ELEVATION LADDER UNIFICATA (design doc dynamics-and-depth §A).
+   Prima: questa ricetta era scritta due volte con coperture diverse (qui
+   senza .menu, in cosmos-tweaks § FUSION GLASS con .menu ma senza tooltip) —
+   sulla flavour attiva di Mario (cupertino-dark, fusion off) i menu
+   contestuali non ricevevano MAI elevazione Cosmos. Ora: UNA base
+   flavour-agnostica copre l'intero insieme di superfici flottanti
+   (.menu incluso); Fusion Glass in cosmos-tweaks resta libera di
+   SOVRASCRIVERE (blur/glass) ma non ridichiara più la base. */
 
 /* Menu contestuali — via variabile: Style Settings può ancora sovrascrivere. */
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --menu-background: var(--cosmos-surface-2);
 }
 
-/* Modal, prompt (quick switcher), suggestion popover, hover popover —
-   element-level: la base pinna --modal-background con important layered,
-   quindi la variabile non basta. */
+/* Menu, modal, prompt (quick switcher), suggestion popover, ogni popover
+   (hover-popover incluso: .popover copre il sovrainsieme) — element-level:
+   la base pinna --modal-background con important layered, quindi la
+   variabile non basta. .menu incluso qui (era assente: bug misurato del
+   design doc, finding 1). .popover bare (non solo .hover-popover) copre
+   anche i popover non-hover — sovrainsieme richiesto perché Fusion Glass
+   applicava --cosmos-pop-shadow anche lì: unificato qui invece di
+   ridichiararlo come override. */
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .menu,
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .modal,
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .prompt,
 body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .suggestion-container,
-body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .popover.hover-popover {
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .popover {
   background-color: var(--cosmos-surface-2);
   box-shadow: var(--cosmos-pop-shadow);
 }

@@ -108,6 +108,51 @@ if 'style_settings_first_block_required_ids' in contract:
         if not re.search(r'^\s*id:\s*' + re.escape(rid) + r'\s*$', first, re.M):
             failures.append(f"Style Settings: id '{rid}' assente dal PRIMO blocco @settings di theme.css (i blocchi successivi sono ignorati dal plugin)")
 
+# 9. Anti-duplicazione elevazione (dynamics-and-depth §A/Contract#1). Le
+#    superfici flottanti (.menu, .suggestion-container, .prompt, .popover,
+#    .modal, .tooltip) ricevono la loro ombra BASE (background-color +
+#    box-shadow: var(--cosmos-pop-shadow) nello stesso blocco di regola) da
+#    UNA sola sede flavour-agnostica: cosmos-layer.css § ANGLAGE
+#    (gate `body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light)`,
+#    che è il gate "qualunque flavour scuro Cosmos non-Baseline/non-Light" —
+#    l'unico consentito a dichiarare la base). Qualsiasi ALTRO blocco che
+#    ridichiari ENTRAMBE le proprietà sullo stesso selettore flottante è una
+#    duplicazione: le flavour possono SOVRASCRIVERE proprietà additive (es.
+#    backdrop-filter) ma non re-includere box-shadow insieme a un
+#    background sullo stesso selettore — quello è il pattern che ha causato
+#    la deriva di copertura misurata (finding 1).
+if contract.get('elevation_anti_dup_check'):
+    floating_selectors = ['.menu', '.suggestion-container', '.prompt',
+                           '.popover', '.modal', '.tooltip']
+    allowed_file = 'cosmos-layer.css'
+    allowed_gate = 'body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light)'
+    rule_re = re.compile(r'([^{}]+)\{([^{}]*)\}', re.S)
+    for f, css in texts.items():
+        if css is None: continue
+        for sel_block, decl in rule_re.findall(strip_comments(css)):
+            has_bg = re.search(r'\bbackground(?:-color)?\s*:', decl)
+            has_pop_shadow = re.search(r'box-shadow\s*:\s*var\(--cosmos-pop-shadow\)', decl)
+            if not (has_bg and has_pop_shadow):
+                continue
+            # Solo il selettore RIGHTMOST di ogni comma-branch conta: una
+            # regola su `.modal.mod-settings .vertical-tab-header` non sta
+            # ridichiarando l'elevazione di `.modal` — sta stilando un
+            # discendente più specifico e diverso. Guardiamo solo l'ultimo
+            # simple-selector di ogni branch (dopo l'ultimo combinatore).
+            branches = sel_block.split(',')
+            rightmost = [b.strip().split()[-1] if b.strip().split() else '' for b in branches]
+            targets = sorted({s for s in floating_selectors
+                               for r in rightmost if s in r})
+            if not targets:
+                continue
+            is_allowed_site = (f == allowed_file and allowed_gate in sel_block)
+            if not is_allowed_site:
+                failures.append(
+                    f"{f}: elevazione base (background+--cosmos-pop-shadow) ridichiarata per {targets} "
+                    f"fuori dalla sede unica ({allowed_file}, gate '{allowed_gate}') — le flavour devono "
+                    f"sovrascrivere/aggiungere, non ridichiarare la base"
+                )
+
 if warnings:
     print("contract warnings:")
     for w in warnings: print(f"  ⚠ {w}")
