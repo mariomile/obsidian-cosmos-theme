@@ -188,11 +188,101 @@ suite's form-language convention) + vault language rules.
 
 ---
 
+## 6. Elevation & motion depth
+
+Cantiere 2 of the design/UX program ("Dinamica & profondità"). Source:
+`cosmos-tokens.css`. These tokens already exist and are already used by
+Cosmos itself — this section makes plugin consumption of them mandatory,
+it does not invent new depth language.
+
+**Elevation hierarchy** — which shadow tier a surface gets:
+
+| Tier | Token | Canonical value | When |
+|---|---|---|---|
+| Flat | *(none)* | — | Inline chrome that sits in the document flow (rows, chips, inline buttons) |
+| Wash | *(none, see hover below)* | — | Hover/active state on a flat element — colour only, no shadow |
+| Pop | `--cosmos-pop-shadow` | 2-layer shadow, dark: `rgba(0,0,0,.28) 0 12px 32px, rgba(0,0,0,.16) 0 2px 8px` | Menu, popover, tooltip, prompt, dropdown — anything that floats over content and closes on outside-click |
+| Island | `--cosmos-island-shadow` | 2-layer shadow, dark: `rgba(0,0,0,.16) 0 24px 48px, rgba(0,0,0,.12) 0 4px 16px` | Sidebar/panel that persists in the layout (not dismissed by outside-click) |
+| Glass | `--cosmos-glass-surface` / `--cosmos-glass-surface-strong` + `--cosmos-glass-blur` + `--cosmos-glass-outline` | `color-mix(in srgb, var(--background-primary) 78%, transparent)` / `blur(18px) saturate(115%)` | A surface that sits *above* editor content the user is still reading through (command bar, floating toolbar) — never for a full-height sidebar |
+
+> MUST: a plugin never hand-picks a `box-shadow` for a floating/persistent
+> surface — it consumes the matching tier token with its canonical fallback.
+> MUST NOT: stack two tiers on the same element (e.g. Pop shadow **and**
+> glass blur) — pick the one tier that matches the surface's dismiss
+> behaviour.
+> Desktop / phone: identical tier choice. On phone, Pop becomes the
+> bottom-sheet elevation (already the `cosmos-sheet-rise` recipe in §3);
+> Island has no phone equivalent (sidebars are full-screen drawers there).
+
+**Hover richness** — a hover state is colour **and** a subtle physical lift,
+never colour alone:
+
+```css
+.row:hover {
+  background-color: var(--portal-wash, color-mix(in srgb, var(--text-normal) 6%, transparent));
+  transition: background-color var(--cosmos-t-fast, 140ms) var(--mv-wash, cubic-bezier(0.25, 1, 0.5, 1));
+}
+.card:hover {
+  transform: translateY(-1px);
+  transition: transform var(--cosmos-t-fast, 140ms) var(--mv-lift, cubic-bezier(0.22, 1, 0.36, 1));
+}
+```
+
+> MUST: colour washes ease with `--mv-wash`; physical lifts (`transform`)
+> ease with `--mv-lift` — the two easings are not interchangeable (`--mv-wash`
+> is a colour curve, `--mv-lift` mimics a physical object settling).
+> MUST: a `transform` lift never exceeds 2px — this is a hint, not a jump.
+> MUST NOT: hover triggers on `@media (hover: hover)`-less contexts — a
+> touch tap must never leave a stuck hover state (existing native Obsidian
+> behaviour; plugins must not fight it with custom `:hover` outside that
+> media query on phone-reachable elements).
+
+**Drag polish** — during a drag, only `transform` and `opacity` move; the
+element never reflows the layout it's being dragged over:
+
+```css
+.is-dragging {
+  transform: translate(var(--drag-x), var(--drag-y));
+  opacity: 0.9;
+  transition: none; /* the pointer drives position directly while dragging */
+}
+.is-dropped {
+  transition: transform var(--cosmos-t-base, 180ms) var(--cosmos-native, cubic-bezier(0.32, 0.72, 0, 1));
+}
+```
+
+> MUST: drag positioning uses `transform: translate(...)`, never
+> `left`/`top`/`margin` — those trigger layout on every pointer-move frame.
+> MUST: the drop settle animates with `--cosmos-native` (the same
+> zero-overshoot easing used for phone sheet-rise) — a dropped element
+> comes to rest, it does not bounce.
+> Desktop / phone: identical rule. Phone-native long-press-to-drag (where
+> present) follows the same transform-only constraint.
+
+**Panel & tab transitions** — opening/closing a persistent panel, or
+switching tabs, is a structural motion and uses the *panel* duration, not
+the *fast* one:
+
+| Motion | Token | Phone equivalent |
+|---|---|---|
+| Panel/sidebar open-close | `--cosmos-t-panel` (`300ms`) + `--cosmos-native` | Same token drives `cosmos-sheet-rise` |
+| Tab switch (content swap) | `--cosmos-t-base` (`180ms`) + `--cosmos-native` — crossfade `opacity` only, never slide the new tab in | Same |
+
+> MUST: a panel that opens/closes (not just shows/hides) animates
+> `transform`/`opacity` over `--cosmos-t-panel`, not the faster hover
+> duration — a structural move that happens at hover speed reads as
+> flickery, not snappy.
+> MUST: tab-content swaps crossfade — sliding panels in from the side on
+> every tab click is the "AI slop" carousel anti-pattern, not a Craft/Notion
+> pattern.
+
+---
+
 ## Audit procedure (per rollout wave)
 
 1. Grep the plugin's stylesheet for raw `ms` / hex values outside a
    `var(--cosmos-*, fallback)` or `var(--mv-*, fallback)` pattern.
-2. Walk each of the 5 sections above against the plugin's surfaces —
+2. Walk each of the 6 sections above against the plugin's surfaces —
    desktop first, then phone (iPhone Pro Max; no iPad).
 3. Every unchecked box is a fix, not a note — this file is the gate, not a
    suggestion list.
