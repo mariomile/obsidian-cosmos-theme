@@ -584,17 +584,17 @@ settings:
 	-
 		id: cosmos-generous-radii
 		title: Generous radii (Craft)
-		description: Raggi base più ampi (pill/card/pannelli/modali) per un look più morbido alla Craft. Si combina con Roundness.
+		description: Wider base radii (pill/card/panels/modals) for a softer, Craft-like look. Combines with Roundness.
 		type: class-toggle
 	-
 		id: cosmos-phone-edition
-		title: Phone Edition (mobile nativo)
-		description: Rifiniture touch native su iPhone (navbar a pillola flottante, header circolare, selezione accent, feedback al tap, safe-area). Solo su telefono. Spegni per tornare al mobile attuale.
+		title: Phone Edition (native mobile)
+		description: Native touch refinements on iPhone (floating pill navbar, circular header, accent selection, tap feedback, safe-area). Phone only. Turn off to go back to the current mobile look.
 		type: class-toggle
 	-
 		id: cosmos-craft-care
 		title: Craft care (desktop)
-		description: La stessa cura della Phone Edition portata su desktop — selezione accent, label Properties/Linked mentions quiete, motion di stato su menu/modal/popover, press al click. Solo su desktop (pointer fine). Spegni per tornare al desktop attuale.
+		description: The same care as Phone Edition brought to desktop — accent selection, quiet Properties/Linked mentions labels, state motion on menu/modal/popover, click press feedback. Desktop only (fine pointer). Turn off to go back to the current desktop look.
 		type: class-toggle
 	-
 		id: icon-stroke-modifier
@@ -608,7 +608,7 @@ settings:
 	-
 		id: cosmos-filled-icons
 		title: Filled navigation icons (Craft)
-		description: Usa glifi pieni per oggetti e destinazioni (cartelle, file, libri, archivio, persone, tag e collezioni). Azioni e controlli restano outline.
+		description: Uses filled glyphs for objects and destinations (folders, files, books, archive, people, tags and collections). Actions and controls stay outline.
 		type: class-toggle
 		default: false
 	-
@@ -632,8 +632,8 @@ settings:
 				value: status-bar-baseline
 	-
 		id: cosmos-hide-status-bar
-		title: Nascondi status bar
-		description: Nasconde completamente la status bar in basso (conteggio parole, ecc.).
+		title: Hide status bar
+		description: Completely hides the status bar at the bottom (word count, etc.).
 		type: class-toggle
 		default: false
 	-
@@ -670,7 +670,7 @@ settings:
 	-
 		id: cosmos-flavour
 		title: Palette
-		description: Il palette colori/superfici — distinto dal "Cosmos Flavour" (layout) qui sopra. Mutuamente esclusivo, torni sempre a uno. New Craft Darker = scuro di default. New Craft Lighter = superfici chiare. Real Craft = colori reali di Craft.
+		description: The color/surface palette — distinct from the "Cosmos Flavour" (layout) above. Mutually exclusive, you always end up on one. New Craft Darker = dark by default. New Craft Lighter = light surfaces. Real Craft = Craft's real colors.
 		type: class-select
 		allowEmpty: false
 		default: nc-darker
@@ -714,8 +714,8 @@ settings:
 				value: input-baseline
 	-
 		id: cosmos-light
-		title: Superfici chiare (New Craft Light)
-		description: Disattiva le superfici scure Cosmos → grigi nativi più chiari. Si combina con New Craft/Apple.
+		title: Light surfaces (New Craft Light)
+		description: Disables dark Cosmos surfaces → lighter native grays. Combines with New Craft/Apple.
 		type: class-toggle
 		default: false
 	-
@@ -727,31 +727,31 @@ settings:
 	-
 		id: craft-nav-toggle
 		title: Craft sidebar nav
-		description: Nav sidebar in stile Craft — pill attivo, hover morbido, label di sezione uppercase. OFF = look attuale.
+		description: Craft-style sidebar nav — active pill, soft hover, uppercase section labels. OFF = current look.
 		type: class-toggle
 		default: false
 	-
 		id: cosmos-fusion-tabs
 		title: Fusion tabs (Craft)
-		description: Usa il trattamento tab capsule e translucent di Baseline Fusion senza cambiare il flavour Cosmos. Solo desktop; Standard resta invariato.
+		description: Uses Baseline Fusion's capsule and translucent tab treatment without changing the Cosmos flavour. Desktop only; Standard stays unchanged.
 		type: class-toggle
 		default: false
 	-
 		id: cosmos-floating-editor
 		title: Floating editor surface
-		description: Trasforma l'editor in una superficie sospesa con inset, hairline, traslucenza e shadow. Fusion Glass lo include automaticamente.
+		description: Turns the editor into a suspended surface with inset, hairline, translucency and shadow. Fusion Glass includes it automatically.
 		type: class-toggle
 		default: false
 	-
 		id: cosmos-floating-settings
 		title: Floating settings panel
-		description: Rende la navigazione delle impostazioni una island traslucida in stile Craft/macOS. Fusion Glass lo include automaticamente.
+		description: Turns settings navigation into a translucent island, Craft/macOS-style. Fusion Glass includes it automatically.
 		type: class-toggle
 		default: false
 	-
 		id: cosmos-floating-ribbon
 		title: Floating ribbon
-		description: Stacca la ribbon sinistra dai bordi con superficie, radius e shadow coordinati. Fusion Glass lo include automaticamente.
+		description: Detaches the left ribbon from the edges with a coordinated surface, radius and shadow. Fusion Glass includes it automatically.
 		type: class-toggle
 		default: false
 	-
@@ -1691,7 +1691,7 @@ settings:
 	-
 		id: cosmos-serif-headings
 		title: Serif headings (New York)
-		description: Inline title + heading nel serif di sistema Apple (New York). Il corpo resta sans. Feel "Craft".
+		description: Inline title + headings in Apple's system serif (New York). Body text stays sans. "Craft" feel.
 		type: class-toggle
 	-
 		id: heading-spacing
