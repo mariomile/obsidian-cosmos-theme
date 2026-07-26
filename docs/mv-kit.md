@@ -178,6 +178,19 @@ suite's form-language convention) + vault language rules.
 | Buttons | `.mva-btn` convention — never `mod-cta` | Same |
 | Inputs | `.mva-pv-input` convention | Same |
 
+> ⚠️ **MUST: every user-facing string is in English — no exceptions.** These
+> are public plugins with public releases; a settings description, command
+> name, notice, button label, tooltip, placeholder or Style Settings
+> `title`/`description` is read by people who do not speak Italian. Mario
+> works in Italian for conversation and strategy, English for product — the
+> product surface is the plugin, so the plugin is English. This applies to
+> the theme's Style Settings block too: it renders in Obsidian's settings UI
+> like any plugin setting. Internal code comments are a separate question
+> (they are not a product surface) and are out of this rule.
+> Guard: each plugin's `src/i18n-contract.test.ts` scans user-facing string
+> literals for Italian function words (`il`, `della`, `viene`, `perché`, …)
+> and fails on a hit — port it when adding a contract to a new repo.
+
 > MUST: no plugin form uses a native `<select>` element — chip+popover only.
 > MUST: no plugin button carries the `mod-cta` class.
 > MUST: all labels are sentence-case, not Title Case or ALL CAPS (labels;
