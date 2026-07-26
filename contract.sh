@@ -168,6 +168,37 @@ if contract.get('elevation_anti_dup_check'):
             f"la scala di elevazione ha UNA sola sede flavour-agnostica"
         )
 
+# 10. Style Settings i18n: il blocco @settings di cosmos-base.css è la UI che
+#     l'utente finale vede nel plugin Style Settings — deve restare in
+#     inglese (i ~106 commenti CSS interni in italiano altrove nel tema sono
+#     fuori scope, per decisione esplicita). Stessa word-list delle
+#     i18n-guard del plugin: fallisce se una riga title:/description: dentro
+#     il blocco @settings contiene >= 2 parole funzionali italiane (match
+#     whole-word, case-insensitive) — soglia 2 per non far scattare falsi
+#     positivi su singole parole ambigue tra le due lingue (es. "i" come
+#     iniziale, "per" come token isolato in codice).
+ITALIAN_FUNCTION_WORDS = {
+    'il', 'lo', 'la', 'i', 'gli', 'le', 'un', 'una', 'di', 'del', 'della',
+    'dei', 'delle', 'che', 'con', 'per', 'non', 'come', 'anche', 'più',
+    'sono', 'sulla', 'nella', 'quando', 'se', 'tra', 'questo', 'questa',
+}
+base_css = read('cosmos-base.css')
+if base_css is not None:
+    m = re.search(r'/\*\s*@settings(.*?)\*/', base_css, re.S)
+    settings_block = m.group(1) if m else ''
+    word_re = re.compile(r"[a-zà-ÿ']+", re.I)
+    for lineno, line in enumerate(settings_block.splitlines(), start=1):
+        stripped = line.strip()
+        if not (stripped.startswith('title:') or stripped.startswith('description:')):
+            continue
+        words = {w.lower() for w in word_re.findall(stripped)}
+        hits = words & ITALIAN_FUNCTION_WORDS
+        if len(hits) >= 2:
+            failures.append(
+                f"cosmos-base.css: @settings line ~{lineno} looks Italian "
+                f"(function words: {sorted(hits)}) — {stripped[:100]}"
+            )
+
 if warnings:
     print("contract warnings:")
     for w in warnings: print(f"  ⚠ {w}")
