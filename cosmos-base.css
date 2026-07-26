@@ -816,7 +816,7 @@ settings:
 		title: Mobile editor font size
 		description: Note/editor body text on phone & tablet only — desktop keeps using Appearance → Font size.
 		type: variable-number-slider
-		default: 16
+		default: 18
 		min: 16
 		max: 40
 		step: 1

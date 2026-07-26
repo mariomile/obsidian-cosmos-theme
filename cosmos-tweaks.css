@@ -644,8 +644,15 @@ body.realcraft.active-line-block .view-content > .markdown-source-view .cm-line.
      • font-mobile-ui-modifier (default 0px) — sommato alla scala UI desktop
        LITERALE di Cosmos (12/13/14/16/18, non al calc di Baseline). Default 0
        = font mobile al DEFAULT (nessun bump); lo slider resta per alzarlo.
-     • font-mobile-text-size (default 16px = --font-text-size desktop) — valore
-       assoluto per l'editor mobile; default = come desktop, slider per cambiarlo.
+     • font-mobile-text-size (default 18px) — valore assoluto per l'editor
+       mobile. Era 16 (= --font-text-size desktop); portato a 18 il 2026-07-26
+       su verdetto d'uso di Mario ("quella che ho sul telefono è quella in cui
+       mi trovo davvero bene, vorrei fosse il default"): 18px è il corpo che
+       legge bene su iPhone Pro Max, il desktop resta sui suoi 24px. Il
+       fallback nel var() qui sotto e il `default:` dello slider in
+       cosmos-base.css DEVONO restare allineati: Style Settings non inietta la
+       variabile finché lo slider non viene toccato, quindi è il fallback CSS
+       a fare da default reale su un vault pulito.
 
    --font-ui-*: sidebar, tab, menu, impostazioni. Gated body.is-mobile,
    specificità (0,2,1) — una classe in più della base (0,1,1) — batte la base
@@ -681,7 +688,7 @@ body.is-mobile.theme-dark, body.is-mobile.theme-light {
   --font-ui-medium: calc(14px + var(--font-mobile-ui-modifier, 0px));
   --font-ui-large: calc(16px + var(--font-mobile-ui-modifier, 0px));
   --font-ui-larger: calc(18px + var(--font-mobile-ui-modifier, 0px));
-  --font-text-size: var(--font-mobile-text-size, 16px) !important;
+  --font-text-size: var(--font-mobile-text-size, 18px) !important;
 }
 
 /* ==========================================================================
