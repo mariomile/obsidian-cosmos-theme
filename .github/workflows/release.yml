@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify manifest version matches tag
+        run: |
+          MANIFEST_VERSION=$(node -p "require('./manifest.json').version")
+          if [ "$MANIFEST_VERSION" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::manifest.json version ($MANIFEST_VERSION) does not match tag ($GITHUB_REF_NAME)"
+            exit 1
+          fi
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # A theme ships one generated artefact, so the gate is reproducibility:
+      # check-build.sh rebuilds theme.css from cosmos-base.css + the layer
+      # files and fails if the committed output differs by a single byte. That
+      # proves the theme.css being published is exactly what the sources
+      # produce — and it runs the design contract (!important / raw-value /
+      # mobile-gate ratchets) on the way through.
+      - name: Verify the committed theme.css is reproducible
+        run: pnpm release:check
+
+      # Themes publish manifest.json + theme.css — there is no main.js.
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" manifest.json theme.css \
+            --title "$(node -p "require('./manifest.json').name") $GITHUB_REF_NAME" \
+            --generate-notes
