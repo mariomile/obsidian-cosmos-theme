@@ -278,11 +278,52 @@ the *fast* one:
 
 ---
 
+## 7. Reading rhythm
+
+Cantiere 3 of the design/UX program ("Scrittura & lettura"). Unlike §§1-6,
+this section is **descriptive first**: the reading surface is Mario's
+territory (he decides type by using it, not by spec — the 18px phone body
+came from a use verdict, `575755e`). The rules below therefore lock in
+*coherence* and *tokenization*, and explicitly do **not** impose new taste
+values. Where a value is a taste call, expose a Style Settings control
+instead of changing it silently.
+
+Measured live 2026-07-26 (`obsidian-cli eval`, Mario's actual vault):
+
+| Property | Desktop | Phone | Source |
+|---|---|---|---|
+| `--font-text-size` | `16px` (Appearance → Font size) | `18px` (`--font-mobile-text-size`, default since `575755e`) | User-owned |
+| `--line-height-normal` | `1.6` | `1.55` (`cosmos-phone.css`) | Theme |
+| `--file-line-width` | `700px` (≈87 chars at 16px) | n/a (full width) | Obsidian default |
+| `--file-margins` | `32px 32px` | `var(--size-4-5)` (`cosmos-phone.css`) | Obsidian / theme |
+| `--p-spacing` | `1rem` | `1rem` | Obsidian default |
+| Heading scale | `1.618 / 1.462 / 1.318em` | same | Obsidian default |
+
+> MUST: a plugin that renders **prose** (note preview, chat message, card
+> excerpt, search snippet) inherits the reading tokens — `--line-height-normal`,
+> `--p-spacing`, `--font-text-size` — rather than hardcoding its own
+> line-height or paragraph gap. Plugin *chrome* (labels, buttons, rows) keeps
+> using the `--font-ui-*` scale from §2; the split is prose vs chrome, not
+> plugin vs theme.
+> MUST: any deliberate deviation from the table above is recorded in the
+> plugin's audit note with its reason — an undocumented one-off line-height
+> is drift, the same value with a stated reason is a decision.
+> MUST NOT: a plugin sets `--file-line-width` or overrides the heading scale
+> — the reading measure belongs to the theme (and, through Style Settings,
+> to the user).
+> MUST NOT: taste values in this section get "harmonized" by a wave without
+> Mario's say-so. The phone/desktop line-height difference (1.55 vs 1.6) is
+> **intentional**: phone body text is larger (18px vs 16px), and larger type
+> needs proportionally less leading to read at the same rhythm. Do not
+> "fix" it to a single number.
+
+---
+
 ## Audit procedure (per rollout wave)
 
 1. Grep the plugin's stylesheet for raw `ms` / hex values outside a
    `var(--cosmos-*, fallback)` or `var(--mv-*, fallback)` pattern.
-2. Walk each of the 6 sections above against the plugin's surfaces —
+2. Walk each of the 7 sections above against the plugin's surfaces —
    desktop first, then phone (iPhone Pro Max; no iPad).
 3. Every unchecked box is a fix, not a note — this file is the gate, not a
    suggestion list.
