@@ -233,6 +233,25 @@ body.cosmos-phone-edition.is-phone .metadata-properties-heading .metadata-proper
   letter-spacing: 0.06em;
 }
 
+/* Il chevron di collapse è nativamente absolute a inset-inline-start:-21px — un
+   marcatore da gutter desktop che sui margini stretti del telefono finisce
+   ORFANO nel vuoto a sinistra, fuori dalla colonna di testo (segnalato
+   2026-07-27). Lo portiamo nel FLUSSO, inline appena a sinistra del micro-label
+   quieto, così la disclosure legge come un'unità "> PROPERTIES" — indipendente
+   dal margine, nessun clipping. Il heading è inline-flex per allineare chevron
+   e titolo su una riga (il collapse-indicator è un div block: senza flex
+   andrebbe a capo sopra il titolo). Colore faint come il label. */
+body.cosmos-phone-edition.is-phone .metadata-properties-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--size-4-1);
+}
+body.cosmos-phone-edition.is-phone .metadata-properties-heading .collapse-indicator {
+  position: static;
+  padding: 0;
+  color: var(--text-faint);
+}
+
 /* Property rows: 44pt + hairline 0.5px tra le righe (iOS non usa mai 1px:
    il mezzo pixel retina è la differenza tra "web app" e "nativo"). */
 body.cosmos-phone-edition.is-phone .metadata-property {
