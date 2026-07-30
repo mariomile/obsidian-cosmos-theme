@@ -5208,6 +5208,42 @@ body.is-mobile.theme-dark, body.is-mobile.theme-light {
 }
 
 /* ==========================================================================
+   § SETTINGS — SECTIONED HEADINGS (Obsidian 1.12)
+   --------------------------------------------------------------------------
+   La 1.12 ha spezzato ogni tab dei settings in sezioni marcate da
+   .setting-item-heading ("Font", "Advanced", …). La base gli dà solo padding:
+   il nome resta testo UI neutro (--font-ui-medium, peso normale), senza
+   identità di "divisore" — leggeva come una riga orfana tra i controlli.
+
+   Qui la sezione eredita l'UNICO idioma di label-di-sezione già in uso nel
+   tema: le micro-label uppercase mute di FOLDERS/STARRED (Craft nav) e delle
+   micro-label di Bases, tutte pilotate da --mv-label-*. Così ogni tab di
+   impostazioni — core E plugin — legge le sue sezioni con la stessa grammatica
+   del resto di Cosmos, invece di un font UI generico. La hairline sotto
+   (--mv-hairline, già il divisore-token del tema) dà la separazione netta
+   senza aggiungere peso tipografico.
+
+   Ungated di proposito: vale in ogni input-mode e in ogni modal di settings
+   (Appearance, plugin, Style Settings, community). Nessun gate mobile — la
+   stessa micro-label vale nei drawer phone.
+
+   Specificità: la base esclude sempre gli heading dai suoi border
+   (.setting-item:not(.setting-item-heading)) e lascia il nome allo stile
+   generico .setting-item-name, quindi questi due selettori (0,4,0) vincono
+   per specificità pura; il source-order (tweaks dopo la base) copre comunque
+   ogni pareggio. Nessun !important (contract check #1). 2026-07-30. */
+.modal.mod-settings .setting-item-heading .setting-item-name {
+  color: var(--mv-label-color);
+  font-size: var(--mv-label-size);
+  font-weight: var(--mv-label-weight);
+  letter-spacing: var(--mv-label-track);
+  text-transform: uppercase;
+}
+.modal.mod-settings .setting-item.setting-item-heading {
+  border-bottom: var(--cosmos-hairline-width) solid var(--mv-hairline);
+}
+
+/* ==========================================================================
    COSMOS PHONE EDITION — layer additivo `is-phone`.
    Il toggle Style Settings ("Phone Edition") vive nel blocco @settings
    PRINCIPALE (cosmos-base.css), NON qui: Style Settings legge solo il primo
