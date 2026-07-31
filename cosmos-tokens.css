@@ -55,7 +55,16 @@ body {
      titolo breve resta vicino al floor, titoli lunghi crescono fino al cap
      poi troncano con ellissi nativa (vedi cosmos-layer.css). */
   --cosmos-tab-min: 52px;
-  --cosmos-tab-max: 184px;
+  /* 184→130 (2026-08-01): con molti tab aperti Obsidian nativo assegna a
+     ciascuno width: var(--tab-width) (spazio disponibile / n. tab), che il
+     nostro flex-basis:auto eredita — con 15+ tab quella width nativa supera
+     qualunque cap ragionevole e ogni tab finisce clampato uguale al cap
+     invece che al proprio testo (bug reale: --cosmos-tab-min/-max non
+     ottengono mai un vero content-hug quando i tab sono tanti, un limite di
+     Chromium sul nested-flex + ellissi, non risolvibile in solo CSS — la
+     misura via JS in TabX è stata proposta e rimandata). Il cap più basso è
+     un compromesso: tab più stretti in generale, non "a misura di testo". */
+  --cosmos-tab-max: 130px;
   --cosmos-r-fusion-tab: 999px;
   --cosmos-r-fusion-tabbar: calc(var(--cosmos-r-fusion-tab) + var(--cosmos-tab-inset));
   --cosmos-fusion-tab-shadow: var(--shadow-tab, var(--shadow-s));
