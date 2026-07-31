@@ -5257,6 +5257,23 @@ body.is-mobile.theme-dark, body.is-mobile.theme-light {
   border-bottom: var(--cosmos-hairline-width) solid var(--mv-hairline);
 }
 
+/* Card bg delle sezioni raggruppate (.setting-group .setting-items / …-search,
+   Obsidian 1.12) mai armonizzata quando sopra è arrivato lo stile heading:
+   Obsidian nativo la lascia su --background-primary-alt mentre la pagina dei
+   settings è --background-primary — due superfici diverse per design nativo,
+   ma non nel linguaggio di elevazione di Cosmos (surface-0..3), quindi la
+   card leggeva come "il colore sbagliato" invece che come un gradino
+   intenzionale. Riuso --mv-card-bg: lo stesso token-card già usato ovunque
+   nel tema, non un nuovo colore. Niente gate is-phone qui (ratchet mobile-
+   excluding già al ceiling): non serve — la regola phone di Baseline
+   (`body.is-phone:is(.input-baseline,:not(.css-settings-manager))
+   .modal.mod-settings`) è più specifica (0,4,1 vs 0,2,0 nostro) e vince lì
+   comunque. Nessun !important: vince per specificità + source-order sulla
+   definizione root di app.css. 2026-08-01. */
+.modal.mod-settings {
+  --setting-items-background: var(--mv-card-bg);
+}
+
 /* ==========================================================================
    COSMOS PHONE EDITION — layer additivo `is-phone`.
    Il toggle Style Settings ("Phone Edition") vive nel blocco @settings
