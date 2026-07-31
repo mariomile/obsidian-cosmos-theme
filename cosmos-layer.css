@@ -28,9 +28,9 @@
    ========================================================================== */
 
 .workspace-split.mod-root .workspace-tab-header {
-  min-width: 108px !important;   /* floor leggibile (era 130) */
+  min-width: var(--cosmos-tab-min, 52px) !important;   /* floor content-hug (era 108px) */
   flex: 0 0 auto !important;     /* rimpiazza flex-shrink:0 E uccide flex-grow:1 → niente stretch, i tab abbracciano il contenuto (look Craft) */
-  max-width: 184px;             /* soffitto: titoli lunghi troncano (…). NO !important: la base non setta max-width */
+  max-width: var(--cosmos-tab-max, 184px);             /* soffitto: titoli lunghi troncano (…). NO !important: la base non setta max-width */
 }
 
 /* Scroll attivo ma scrollbar nascosta (trackpad / shift+rotella funzionano) */
