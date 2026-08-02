@@ -327,7 +327,7 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-split.mod-sidedock .workspace-tab-header-container,
+  .workspace-tab-header-container,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace-split.mod-sidedock .workspace-tab-container,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
