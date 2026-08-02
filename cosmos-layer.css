@@ -290,6 +290,15 @@ body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace-split.mod-root .workspace-tab-container {
   background-color: var(--background-primary);
+  /* Angoli SUPERIORI a filo con la tab bar. Cosmos progetta il tab attivo come
+     "document card" (§ Tab attivo, sopra): il tab È il bordo alto del foglio.
+     Col chrome acceso passa una banda scura fra il tab e il suo documento, e
+     il raggio di 12px in cima — invisibile finché tab bar e pannello erano lo
+     stesso colore — si legge come "pannello tagliato sopra". Squadrando solo
+     i due angoli alti il foglio torna a incontrare la barra a filo; sotto
+     resta arrotondato, l'isola non perde la sua forma. */
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 /* ==========================================================================
