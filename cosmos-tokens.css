@@ -258,6 +258,57 @@ body.perplexity.theme-dark:not(.layout-baseline):not(.cosmos-light) {
 }
 
 /* --------------------------------------------------------------------------
+   § LINEAR (Palette option) — campionato pixel dall'app Linear (dark).
+   Neutro quasi puro con cast blu di 1-2 punti sul canale B (#121213, #232325):
+   NON warm come Perplexity, NON neutro assoluto come Craft.
+
+   Linear INVERTE il modello Cosmos come Realcraft, ma più a fondo: il canvas
+   (#121213) è quasi identico al canvas Cosmos (#141414) — la differenza non è
+   la scurezza, è la DIREZIONE. Cosmos eleva la chrome sopra il canvas (#171717);
+   Linear la scava sotto, a #09090a. Nella schermata reale il canvas è il 76.3%
+   dei pixel e la chrome il 19.9%: il contenuto galleggia sopra la cornice senza
+   bisogno di ombre, e i grigi alti restano liberi per gli stati interattivi
+   invece di essere spesi sui background.
+
+   Conseguenza dell'inversione: serve il fix riga attiva in cosmos-tweaks.css
+   § REALCRAFT, che qui è ancora più necessario (chrome #09090a vs #1b1b1b).
+
+   NON implementato di proposito: Linear separa i pannelli con un divisore più
+   SCURO di entrambe le superfici (#060607-#080809, scavato invece che disegnato
+   — l'opposto della convenzione Obsidian). Serve perché canvas e chrome distano
+   appena 1.06:1 di contrasto: da soli non si separano, è il solco a farlo.
+   Richiederebbe --divider-color, che né Realcraft né Perplexity toccano; fuori
+   dalla superficie collaudata. Se la separazione dei pannelli risultasse debole
+   all'uso, è qui che si interviene.
+
+   Accent lasciato al sistema/vault (come realcraft/perplexity). L'indigo di
+   Linear, se lo vuoi, è #5e6ad3 — da impostare dal preset accent: nello
+   screenshot originale occupa lo 0.19% dei pixel ed è l'UNICA area colorata
+   con peso di tutta l'interfaccia. Il colore è un evento, non un ambiente.
+
+   Isolato: nessun effetto senza il toggle. Specificità (0,4,1) = ai blocchi
+   scheme e a realcraft/perplexity, appesa dopo → vince per ordine.
+   -------------------------------------------------------------------------- */
+body.linear.theme-dark:not(.layout-baseline):not(.cosmos-light) {
+  /* Superfici — campionate da Linear. Chrome più SCURO del canvas (inversione,
+     come Realcraft); hover/selected staccano verso l'alto a step netti. */
+  --cosmos-surface-0: #121213;   /* editor / canvas — content surface (--background-primary) */
+  --cosmos-surface-1: #09090a;   /* sidebar + pannelli + tab bar — chrome scavato (--background-secondary) */
+  --cosmos-surface-2: #1c1c1d;   /* block / elevate — hover, button secondario (--background-primary-alt) */
+  --cosmos-surface-3: #232325;   /* card / nav attivo — riga selezionata (--background-secondary-alt) */
+
+  /* Bordi — Linear: hairline appena sopra la superficie elevata. */
+  --background-modifier-border:       #1e1f21;
+  --background-modifier-border-hover:  #29292b;
+
+  /* Testo — 3 livelli neutri desaturati. Contrasto WCAG misurato sul canvas
+     #121213: 14.72:1 (AAA) / 6.26:1 (AA) / 3.27:1 (solo testo grande e icone). */
+  --text-normal: #e3e4e6;
+  --text-muted:  #959597;
+  --text-faint:  #666668;
+}
+
+/* --------------------------------------------------------------------------
    § NOTION (Cosmos Flavour: layout-notion) — flavour COMPLETO, non solo palette.
    Due assi in un colpo solo: GEOMETRIA squadrata (l'essenza "più squadrato" di
    Notion) + PALETTE carta-Notion, light E dark. Campionata dai valori reali di

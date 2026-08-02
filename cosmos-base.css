@@ -687,6 +687,9 @@ settings:
 			-
 				label: Perplexity
 				value: perplexity
+			-
+				label: Linear
+				value: linear
 	-
 		id: element-style
 		title: Personality

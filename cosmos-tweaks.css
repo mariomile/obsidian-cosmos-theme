@@ -624,13 +624,17 @@ body.craft-nav-toggle .nav-folder-title:not([data-path*="/"]) > .nav-folder-titl
 }
 
 /* ==========================================================================
-   § REALCRAFT — fix riga attiva. L'active-line-block colora la riga corrente
-   con --background-secondary, che in Realcraft è il chrome SCURO (#1b1b1b) →
-   riga near-black sotto il testo. Portala a una superficie elevata chiara così
-   "stacca" come un block Craft invece di annerire. Scoped a body.realcraft
-   (una classe in più della regola base → vince). Solo con Realcraft attivo.
+   § PALETTE INVERTITE — fix riga attiva. L'active-line-block colora la riga
+   corrente con --background-secondary, che nelle palette che INVERTONO il
+   modello Cosmos è il chrome SCURO → riga near-black sotto il testo. Portala a
+   una superficie elevata chiara così "stacca" come un block invece di annerire.
+     Realcraft — chrome #1b1b1b (Craft inverte Cosmos)
+     Linear    — chrome #09090a (inverte più a fondo → il fix serve di più)
+   :is() pesa quanto una classe singola: specificità IDENTICA al precedente
+   body.realcraft (una classe in più della regola base → vince), nessun
+   !important (budget cosmos-tweaks già a 2/2). Solo con quelle palette attive.
    ========================================================================== */
-body.realcraft.active-line-block .view-content > .markdown-source-view .cm-line.cm-active:not(.cm-gutterElement, .HyperMD-callout, .HyperMD-codeblock-bg, .HyperMD-quote)::before {
+body:is(.realcraft, .linear).active-line-block .view-content > .markdown-source-view .cm-line.cm-active:not(.cm-gutterElement, .HyperMD-callout, .HyperMD-codeblock-bg, .HyperMD-quote)::before {
   background: var(--background-primary-alt);
 }
 
