@@ -243,6 +243,37 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
 }
 
 /* ==========================================================================
+   § CHROME DISTINTO (toggle: cosmos-chrome-surface, default OFF)
+   --------------------------------------------------------------------------
+   Opt-out esplicito dall'"approccio Craft/Notion" qui sopra: di default Cosmos
+   tiene editor ≈ sidebar ≈ pannelli su una superficie unica, e separa le aree
+   GEOMETRICAMENTE (outline hairline + shadow delle isole), non tonalmente.
+   Conseguenza: --background-secondary è definito da ogni palette ma non dipinge
+   nulla — è consumato solo 2 volte in tutti i layer, mai per la chrome. Il
+   chrome di Cosmos default (#171717), Realcraft (#1b1b1b), Perplexity (#1f1e1d)
+   e Linear (#09090a) sono tutti invisibili.
+
+   Questo toggle fa semplicemente DIPINGERE quel token. Non impone una direzione:
+   la direzione è già nel valore di ciascuna palette, e ognuna esprime il proprio
+   modello senza che questa regola ne sappia nulla —
+     Cosmos default  chrome #171717 > canvas #141414  → si ELEVA
+     Linear          chrome #09090a < canvas #121213  → si INCASSA
+   Per questo il toggle è palette-agnostico e non gated su .linear: sarebbe stato
+   il mio modello imposto a tutte, invece del loro.
+
+   Default OFF: senza il toggle nulla cambia rispetto a prima. Nessun !important
+   (budget cosmos-layer 10/10 intatto): (0,6,1) basta a battere Baseline.
+   ========================================================================== */
+body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
+  .workspace-split.mod-sidedock .workspace-tab-container,
+body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
+  .workspace-split.mod-sidedock .workspace-tab-header-container,
+body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
+  .workspace-ribbon {
+  background-color: var(--background-secondary);
+}
+
+/* ==========================================================================
    § OPACITÀ — dark opaco legato al CSS, indipendente dal toggle translucency
    --------------------------------------------------------------------------
    Il look non deve dipendere dall'impostazione "translucency" di Obsidian
