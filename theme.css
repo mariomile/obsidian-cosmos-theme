@@ -4055,8 +4055,6 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
    (budget cosmos-layer 10/10 intatto).
    ========================================================================== */
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace,
-body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace-tab-header-container,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace-split.mod-sidedock .workspace-tab-container,
@@ -4066,10 +4064,29 @@ body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
 }
 
 /* Isolamento della colonna editor: canvas dietro l'isola e la sua tab bar,
-   così gli angoli arrotondati del main panel non rivelano il chrome. */
+   così gli angoli arrotondati del main panel non rivelano il fondo. */
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace-split.mod-root .workspace-tabs {
   background-color: var(--background-primary);
+}
+
+/* --- Il FONDO va sotto i pannelli, non alla loro quota ---------------------
+   `.workspace` è il piano su cui poggiano le isole: se prende lo stesso chrome
+   dei pannelli laterali, l'isola della sidebar sparisce — ha raggio, outline e
+   island-gap di 8px, ma essendo dello stesso colore di ciò che le sta dietro
+   non si legge più come pannello, e sembra "tagliata via". L'editor invece si
+   vedeva, perché è canvas su chrome.
+   Serve quindi un terzo livello, SOTTO la chrome. Non è un'invenzione: Linear
+   ha davvero tre quote — divisore scavato #060607, chrome #09090a, canvas
+   #121213 — e separa i pannelli scavando, non disegnando hairline (campionato
+   nel blocco § LINEAR di cosmos-tokens.css).
+   Derivato dal token invece che hardcodato, così funziona con ogni palette:
+   ogni chrome genera il proprio scavo, e le palette che ELEVANO la chrome
+   (Cosmos default) ottengono comunque un fondo che sta sotto ai pannelli.
+   -------------------------------------------------------------------------- */
+body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
+  .workspace {
+  background-color: color-mix(in srgb, var(--background-secondary), black 40%);
 }
 
 /* ==========================================================================
