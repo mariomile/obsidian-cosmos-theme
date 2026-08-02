@@ -294,13 +294,23 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
    QUALI superfici — il modello Linear è "fondo chrome, UN pannello canvas",
    non "tutto scuro". Due regole speculari:
      A) chrome  — .workspace (il piano di fondo, incluso lo spazio dei semafori
-                  macOS in alto a sinistra), tutte le tab bar, il ribbon,
-                  l'interno dei pannelli laterali (la sidebar È la cornice)
-     B) canvas  — l'interno del pannello root: il contenuto che galleggia
+                  macOS in alto a sinistra), il ribbon, e l'INTERO pannello
+                  laterale, tab bar compresa (la sidebar È la cornice)
+     B) canvas  — l'INTERA area editor, tab bar compresa: una superficie
+                  continua dall'alto, il piano che deve emergere
    La (B) non è ridondante. Senza, ogni vista che non dipinge il proprio fondo
    (Bases, Canvas, PDF, view di plugin) erediterebbe il chrome della (A) e
    diventerebbe scura: la (B) garantisce al contenuto un pavimento canvas
    qualunque sia la vista. Dipingere solo la (A) è il bug, non l'ottimizzazione.
+
+   PERCHÉ la tab bar dell'EDITOR resta canvas (segnalato da Mario 2 volte,
+   sbagliato da me 2 volte). Dipingerla di chrome infila una banda scura fra
+   i tab e il loro documento: l'area editor si spezza in due e il pannello
+   legge come "decapitato" — indipendentemente dagli angoli, che è la costante
+   che avevo mancato inseguendo prima il raggio e poi la specificità.
+   Le tab bar dei SIDEDOCK invece vanno chrome: lì la tab bar è cornice, non
+   intestazione di un documento. Verificato iniettando entrambe le varianti
+   dal vivo e mappando i pixel dell'angolo, invece di indovinare una terza volta.
 
    Default OFF: senza il toggle nulla cambia rispetto a prima. Nessun !important
    (budget cosmos-layer 10/10 intatto): (0,4,1) basta a battere il transparent
@@ -309,7 +319,7 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-tab-header-container,
+  .workspace-split.mod-sidedock .workspace-tab-header-container,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace-split.mod-sidedock .workspace-tab-container,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
@@ -317,6 +327,8 @@ body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   background-color: var(--background-secondary);
 }
 
+body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
+  .workspace-split.mod-root .workspace-tab-header-container,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace-split.mod-root .workspace-tab-container {
   background-color: var(--background-primary);
