@@ -165,6 +165,19 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
   background-color: var(--craft-tab-active) !important;  /* beats: hard-set base per-selettore */
   box-shadow: var(--shadow-tactile);
   transform: scale(1);
+  /* 2026-08-03 — ACCENSIONE. Vedi § lato :not(.is-active) per il perché
+     l'asimmetria: qui il fill entra, di là esce all'istante.
+     Curva: --cosmos-native (ease-out) al posto di --anim-motion-baseline.
+     Quest'ultima è cubic-bezier(0.1, 0, 0.1, 1.25): y1=0 con x1=0.1 = partenza
+     lenta (il colore TRATTIENE), y2=1.25 = overshoot. Su un transform è
+     giusta — la materia ha inerzia; su un background-color no: i colori non
+     rimbalzano, il valore supera il target e torna indietro. Il transform su
+     questo stesso elemento usa già --cosmos-native: la curva corretta era
+     nel tema, applicata solo all'altra property. */
+  transition:
+    background-color var(--anim-duration-fast) var(--cosmos-native),
+    box-shadow       var(--anim-duration-fast) var(--cosmos-native),
+    transform        var(--cosmos-t-fast) var(--cosmos-native);
 }
 
 /* --- Inattivi: kill del ghost (opacity .5) → flat, testo muto ------------- */
@@ -181,6 +194,23 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
      Riuso di questa regola già gated (non una nuova) per non alzare il
      conteggio dei gate mobile-excluding (ratchet: mai sopra 24). */
   transform: scale(0.99);
+  /* 2026-08-03 — SPEGNIMENTO ISTANTANEO. Segnalato da Mario: "clicco un tab e
+     l'altro resta acceso per un millisecondo, sembra laggoso".
+     Non era una sensazione: attivo e inattivo avevano la STESSA transizione
+     (background-color .16s), e su uno stato ESCLUSIVO — un solo tab attivo —
+     una transizione simmetrica garantisce per costruzione che per 160ms due
+     tab siano accesi insieme. La partenza lenta della vecchia curva
+     peggiorava: il tab uscente tratteneva il colore proprio all'inizio.
+     Il fill (e il suo lift) escono ora a 0s: in ogni istante UN solo tab è
+     acceso. Il transform resta animato — è il settle di scala, non lo stato,
+     e senza il fill non può leggersi come "due tab attivi".
+     Paradosso utile: togliendo l'animazione in uscita si percepisce più
+     fluido, perché a dare la sensazione di lag era la sovrapposizione.
+     `0s` non conta come durata raw per il ratchet (il check cerca \d+ms). */
+  transition:
+    background-color 0s,
+    box-shadow       0s,
+    transform        var(--cosmos-t-fast) var(--cosmos-native);
 }
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
