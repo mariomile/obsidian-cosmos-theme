@@ -3991,16 +3991,35 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
    Per questo il toggle è palette-agnostico e non gated su .linear: sarebbe stato
    il mio modello imposto a tutte, invece del loro.
 
+   QUALI superfici — il modello Linear è "fondo chrome, UN pannello canvas",
+   non "tutto scuro". Due regole speculari:
+     A) chrome  — .workspace (il piano di fondo, incluso lo spazio dei semafori
+                  macOS in alto a sinistra), tutte le tab bar, il ribbon,
+                  l'interno dei pannelli laterali (la sidebar È la cornice)
+     B) canvas  — l'interno del pannello root: il contenuto che galleggia
+   La (B) non è ridondante. Senza, ogni vista che non dipinge il proprio fondo
+   (Bases, Canvas, PDF, view di plugin) erediterebbe il chrome della (A) e
+   diventerebbe scura: la (B) garantisce al contenuto un pavimento canvas
+   qualunque sia la vista. Dipingere solo la (A) è il bug, non l'ottimizzazione.
+
    Default OFF: senza il toggle nulla cambia rispetto a prima. Nessun !important
-   (budget cosmos-layer 10/10 intatto): (0,6,1) basta a battere Baseline.
+   (budget cosmos-layer 10/10 intatto): (0,4,1) basta a battere il transparent
+   di Baseline su .workspace-tab-header-container, che è (0,2,1).
    ========================================================================== */
+body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
+  .workspace,
+body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
+  .workspace-tab-header-container,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace-split.mod-sidedock .workspace-tab-container,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-split.mod-sidedock .workspace-tab-header-container,
-body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace-ribbon {
   background-color: var(--background-secondary);
+}
+
+body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
+  .workspace-split.mod-root .workspace-tab-container {
+  background-color: var(--background-primary);
 }
 
 /* ==========================================================================

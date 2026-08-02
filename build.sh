@@ -15,10 +15,23 @@ LAYERS = ['cosmos-tokens.css','cosmos-layer.css','cosmos-islands.css','cosmos-tw
 used = [fn for fn in LAYERS if os.path.exists(fn)]
 for fn in used:
     parts += open(fn).read().split('\n')
+
+# Commenti bilanciati, PER FILE. Un `*/` di troppo (tipico: si estende un
+# commento incollando il testo DOPO la sua riga di chiusura) lascia testo nudo
+# fuori da ogni commento: il parser CSS scarta fino al punto di recupero e si
+# mangia silenziosamente la regola successiva. Le graffe restano bilanciate,
+# quindi il check qui sotto non lo vede — e il CSS morto arriva a schermo.
+# Misurato il 2026-08-02 su § CHROME DISTINTO: regola live nel <style>,
+# selettore che matcha, ma assente dal CSSOM.
+for fn in used:
+    src = open(fn).read()
+    o_, c_ = src.count('/*'), src.count('*/')
+    assert o_ == c_, f"{fn}: commenti sbilanciati — {o_} aperture '/*' vs {c_} chiusure '*/' (un '*/' orfano uccide la regola che segue)"
+
 open('theme.css','w').write('\n'.join(parts))
 o = '\n'.join(parts)
 assert o.count('{') == o.count('}'), f"brace mismatch {o.count('{{')} vs {o.count('}}')}"
-print(f"theme.css rebuilt — base {len(base)} lines + {len(used)} layers = {len(parts)} lines, braces balanced")
+print(f"theme.css rebuilt — base {len(base)} lines + {len(used)} layers = {len(parts)} lines, braces + comments balanced")
 PY
 
 ./contract.sh
