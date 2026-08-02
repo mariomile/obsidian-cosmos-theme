@@ -4021,33 +4021,29 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
    Per questo il toggle è palette-agnostico e non gated su .linear: sarebbe stato
    il mio modello imposto a tutte, invece del loro.
 
-   QUALI superfici — il modello Linear è "fondo chrome, UN pannello canvas",
-   non "tutto scuro". Due regole speculari:
-     A) chrome  — .workspace (il piano di fondo, incluso lo spazio dei semafori
-                  macOS in alto a sinistra), il ribbon, e l'INTERO pannello
-                  laterale, tab bar compresa (la sidebar È la cornice)
-     B) canvas  — l'INTERA area editor, tab bar compresa: una superficie
-                  continua dall'alto, il piano che deve emergere
-   La (B) non è ridondante. Senza, ogni vista che non dipinge il proprio fondo
-   (Bases, Canvas, PDF, view di plugin) erediterebbe il chrome della (A) e
-   diventerebbe scura: la (B) garantisce al contenuto un pavimento canvas
-   qualunque sia la vista. Dipingere solo la (A) è il bug, non l'ottimizzazione.
+   SOLO COLORE, ZERO GEOMETRIA. Vincolo esplicito di Mario dopo tre miei
+   tentativi sbagliati: il main panel deve restare nel suo riquadro con i
+   rounded border, IDENTICO a tutte le altre palette. Il toggle cambia il
+   colore della cornice e basta.
 
-   PERCHÉ la tab bar dell'EDITOR resta canvas (segnalato da Mario 2 volte,
-   sbagliato da me 2 volte). Dipingerla di chrome infila una banda scura fra
-   i tab e il loro documento: l'area editor si spezza in due e il pannello
-   legge come "decapitato" — indipendentemente dagli angoli, che è la costante
-   che avevo mancato inseguendo prima il raggio e poi la specificità.
-   Le tab bar dei SIDEDOCK invece vanno chrome: lì la tab bar è cornice, non
-   intestazione di un documento. Verificato iniettando entrambe le varianti
-   dal vivo e mappando i pixel dell'angolo, invece di indovinare una terza volta.
+   Perciò questa sezione tocca UNA sola property — background-color — su tre
+   superfici che sono tutte cornice: i due pannelli laterali (contenuto + tab
+   bar: lì la tab bar È cornice) e il ribbon. Niente altro.
+
+   ⛔ Cosa NON va fatto qui, imparato sbagliandolo:
+   - NON dipingere `.workspace` (il piano di fondo). Sta DIETRO l'isola
+     dell'editor: colorarlo fa comparire il chrome negli angoli arrotondati
+     del main panel, che così sembra morsicato.
+   - NON dipingere la tab bar dell'EDITOR. Infila una banda scura fra i tab e
+     il loro documento: l'area editor si spezza e il pannello sembra decapitato.
+   - NON toccare `border-radius`. Squadrare gli angoli alti "per far combaciare"
+     fa leggere il pannello come affettato, ed è comunque geometria.
+   Ognuno di questi tre era un tentativo di curare il sintomo dopo aver
+   introdotto il precedente. La cura giusta era non introdurre il primo.
 
    Default OFF: senza il toggle nulla cambia rispetto a prima. Nessun !important
-   (budget cosmos-layer 10/10 intatto): (0,4,1) basta a battere il transparent
-   di Baseline su .workspace-tab-header-container, che è (0,2,1).
+   (budget cosmos-layer 10/10 intatto).
    ========================================================================== */
-body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace-split.mod-sidedock .workspace-tab-header-container,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
@@ -4055,22 +4051,6 @@ body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace-ribbon {
   background-color: var(--background-secondary);
-}
-
-body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-split.mod-root .workspace-tab-header-container,
-body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-split.mod-root .workspace-tab-container {
-  background-color: var(--background-primary);
-  /* Angoli SUPERIORI a filo con la tab bar. Cosmos progetta il tab attivo come
-     "document card" (§ Tab attivo, sopra): il tab È il bordo alto del foglio.
-     Col chrome acceso passa una banda scura fra il tab e il suo documento, e
-     il raggio di 12px in cima — invisibile finché tab bar e pannello erano lo
-     stesso colore — si legge come "pannello tagliato sopra". Squadrando solo
-     i due angoli alti il foglio torna a incontrare la barra a filo; sotto
-     resta arrotondato, l'isola non perde la sua forma. */
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
 }
 
 /* ==========================================================================
