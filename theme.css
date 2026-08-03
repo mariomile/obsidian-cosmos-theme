@@ -3674,8 +3674,13 @@ body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light) {
 body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root {
   --background-primary:       #121213;
-  --background-secondary:     #121213;
   --file-header-background:   #121213;   /* derivato: vedi ⚠️ sopra */
+  /* NB: --background-secondary NON va ridefinito qui. Portarlo al valore del
+     canvas rende invisibile la riga attiva (active-line-block la dipinge con
+     quel token) — stesso identico colore, zero contrasto. Lasciandolo al
+     valore globale #09090a, il main pane si comporta come in Linear Darker:
+     secondary più scuro del canvas, e il fix § PALETTE INVERTITE di
+     cosmos-tweaks.css porta la riga su --background-primary-alt (#1c1c1d). */
 }
 body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .workspace-tab-container {
@@ -5227,13 +5232,20 @@ body.craft-nav-toggle .nav-folder-title:not([data-path*="/"]) > .nav-folder-titl
    corrente con --background-secondary, che nelle palette che INVERTONO il
    modello Cosmos è il chrome SCURO → riga near-black sotto il testo. Portala a
    una superficie elevata chiara così "stacca" come un block invece di annerire.
-     Realcraft — chrome #1b1b1b (Craft inverte Cosmos)
-     Linear    — chrome #09090a (inverte più a fondo → il fix serve di più)
+     Realcraft      — chrome #1b1b1b (Craft inverte Cosmos)
+     Linear Darker  — chrome #09090a (inverte più a fondo → il fix serve di più)
+     Linear Lighter — stessa situazione DENTRO il main pane: lì il canvas è
+                      #121213 e --background-secondary resta il #09090a globale
+   ⚠️ Quando aggiungi una palette al select, chiediti se la sua secondary è più
+   scura del canvas: se sì va aggiunta qui, altrimenti la riga attiva annerisce.
+   L'altro modo di sbagliare è portare secondary AL valore del canvas dentro uno
+   scope: la riga diventa invisibile invece che nera, sintomo diverso ma stessa
+   causa (zero delta fra riga e fondo).
    :is() pesa quanto una classe singola: specificità IDENTICA al precedente
    body.realcraft (una classe in più della regola base → vince), nessun
    !important (budget cosmos-tweaks già a 2/2). Solo con quelle palette attive.
    ========================================================================== */
-body:is(.realcraft, .linear).active-line-block .view-content > .markdown-source-view .cm-line.cm-active:not(.cm-gutterElement, .HyperMD-callout, .HyperMD-codeblock-bg, .HyperMD-quote)::before {
+body:is(.realcraft, .linear, .linear-lighter).active-line-block .view-content > .markdown-source-view .cm-line.cm-active:not(.cm-gutterElement, .HyperMD-callout, .HyperMD-codeblock-bg, .HyperMD-quote)::before {
   background: var(--background-primary-alt);
 }
 

@@ -352,8 +352,13 @@ body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light) {
 body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root {
   --background-primary:       #121213;
-  --background-secondary:     #121213;
   --file-header-background:   #121213;   /* derivato: vedi ⚠️ sopra */
+  /* NB: --background-secondary NON va ridefinito qui. Portarlo al valore del
+     canvas rende invisibile la riga attiva (active-line-block la dipinge con
+     quel token) — stesso identico colore, zero contrasto. Lasciandolo al
+     valore globale #09090a, il main pane si comporta come in Linear Darker:
+     secondary più scuro del canvas, e il fix § PALETTE INVERTITE di
+     cosmos-tweaks.css porta la riga su --background-primary-alt (#1c1c1d). */
 }
 body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .workspace-tab-container {
