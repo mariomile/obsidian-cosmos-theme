@@ -3469,11 +3469,39 @@ body {
   --mv-card-rest: var(--cosmos-card-rest);
   --mv-card-lift: 0 8px 24px color-mix(in srgb, var(--cosmos-shadow-ink) calc(45% * var(--cosmos-shadow-scale)), transparent);
 
-  /* Label recipe (eyebrow small-caps muto) — usata da header, card e group */
+  /* Label recipe (eyebrow small-caps muto) — usata da header, card e group.
+     La quinta gamba (transform) era scritta a mano da tutti e 3 i call site,
+     e il Bases skin doveva pure disfarla per .bases-table-header-name: ora è
+     un token, quindi disfarla è --mv-label-transform: none, una riga sola. */
   --mv-label-color: var(--text-muted);
   --mv-label-size: 0.7rem;
   --mv-label-weight: 600;
   --mv-label-track: 0.05em;
+  --mv-label-transform: uppercase;
+
+  /* --- Troncamento: sfumatura, non ellissi (Craft) --------------------------
+     Dove Craft tronca, il testo DISSOLVE. Lo stop è in em, così la stessa
+     ricetta serve un clamp a 2 righe come uno a 5 senza un token per sito.
+     Il call site deve togliere -webkit-line-clamp: i due meccanismi si
+     sommano e si vedrebbero i puntini DENTRO la sfumatura.
+
+     --fade-inset compensa il padding-bottom del call site. Serve perché il
+     padding sta DENTRO la scatola mascherata: senza compensazione la
+     sfumatura coprirebbe il padding (che è vuoto) e lascerebbe l'ultima riga
+     di testo tagliata di netto. Il nome è volutamente senza prefisso --mv-:
+     i plugin della suite non possono DICHIARARE token della famiglia --mv-
+     o --cosmos- (lo vieta il loro style-contract), ma devono poter
+     valorizzare questo. (E il glob seguito da slash chiuderebbe il commento
+     in anticipo: vedi il check "commenti sbilanciati" di build.sh.)
+
+     Solo per il corpo del testo: sui titoli, che sono in grassetto e su 2
+     righe, una dissolvenza si legge come un bug di rendering, non come una
+     scelta. Lì l'ellissi resta. */
+  --mv-fade-mask: linear-gradient(
+    to bottom,
+    black calc(100% - 1.5em - var(--fade-inset, 0px)),
+    transparent calc(100% - var(--fade-inset, 0px))
+  );
 
   /* --- Mobile (iPhone Pro Max è il target; niente iPad nel parco) -----------
      Primi token mobile dell'ecosistema (nessun tema Obsidian usa safe-area,
