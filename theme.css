@@ -688,8 +688,11 @@ settings:
 				label: Perplexity
 				value: perplexity
 			-
-				label: Linear
+				label: Linear Darker
 				value: linear
+			-
+				label: Linear Lighter
+				value: linear-lighter
 	-
 		id: element-style
 		title: Personality
@@ -3625,6 +3628,58 @@ body.linear.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   --text-normal: #e3e4e6;
   --text-muted:  #959597;
   --text-faint:  #666668;
+}
+
+/* --------------------------------------------------------------------------
+   § LINEAR LIGHTER (Palette option) — stessi colori campionati, struttura
+   INVERTITA rispetto a "Linear Darker": qui il main pane emerge CHIARO su un
+   fondo scuro uniforme, com'è davvero Linear (canvas 76.3% dei pixel, chrome
+   19.9%). Darker resta la variante a superficie uniforme.
+
+   COME, ed è il punto: NON si dipinge la cornice, si SCHIARISCE il main pane.
+   Cosmos dipinge tutta l'app con --background-primary; qui quel token vale
+   #09090a globalmente (→ fondo scuro ovunque, gratis, senza toccare sidebar,
+   ribbon o view di plugin) e viene RIDEFINITO a #121213 dentro il solo
+   .workspace-split.mod-root. Il raggio 12px + overflow:hidden dell'isola
+   erano già lì: ritagliano da soli il chiaro nella forma giusta. Zero
+   geometria, zero elementi della cornice dipinti, zero terzo piano.
+   (Il verso opposto — scurire la cornice dipingendo ciò che Cosmos lascia
+   trasparente — è stato provato e fallisce: vedi il commento rimosso nello
+   storico, richiede tre piani e rompe le view dei plugin.)
+
+   ⚠️ I token DERIVATI vanno ridefiniti a mano. La sostituzione di una custom
+   property avviene sull'elemento dove è DICHIARATA, non dove è usata: quindi
+   --file-header-background, dichiarata su body come var(--background-secondary),
+   si risolve lì a #09090a ed eredita come valore letterale, ignorando
+   l'override di scope. Senza la riga esplicita l'header della nota resta scuro
+   dentro un pannello chiaro. Verificato scandendo TUTTI i discendenti del main
+   pane: con queste tre righe, zero elementi scuri residui.
+   -------------------------------------------------------------------------- */
+body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light) {
+  /* Il fondo dell'app = la chrome di Linear. Cosmos lo dipinge ovunque. */
+  --cosmos-surface-0: #09090a;   /* fondo app — sidebar, ribbon, angolo semafori */
+  --cosmos-surface-1: #09090a;   /* allineato: Cosmos non lo consuma per la chrome */
+  --cosmos-surface-2: #1c1c1d;   /* block / elevate — hover, button secondario */
+  --cosmos-surface-3: #232325;   /* card / nav attivo — riga selezionata */
+
+  --background-modifier-border:       #1e1f21;
+  --background-modifier-border-hover:  #29292b;
+
+  --text-normal: #e3e4e6;
+  --text-muted:  #959597;
+  --text-faint:  #666668;
+}
+
+/* Il main pane torna canvas: base, derivati e fill dell'isola. */
+body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .workspace-split.mod-root {
+  --background-primary:       #121213;
+  --background-secondary:     #121213;
+  --file-header-background:   #121213;   /* derivato: vedi ⚠️ sopra */
+}
+body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .workspace-split.mod-root .workspace-tab-container {
+  background-color: var(--background-primary);
 }
 
 /* --------------------------------------------------------------------------

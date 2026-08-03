@@ -688,8 +688,11 @@ settings:
 				label: Perplexity
 				value: perplexity
 			-
-				label: Linear
+				label: Linear Darker
 				value: linear
+			-
+				label: Linear Lighter
+				value: linear-lighter
 	-
 		id: element-style
 		title: Personality
