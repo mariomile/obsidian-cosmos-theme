@@ -51,6 +51,27 @@ body {
   --cosmos-r-pill: var(--cosmos-tab-radius, var(--tab-radius, 8px));
   --cosmos-tab-inset: 2px;
   --cosmos-r-tabbar: calc(var(--cosmos-r-pill) + var(--cosmos-tab-inset));
+
+  /* --- Concentricità INTERNA (specchio di --cosmos-r-tabbar) ----------------
+     Un raggio interno corretto è raggio esterno MENO il padding: altrimenti
+     l'angolo del figlio e quello del genitore non sono concentrici e la card
+     si legge "storta" senza che si capisca perché.
+
+     La terna va dichiarata SUL CONTENITORE, non qui: la sostituzione di una
+     custom property avviene dove è DICHIARATA, non dove è usata (stesso
+     motivo documentato nel blocco LINEAR DARKER). Un --cosmos-r-inner
+     dichiarato su body si risolverebbe UNA volta contro i default qui sotto e
+     ignorerebbe qualunque --cosmos-r-inset ridefinito da un discendente.
+     --cosmos-r-tabbar funziona solo perché entrambi i suoi input stanno su body.
+
+     Uso:  .card { --cosmos-r-outer: var(--mv-r-card);
+                   --cosmos-r-inset: var(--cosmos-gap-2);
+                   --cosmos-r-inner: max(0px, calc(var(--cosmos-r-outer) - var(--cosmos-r-inset)));
+                   border-radius: var(--cosmos-r-outer); padding: var(--cosmos-r-inset); }
+           .card > img { border-radius: var(--cosmos-r-inner); } */
+  --cosmos-r-outer: var(--mv-r-card);
+  --cosmos-r-inset: var(--cosmos-gap-2);
+  --cosmos-r-inner: max(0px, calc(var(--cosmos-r-outer) - var(--cosmos-r-inset)));
   /* Ampiezza tab in .mod-root: hug del contenuto tra floor e cap — icona +
      titolo breve resta vicino al floor, titoli lunghi crescono fino al cap
      poi troncano con ellissi nativa (vedi cosmos-layer.css). */
@@ -589,6 +610,54 @@ body.layout-notion.theme-light.cupertino-light {
   --cosmos-surface-card-hover: #f7f6f3;
   --cosmos-card-border: var(--background-modifier-border);
   --cosmos-shadow-scale: 0.5;
+}
+
+/* --------------------------------------------------------------------------
+   § GEOMETRIA NEW CRAFT — la scala raggi del flavour layout-cupertino.
+   Craft arrotonda più di Obsidian: bottoni ~10, card 14-16, pannelli
+   flottanti 16-18, sheet ~24, pill full-round. La scala base è 8/12/20/28.
+
+   Perché sul FLAVOUR e non sulla scala base: layout-baseline ("Standard") ha
+   un contratto esplicito di Baseline pulito, layout-notion squadra
+   deliberatamente a 3/5/8/12, e Fusion/Border sono altri look. Solo
+   layout-cupertino rivendica Craft.
+
+   Perché NON promuovendo cosmos-generous-radii a default: quello è la via di
+   fuga dell'UTENTE, ortogonale al flavour. Promuoverlo confonderebbe "il look
+   New Craft" con "l'utente ha chiesto più rotondo", e non lascerebbe modo di
+   andare ancora più rotondi.
+
+   Coppia scheme comma-joined: il check #5 blanka il blocco (la regex matcha
+   il ramo destro), quindi la geometria si scrive UNA volta sola — senza la
+   duplicazione dark/light del blocco Notion qui sopra.
+
+   NIENTE :not(.layout-baseline): i layout-* sono mutuamente esclusivi (stesso
+   class-select di Style Settings), e il ratchet dei gate mobile è al soffitto.
+
+   Cascata: (0,2,1) batte la scala base di cosmos-base (body, 0,1,0). Il
+   toggle generous in cosmos-tweaks pareggia la specificità e vince per
+   ordine di concatenazione (tokens → ... → tweaks), quindi resta funzionante.
+   -------------------------------------------------------------------------- */
+body.layout-cupertino.theme-dark,
+body.layout-cupertino.theme-light {
+  --radius-s: calc(10px * var(--radius-modifier));    /* bottoni, input, tab, clickable-icon */
+  --radius-m: calc(14px * var(--radius-modifier));    /* card, popover, superfici flottanti */
+  --radius-l: calc(18px * var(--radius-modifier));    /* isole, pannelli */
+  --radius-xl: calc(24px * var(--radius-modifier));   /* modali, sheet */
+  --mv-r-card: 14px;
+  --mv-r1: 8px;
+  --mv-r-chip: 6px;
+}
+
+/* Phone: Craft su iPhone è più morbido (sheet a tutta larghezza, pollice).
+   Gate POSITIVO .is-phone — non conta nel ratchet mobile, che pesa solo i
+   :not(.is-phone)/:not(.is-mobile) escludenti. */
+body.layout-cupertino.is-phone.theme-dark,
+body.layout-cupertino.is-phone.theme-light {
+  --radius-s: calc(12px * var(--radius-modifier));
+  --radius-m: calc(16px * var(--radius-modifier));
+  --radius-l: calc(22px * var(--radius-modifier));
+  --radius-xl: calc(30px * var(--radius-modifier));
 }
 
 /* --------------------------------------------------------------------------

@@ -292,12 +292,23 @@ body.theme-dark, body.theme-light {
    pill/card/pannelli/modali si ammorbidiscono. Composabile con lo slider
    Roundness (--radius-modifier resta il fattore). island/pill derivano da
    --tab-radius/--radius-s → scalano di conseguenza. Default OFF. ========================================================================== */
-body.cosmos-generous-radii {
-  --radius-s: calc(12px * var(--radius-modifier));
-  --radius-m: calc(16px * var(--radius-modifier));
+/* Ribasato 2026-08-03: la scala New Craft (10/14/18/24) è ora il DEFAULT del
+   flavour layout-cupertino, quindi questo toggle non è più "più rotondo di
+   Baseline" ma "più rotondo di Craft" — che è ciò che si aspetta chi lo
+   accende. Coppia scheme per pareggiare la specificità (0,2,1) del blocco
+   New Craft in cosmos-tokens: a parità vince questo, perché cosmos-tweaks
+   è concatenato dopo.
+   --tab-radius rimosso: era riga morta dal 2026-07. cosmos-base fissa
+   body.input-cupertino{--tab-radius: var(--radius-s) !important}, che non
+   si può battere da qui — misurato, il raggio dei tab risolveva a --radius-s
+   e mai a questi 10px. Ora il tab segue --radius-s per costruzione. */
+body.cosmos-generous-radii.theme-dark,
+body.cosmos-generous-radii.theme-light {
+  --radius-s: calc(14px * var(--radius-modifier));
+  --radius-m: calc(18px * var(--radius-modifier));
   --radius-l: calc(24px * var(--radius-modifier));
   --radius-xl: calc(32px * var(--radius-modifier));
-  --tab-radius: calc(10px * var(--radius-modifier));
+  --mv-r-card: 18px;
 }
 
 /* ==========================================================================
