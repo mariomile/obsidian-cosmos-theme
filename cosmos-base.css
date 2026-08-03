@@ -691,12 +691,6 @@ settings:
 				label: Linear
 				value: linear
 	-
-		id: cosmos-chrome-surface
-		title: Distinct chrome
-		description: Off (default) = one uniform surface, sidebar and editor share a color and separate only by the island outline. On = the sidebar takes the active palette's chrome color. Each palette moves its own way — New Craft rises above the canvas, Linear and Real Craft sink below it.
-		type: class-toggle
-		default: false
-	-
 		id: element-style
 		title: Personality
 		type: class-select

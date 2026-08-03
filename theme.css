@@ -691,12 +691,6 @@ settings:
 				label: Linear
 				value: linear
 	-
-		id: cosmos-chrome-surface
-		title: Distinct chrome
-		description: Off (default) = one uniform surface, sidebar and editor share a color and separate only by the island outline. On = the sidebar takes the active palette's chrome color. Each palette moves its own way — New Craft rises above the canvas, Linear and Real Craft sink below it.
-		type: class-toggle
-		default: false
-	-
 		id: element-style
 		title: Personality
 		type: class-select
@@ -4000,74 +3994,6 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --background-secondary:     var(--cosmos-surface-1);   /* sidebar + pannelli */
   --background-primary-alt:   var(--cosmos-surface-2);   /* superfici elevate leggere */
   --background-secondary-alt: var(--cosmos-surface-3);   /* nav item attivo / card */
-}
-
-/* ==========================================================================
-   § CHROME DISTINTO (toggle: cosmos-chrome-surface, default OFF)
-   --------------------------------------------------------------------------
-   Linear usa chrome #09090a sotto al canvas #121213. La tab bar del root resta
-   canvas: dipingerla chrome crea una fascia che taglia il pannello centrale.
-   Nelle sidebar con isola attiva, invece, tab bar e contenuto diventano una
-   singola isola: il bordo abbraccia entrambi e non attraversa più il pannello.
-   Il workspace usa la chrome stessa, non un terzo nero: i gap restano presenti
-   geometricamente senza trasformarsi in strisce nere.
-   ========================================================================== */
-body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-split.mod-sidedock .workspace-tab-header-container,
-body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-split.mod-sidedock .workspace-tab-container,
-body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-ribbon {
-  background-color: var(--background-secondary);
-}
-
-/* Root continuo: tab bar e contenuto poggiano sullo stesso canvas. */
-body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-split.mod-root .workspace-tabs,
-body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-split.mod-root > .workspace-tabs > .workspace-tab-header-container {
-  background-color: var(--background-primary);
-}
-
-/* I gap sono chrome, non una quota nera separata. */
-body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace {
-  background-color: var(--background-secondary);
-}
-
-/* Sidebar island: header + contenuto dentro un solo wrapper arrotondato.
-   Lo scope rispetta i toggle island-off e non necessita un gate mobile:
-   `.mod-sidedock` non esiste nei drawer phone. */
-body.cosmos-chrome-surface:not(.cosmos-right-island-off):is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass)
-  .workspace-split.mod-right-split .workspace-tabs,
-body.cosmos-chrome-surface:not(.cosmos-left-island-off):is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass)
-  .workspace-split.mod-left-split .workspace-tabs {
-  width: calc(100% - var(--island-gap) - var(--island-gap));
-  flex-basis: auto;
-  margin: 0 var(--island-gap) var(--island-gap);
-  border-radius: var(--tab-radius);
-  outline: var(--tab-outline-width) solid var(--tab-outline-color);
-  overflow: hidden;
-  box-shadow: var(--cosmos-island-shadow);
-}
-
-body.cosmos-chrome-surface:not(.cosmos-right-island-off):is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass)
-  .workspace-split.mod-right-split .workspace-tab-header-container,
-body.cosmos-chrome-surface:not(.cosmos-left-island-off):is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass)
-  .workspace-split.mod-left-split .workspace-tab-header-container {
-  margin-left: 0;
-  margin-right: 0;
-}
-
-body.cosmos-chrome-surface:not(.cosmos-right-island-off):is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass)
-  .workspace-split.mod-right-split .workspace-tab-container,
-body.cosmos-chrome-surface:not(.cosmos-left-island-off):is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass)
-  .workspace-split.mod-left-split .workspace-tab-container {
-  margin: 0;
-  border-radius: 0;
-  /* Hairline decorativo spostato sul wrapper; non è un focus ring. */
-  outline: none;
-  box-shadow: none;
 }
 
 /* ==========================================================================
