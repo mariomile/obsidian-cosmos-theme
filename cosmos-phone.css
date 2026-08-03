@@ -262,10 +262,13 @@ body.cosmos-phone-edition.is-phone .metadata-property + .metadata-property {
   border-top: 0.5px solid var(--background-modifier-border);
 }
 
-/* Hairline sotto il titolo della nota, come il divider sotto il blocco
-   titolo nel doc view di Craft: chiude la testata, apre il contenuto. */
+/* Respiro sotto il titolo. Qui c'era anche una hairline, presa dal divider
+   sotto il blocco titolo di Craft — rimossa: in Craft quella riga separa il
+   titolo dal CORPO, mentre qui sotto il titolo vengono le properties, che
+   sono già una card con un proprio bordo. Due contorni a due pixel di
+   distanza leggono come un errore di rendering, non come gerarchia. Lo
+   spazio da solo separa altrettanto bene. */
 body.cosmos-phone-edition.is-phone .inline-title {
-  border-bottom: 0.5px solid var(--background-modifier-border);
   padding-bottom: var(--size-4-3);
 }
 

@@ -4005,57 +4005,15 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
 /* ==========================================================================
    § CHROME DISTINTO (toggle: cosmos-chrome-surface, default OFF)
    --------------------------------------------------------------------------
-   Opt-out esplicito dall'"approccio Craft/Notion" qui sopra: di default Cosmos
-   tiene editor ≈ sidebar ≈ pannelli su una superficie unica, e separa le aree
-   GEOMETRICAMENTE (outline hairline + shadow delle isole), non tonalmente.
-   Conseguenza: --background-secondary è definito da ogni palette ma non dipinge
-   nulla — è consumato solo 2 volte in tutti i layer, mai per la chrome. Il
-   chrome di Cosmos default (#171717), Realcraft (#1b1b1b), Perplexity (#1f1e1d)
-   e Linear (#09090a) sono tutti invisibili.
-
-   Questo toggle fa semplicemente DIPINGERE quel token. Non impone una direzione:
-   la direzione è già nel valore di ciascuna palette, e ognuna esprime il proprio
-   modello senza che questa regola ne sappia nulla —
-     Cosmos default  chrome #171717 > canvas #141414  → si ELEVA
-     Linear          chrome #09090a < canvas #121213  → si INCASSA
-   Per questo il toggle è palette-agnostico e non gated su .linear: sarebbe stato
-   il mio modello imposto a tutte, invece del loro.
-
-   SOLO COLORE, ZERO GEOMETRIA. Vincolo esplicito di Mario dopo tre miei
-   tentativi sbagliati: il main panel deve restare nel suo riquadro con i
-   rounded border, IDENTICO a tutte le altre palette. Il toggle cambia il
-   colore della cornice e basta.
-
-   Perciò questa sezione tocca UNA sola property — background-color — su tre
-   superfici che sono tutte cornice: i due pannelli laterali (contenuto + tab
-   bar: lì la tab bar È cornice) e il ribbon. Niente altro.
-
-   Il piano di fondo `.workspace` va chrome perché copre lo spazio dei semafori
-   macOS in alto a sinistra: il ribbon parte da top:48, e senza questo resta un
-   quadrato chiaro nell'angolo mentre tutto attorno è scuro.
-   Ma `.workspace` sta anche DIETRO l'isola dell'editor: da solo farebbe
-   comparire il chrome nei suoi angoli arrotondati (main panel "morsicato").
-   Per questo la colonna editor viene ISOLATA dipingendo di canvas il suo
-   contenitore `.mod-root .workspace-tabs`, che parte da top:0 e contiene
-   l'isola: così l'isola trova canvas dietro i propri angoli, esattamente come
-   in tutte le altre palette, e la sua tab bar (trasparente, dentro il
-   contenitore) resta canvas senza doverla toccare.
-
-   ⛔ Cosa NON va fatto qui, imparato sbagliandolo:
-   - NON dipingere `.workspace` SENZA isolare la colonna editor → angoli
-     morsicati. Sono due mosse che vanno insieme o nessuna delle due.
-   - NON dipingere direttamente la tab bar dell'EDITOR. Infila una banda scura
-     fra i tab e il loro documento: l'area editor si spezza e il pannello
-     sembra decapitato.
-   - NON toccare `border-radius`. Squadrare gli angoli alti "per far combaciare"
-     fa leggere il pannello come affettato, ed è comunque geometria: il main
-     panel deve restare identico a tutte le altre palette.
-
-   Default OFF: senza il toggle nulla cambia rispetto a prima. Nessun !important
-   (budget cosmos-layer 10/10 intatto).
+   Linear usa chrome #09090a sotto al canvas #121213. La tab bar del root resta
+   canvas: dipingerla chrome crea una fascia che taglia il pannello centrale.
+   Nelle sidebar con isola attiva, invece, tab bar e contenuto diventano una
+   singola isola: il bordo abbraccia entrambi e non attraversa più il pannello.
+   Il workspace usa la chrome stessa, non un terzo nero: i gap restano presenti
+   geometricamente senza trasformarsi in strisce nere.
    ========================================================================== */
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-tab-header-container,
+  .workspace-split.mod-sidedock .workspace-tab-header-container,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace-split.mod-sidedock .workspace-tab-container,
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
@@ -4063,30 +4021,53 @@ body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   background-color: var(--background-secondary);
 }
 
-/* Isolamento della colonna editor: canvas dietro l'isola e la sua tab bar,
-   così gli angoli arrotondati del main panel non rivelano il fondo. */
+/* Root continuo: tab bar e contenuto poggiano sullo stesso canvas. */
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-split.mod-root .workspace-tabs {
+  .workspace-split.mod-root .workspace-tabs,
+body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
+  .workspace-split.mod-root > .workspace-tabs > .workspace-tab-header-container {
   background-color: var(--background-primary);
 }
 
-/* --- Il FONDO va sotto i pannelli, non alla loro quota ---------------------
-   `.workspace` è il piano su cui poggiano le isole: se prende lo stesso chrome
-   dei pannelli laterali, l'isola della sidebar sparisce — ha raggio, outline e
-   island-gap di 8px, ma essendo dello stesso colore di ciò che le sta dietro
-   non si legge più come pannello, e sembra "tagliata via". L'editor invece si
-   vedeva, perché è canvas su chrome.
-   Serve quindi un terzo livello, SOTTO la chrome. Non è un'invenzione: Linear
-   ha davvero tre quote — divisore scavato #060607, chrome #09090a, canvas
-   #121213 — e separa i pannelli scavando, non disegnando hairline (campionato
-   nel blocco § LINEAR di cosmos-tokens.css).
-   Derivato dal token invece che hardcodato, così funziona con ogni palette:
-   ogni chrome genera il proprio scavo, e le palette che ELEVANO la chrome
-   (Cosmos default) ottengono comunque un fondo che sta sotto ai pannelli.
-   -------------------------------------------------------------------------- */
+/* I gap sono chrome, non una quota nera separata. */
 body.cosmos-chrome-surface:is(.theme-dark, .theme-light):not(.layout-baseline)
   .workspace {
-  background-color: color-mix(in srgb, var(--background-secondary), black 40%);
+  background-color: var(--background-secondary);
+}
+
+/* Sidebar island: header + contenuto dentro un solo wrapper arrotondato.
+   Lo scope rispetta i toggle island-off e non necessita un gate mobile:
+   `.mod-sidedock` non esiste nei drawer phone. */
+body.cosmos-chrome-surface:not(.cosmos-right-island-off):is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass)
+  .workspace-split.mod-right-split .workspace-tabs,
+body.cosmos-chrome-surface:not(.cosmos-left-island-off):is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass)
+  .workspace-split.mod-left-split .workspace-tabs {
+  width: calc(100% - var(--island-gap) - var(--island-gap));
+  flex-basis: auto;
+  margin: 0 var(--island-gap) var(--island-gap);
+  border-radius: var(--tab-radius);
+  outline: var(--tab-outline-width) solid var(--tab-outline-color);
+  overflow: hidden;
+  box-shadow: var(--cosmos-island-shadow);
+}
+
+body.cosmos-chrome-surface:not(.cosmos-right-island-off):is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass)
+  .workspace-split.mod-right-split .workspace-tab-header-container,
+body.cosmos-chrome-surface:not(.cosmos-left-island-off):is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass)
+  .workspace-split.mod-left-split .workspace-tab-header-container {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+body.cosmos-chrome-surface:not(.cosmos-right-island-off):is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass)
+  .workspace-split.mod-right-split .workspace-tab-container,
+body.cosmos-chrome-surface:not(.cosmos-left-island-off):is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass)
+  .workspace-split.mod-left-split .workspace-tab-container {
+  margin: 0;
+  border-radius: 0;
+  /* Hairline decorativo spostato sul wrapper; non è un focus ring. */
+  outline: none;
+  box-shadow: none;
 }
 
 /* ==========================================================================
@@ -5719,10 +5700,13 @@ body.cosmos-phone-edition.is-phone .metadata-property + .metadata-property {
   border-top: 0.5px solid var(--background-modifier-border);
 }
 
-/* Hairline sotto il titolo della nota, come il divider sotto il blocco
-   titolo nel doc view di Craft: chiude la testata, apre il contenuto. */
+/* Respiro sotto il titolo. Qui c'era anche una hairline, presa dal divider
+   sotto il blocco titolo di Craft — rimossa: in Craft quella riga separa il
+   titolo dal CORPO, mentre qui sotto il titolo vengono le properties, che
+   sono già una card con un proprio bordo. Due contorni a due pixel di
+   distanza leggono come un errore di rendering, non come gerarchia. Lo
+   spazio da solo separa altrettanto bene. */
 body.cosmos-phone-edition.is-phone .inline-title {
-  border-bottom: 0.5px solid var(--background-modifier-border);
   padding-bottom: var(--size-4-3);
 }
 
