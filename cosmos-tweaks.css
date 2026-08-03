@@ -629,9 +629,10 @@ body.craft-nav-toggle .nav-folder-title:not([data-path*="/"]) > .nav-folder-titl
    modello Cosmos è il chrome SCURO → riga near-black sotto il testo. Portala a
    una superficie elevata chiara così "stacca" come un block invece di annerire.
      Realcraft      — chrome #1b1b1b (Craft inverte Cosmos)
-     Linear Darker  — chrome #09090a (inverte più a fondo → il fix serve di più)
-     Linear Lighter — stessa situazione DENTRO il main pane: lì il canvas è
-                      #121213 e --background-secondary resta il #09090a globale
+     Linear Lighter — `.linear`, chrome #09090a (inverte più a fondo → serve di più)
+     Linear Darker  — `.linear-darker`, stessa situazione DENTRO il main pane:
+                      lì il canvas è #121213 e --background-secondary resta il
+                      #09090a globale
    ⚠️ Quando aggiungi una palette al select, chiediti se la sua secondary è più
    scura del canvas: se sì va aggiunta qui, altrimenti la riga attiva annerisce.
    L'altro modo di sbagliare è portare secondary AL valore del canvas dentro uno
@@ -641,7 +642,7 @@ body.craft-nav-toggle .nav-folder-title:not([data-path*="/"]) > .nav-folder-titl
    body.realcraft (una classe in più della regola base → vince), nessun
    !important (budget cosmos-tweaks già a 2/2). Solo con quelle palette attive.
    ========================================================================== */
-body:is(.realcraft, .linear, .linear-lighter).active-line-block .view-content > .markdown-source-view .cm-line.cm-active:not(.cm-gutterElement, .HyperMD-callout, .HyperMD-codeblock-bg, .HyperMD-quote)::before {
+body:is(.realcraft, .linear, .linear-darker).active-line-block .view-content > .markdown-source-view .cm-line.cm-active:not(.cm-gutterElement, .HyperMD-callout, .HyperMD-codeblock-bg, .HyperMD-quote)::before {
   background: var(--background-primary-alt);
 }
 

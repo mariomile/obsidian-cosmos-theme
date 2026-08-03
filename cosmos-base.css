@@ -689,10 +689,10 @@ settings:
 				value: perplexity
 			-
 				label: Linear Darker
-				value: linear
+				value: linear-darker
 			-
 				label: Linear Lighter
-				value: linear-lighter
+				value: linear
 	-
 		id: element-style
 		title: Personality

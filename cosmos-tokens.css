@@ -258,7 +258,12 @@ body.perplexity.theme-dark:not(.layout-baseline):not(.cosmos-light) {
 }
 
 /* --------------------------------------------------------------------------
-   § LINEAR (Palette option) — campionato pixel dall'app Linear (dark).
+   § LINEAR LIGHTER (Palette option, valore `linear`) — campionato pixel
+   dall'app Linear (dark). "Lighter" perché nel complesso è la più CHIARA delle
+   due: superficie uniforme #121213 ovunque. La sorella § LINEAR DARKER usa gli
+   stessi colori ma tiene la cornice a #09090a, quindi risulta più scura anche
+   se il suo pannello centrale è chiaro. Il valore resta `linear` (mai
+   rinominato: cambiargli significato romperebbe le impostazioni salvate).
    Neutro quasi puro con cast blu di 1-2 punti sul canale B (#121213, #232325):
    NON warm come Perplexity, NON neutro assoluto come Craft.
 
@@ -309,10 +314,12 @@ body.linear.theme-dark:not(.layout-baseline):not(.cosmos-light) {
 }
 
 /* --------------------------------------------------------------------------
-   § LINEAR LIGHTER (Palette option) — stessi colori campionati, struttura
-   INVERTITA rispetto a "Linear Darker": qui il main pane emerge CHIARO su un
-   fondo scuro uniforme, com'è davvero Linear (canvas 76.3% dei pixel, chrome
-   19.9%). Darker resta la variante a superficie uniforme.
+   § LINEAR DARKER (Palette option, valore `linear-darker`) — stessi colori
+   campionati, struttura INVERTITA rispetto a "Linear Lighter": qui il main pane
+   emerge CHIARO su un fondo scuro, com'è davvero Linear (canvas 76.3% dei
+   pixel, chrome 19.9%). Si chiama "Darker" perché nel complesso è la più scura
+   delle due — la cornice sta a #09090a — anche se il pannello centrale è
+   chiaro; "Lighter" è quella a superficie uniforme #121213.
 
    COME, ed è il punto: NON si dipinge la cornice, si SCHIARISCE il main pane.
    Cosmos dipinge tutta l'app con --background-primary; qui quel token vale
@@ -333,7 +340,7 @@ body.linear.theme-dark:not(.layout-baseline):not(.cosmos-light) {
    dentro un pannello chiaro. Verificato scandendo TUTTI i discendenti del main
    pane: con queste tre righe, zero elementi scuri residui.
    -------------------------------------------------------------------------- */
-body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light) {
+body.linear-darker.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   /* Il fondo dell'app = la chrome di Linear. Cosmos lo dipinge ovunque. */
   --cosmos-surface-0: #09090a;   /* fondo app — sidebar, ribbon, angolo semafori */
   --cosmos-surface-1: #09090a;   /* allineato: Cosmos non lo consuma per la chrome */
@@ -349,7 +356,7 @@ body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light) {
 }
 
 /* Il main pane torna canvas: base, derivati e fill dell'isola. */
-body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
+body.linear-darker.theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root {
   --background-primary:       #121213;
   --file-header-background:   #121213;   /* derivato: vedi ⚠️ sopra */
@@ -360,7 +367,7 @@ body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
      secondary più scuro del canvas, e il fix § PALETTE INVERTITE di
      cosmos-tweaks.css porta la riga su --background-primary-alt (#1c1c1d). */
 }
-body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
+body.linear-darker.theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .workspace-tab-container {
   background-color: var(--background-primary);
 }
@@ -370,7 +377,7 @@ body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
    dichiarazione locale, non quella ereditata dallo scope .mod-root. Risultato:
    header scuro dentro un pannello chiaro, ma SOLO sulla leaf attiva e solo
    quando la finestra è a fuoco — per questo sembrava a intermittenza. */
-body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
+body.linear-darker.theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .view-header {
   background-color: var(--background-primary);
 }
