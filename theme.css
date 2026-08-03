@@ -3842,6 +3842,21 @@ body.layout-notion.theme-light.cupertino-light {
   display: none;                  /* Chromium (Obsidian) */
 }
 
+/* Tab pinnati raggruppati a sinistra (comportamento Chrome). Nativo Obsidian
+   pinna solo concettualmente (icona pin al posto della ✕) senza riordinare —
+   qui basta il flexbox: il container è già display:flex, quindi `order`
+   sposta l'header senza toccare il DOM/lo stato del tab. Nessuna classe sta
+   sull'header stesso per il pin, solo sull'icona di stato dentro — da qui
+   `:has()`. Tra loro i pinnati restano nell'ordine sorgente (spec flexbox:
+   stesso `order` → ordine DOM), coerente col comportamento Chrome.
+   NOTA: duplicato in vault .obsidian/snippets/marioverse-tabs.css (sorgente
+   canonica) — qui perché sync-snippets.sh rigenererebbe questo file dallo
+   snippet, che ha min/max-width in px letterali (drift pre-esistente,
+   non toccato) invece dei token --cosmos-tab-min/max già in bake qui sotto. */
+.workspace-split.mod-root .workspace-tab-header:has(.workspace-tab-header-status-icon.mod-pinned) {
+  order: -1;
+}
+
 
 /* ===== CRAFT TABS (gated :not(.layout-baseline)) ===== */
 /* ==========================================================================
