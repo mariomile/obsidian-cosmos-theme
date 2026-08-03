@@ -1,11 +1,38 @@
 #!/usr/bin/env bash
+# ⛔ RITIRATO — NON ESEGUIRE. Vedi il blocco di guardia sotto.
+#
 # Re-sync Cosmos layers from local marioverse-* snippets,
 # applying Cosmos gating transforms, then rebuild theme.css.
 #   craft/darker → :not(.layout-baseline)  (off in Standard flavour)
 #   darker       → :not(.cosmos-light)      (off in "Superfici chiare" / Cupertino Light)
-# Run after editing the snippets in the vault. Read-only on the vault.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
+
+# --- Guardia (2026-08-03) ---------------------------------------------------
+# cosmos-layer.css e cosmos-islands.css hanno SUPERATO gli snippet del vault
+# con la tokenizzazione del 2026-07-10. Da allora il repo è la sorgente di
+# verità e questo script è una regressione, non una sincronizzazione.
+#
+# Misurato il 2026-08-03, rieseguendo la trasformazione sugli snippet di oggi:
+#   · reintroduce 3 durate ms raw   (ceiling: 0)  → contract.sh fallisce
+#   · reintroduce 4 hex raw          (ceiling: 0)  → contract.sh fallisce
+#   · porta gli !important da 10 a 12 (ceiling: 10) → contract.sh fallisce
+#   · CANCELLA § ANGLAGE, cioè l'unica dichiarazione di --cosmos-pop-shadow
+#     che il check #9 pretende esista → elevazione delle superfici flottanti
+#     persa, e il check fallisce con base_sites=0
+#   · CANCELLA il bridge .graph-view.color-*
+#   · CANCELLA il contratto di elevazione delle card (--mv-card-rest sulla
+#     .bases-cards-item), landato in questa stessa data
+#
+# Inoltre gli snippet NON girano: appearance.json abilita solo mv-icons-boot,
+# quindi i marioverse-* sono artefatti storici congelati, non una sorgente viva.
+# reference/marioverse-{bases,craft,tabs}.css divergono già dalle copie del vault.
+#
+# Per modificare i layer: si editano DIRETTAMENTE nel repo, poi ./build.sh.
+echo "⛔ sync-snippets.sh è ritirato: il repo è la sorgente di verità dal 2026-07-10." >&2
+echo "   Rieseguirlo romperebbe il design contract e cancellerebbe § ANGLAGE." >&2
+echo "   Per modificare i layer: editali nel repo, poi ./build.sh." >&2
+exit 1
 SNIP="${1:-${OBSIDIAN_SNIPPETS_DIR:-}}"
 if [[ -z "$SNIP" || ! -d "$SNIP" ]]; then
   echo "Usage: ./sync-snippets.sh /path/to/vault/.obsidian/snippets" >&2

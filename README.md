@@ -53,7 +53,7 @@ The removed color-scheme palettes (Nord, Dracula, Flexoki, …) remain inert in 
 
 ## What's baked in
 
-The `COSMOS LAYER` at the end of `theme.css` is assembled from local `marioverse-*` snippets (historical copies in [`reference/`](reference/)) by `./sync-snippets.sh`, with Cosmos gating applied:
+The `COSMOS LAYER` at the end of `theme.css` is built from the layer sources in this repo. It *originated* as a bake of local `marioverse-*` snippets (historical copies in [`reference/`](reference/)), but since the 2026-07-10 tokenisation **the repo is the source of truth** — `sync-snippets.sh` is retired and now refuses to run, because re-syncing would reintroduce raw hex/ms values above the design-contract ceilings and delete both `§ ANGLAGE` and the card elevation contract. Edit the layer files directly, then `./build.sh`.
 
 - **Tabs behavior** — min-width + horizontal scroll for the editor tab bar.
 - **Craft tabs** — compact centered pill tab-bar (geometry only, no permanent background) + active pill (`#242424` in dark) + soft lift. Editor + sidebars. *Off in Standard.*
@@ -66,7 +66,6 @@ The `COSMOS LAYER` at the end of `theme.css` is assembled from local `marioverse
 `theme.css` = pinned [`cosmos-base.css`](cosmos-base.css) + four Cosmos layer sources. The generated file never acts as a build input, so a clean checkout is reproducible.
 
 ```bash
-./sync-snippets.sh /path/to/vault/.obsidian/snippets
 ./build.sh                      # rebuild theme.css from the layer sources only
 pnpm release:check              # rebuild twice + prove byte-for-byte stability
 ./deploy.sh /path/to/your/vault # copy theme.css + manifest.json into a vault
