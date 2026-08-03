@@ -427,12 +427,16 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
    l'aspetto della singola card. Il "sballato" quando il pane è idle è il
    render-loop JS che va stale (vedi memory obsidian-raf-starves); per un
    layout card robusto usare il plugin masonry della suite (type: masonry). */
+/* L'ombra a riposo è il contratto di elevazione, non una decorazione: senza,
+   la card è un rettangolo disegnato; con, è carta appoggiata (Craft). Il token
+   --mv-card-rest è dichiarato UNA volta sola in cosmos-tokens — stessa garanzia
+   che il check #9 impone a --cosmos-pop-shadow, qui ottenuta per costruzione. */
 .bases-view .bases-cards-item {
   position: relative;
-  border: 1px solid var(--background-modifier-border);
+  border: 1px solid var(--mv-card-border);
   border-radius: var(--mv-r-card);
   background: var(--mv-card-bg);
-  box-shadow: none;
+  box-shadow: var(--mv-card-rest);
   transition:
     border-color var(--mv-t) var(--mv-wash),
     background-color var(--mv-t) var(--mv-wash),

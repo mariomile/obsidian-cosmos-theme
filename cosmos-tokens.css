@@ -108,10 +108,44 @@ body {
   --mv-t: var(--cosmos-t-fast);                    /* = exo --mva-t (0.14s) */
 
   --mv-hairline: color-mix(in srgb, var(--text-muted) 14%, transparent);
-  --mv-card-bg: color-mix(in srgb, var(--background-primary) 92%, var(--background-secondary));
-  --mv-card-bg-hover: color-mix(in srgb, var(--background-primary) 82%, var(--background-secondary));
-  --mv-card-lift: 0 5px 16px color-mix(in srgb, var(--background-modifier-box-shadow) 18%, transparent);
   --mv-ring: color-mix(in srgb, var(--interactive-accent) 16%, transparent);
+
+  /* --- Contratto di elevazione (2026-08-03) --------------------------------
+     La card deve leggersi come CARTA APPOGGIATA, non come rettangolo con
+     contorno: gradino di superficie verso l'alto + ombra a riposo (Craft).
+
+     La formula precedente — color-mix(--background-primary 92%,
+     --background-secondary) — dava per scontato che il chrome fosse PIÙ
+     CHIARO del canvas. Su realcraft è più scuro (canvas #242424, chrome
+     #1b1b1b), quindi risolveva a 35.3 su un canvas di 36: la card AFFONDAVA
+     di un punto, e in hover di due. Stesso difetto su linear/linear-darker.
+
+     La cura è non avere l'assunzione: --cosmos-surface-2 è già dichiarato da
+     ogni palette dark, già documentato come "block / superfici elevate", e
+     sempre RELATIVO al proprio canvas — quindi l'inversione di realcraft è
+     gestita per costruzione e non può ripresentarsi.
+
+     L'inchiostro dell'ombra è --background-modifier-box-shadow di app.css,
+     che è GIÀ scheme-aware (rgba(0,0,0,.3) dark, .1 light): una formula sola,
+     due rese corrette. --cosmos-shadow-scale è il trim per palette. */
+  --cosmos-surface-card: var(--cosmos-surface-2, var(--background-primary-alt));
+  --cosmos-surface-card-hover: var(--cosmos-surface-3, var(--background-secondary-alt));
+  --cosmos-card-border: color-mix(in srgb, var(--text-muted) 12%, transparent);
+  --cosmos-shadow-ink: var(--background-modifier-box-shadow);
+  --cosmos-shadow-scale: 1;
+  --cosmos-card-rest:
+    0 1px 2px color-mix(in srgb, var(--cosmos-shadow-ink) calc(40% * var(--cosmos-shadow-scale)), transparent),
+    0 6px 16px color-mix(in srgb, var(--cosmos-shadow-ink) calc(30% * var(--cosmos-shadow-scale)), transparent);
+
+  /* API pubblica --mv-*: ora punta al contratto. I plugin la consumano con
+     fallback letterale, quindi un vault senza Cosmos non si muove di un pixel.
+     Il lift passa da 18% a 45% dell'inchiostro e da 5/16 a 8/24 di geometria:
+     l'hover deve essere un gradino SOPRA il riposo, non un suo re-render. */
+  --mv-card-bg: var(--cosmos-surface-card);
+  --mv-card-bg-hover: var(--cosmos-surface-card-hover);
+  --mv-card-border: var(--cosmos-card-border);
+  --mv-card-rest: var(--cosmos-card-rest);
+  --mv-card-lift: 0 8px 24px color-mix(in srgb, var(--cosmos-shadow-ink) calc(45% * var(--cosmos-shadow-scale)), transparent);
 
   /* Label recipe (eyebrow small-caps muto) — usata da header, card e group */
   --mv-label-color: var(--text-muted);
@@ -178,6 +212,21 @@ body.theme-light {
   --cosmos-pop-shadow:
     rgba(0, 0, 0, 0.08) 0px 12px 32px,
     rgba(0, 0, 0, 0.04) 0px 2px 8px;
+
+  /* Elevazione in LIGHT — la decisione portante del contratto.
+     In dark l'elevazione è "superficie più chiara + ombra tenue". Su un canvas
+     bianco non puoi alzare il riempimento, quindi il gradino lo fa TUTTO
+     l'ombra: scale 1.8 sull'inchiostro light (α .1) → ~.072/.054, cioè
+     l'ombra a riposo di Craft. Se la card legge piatta qui si alza QUESTO
+     numero, non si tocca la formula.
+     Il fill va dichiarato esplicitamente: il fallback --background-primary-alt
+     risolverebbe a #f7f7f7, un blocco tinto alla Notion, non carta bianca.
+     (Ridipingere il canvas light di grigio per avere card bianche è il vero
+     modello Craft light, ed è un cantiere a parte: fuori scope.) */
+  --cosmos-surface-card: var(--background-primary);
+  --cosmos-surface-card-hover: color-mix(in srgb, var(--background-primary), black 3%);
+  --cosmos-card-border: color-mix(in srgb, var(--text-muted) 20%, transparent);
+  --cosmos-shadow-scale: 1.8;
 }
 
 /* --------------------------------------------------------------------------
@@ -200,6 +249,14 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --cosmos-surface-1: color-mix(in srgb, var(--cosmos-surface-0), white 1.2766%);
   --cosmos-surface-2: color-mix(in srgb, var(--cosmos-surface-0), white 2.5532%);
   --cosmos-surface-3: color-mix(in srgb, var(--cosmos-surface-0), white 4.2553%);
+
+  /* Pioli dedicati alla card. Qui NON si riusa surface-2: su questa palette è
+     anche --menu-background, e spostarlo sposterebbe ogni menu del tema.
+     Derivati dallo stesso seed, così la dottrina "un solo seed" regge:
+       card        #1c1c1c  rgb(28)  (+8  → 3.4043%)
+       card hover  #212121  rgb(33)  (+13 → 5.5319%) */
+  --cosmos-surface-card: color-mix(in srgb, var(--cosmos-surface-0), white 3.4043%);
+  --cosmos-surface-card-hover: color-mix(in srgb, var(--cosmos-surface-0), white 5.5319%);
 }
 
 /* --------------------------------------------------------------------------
@@ -219,6 +276,14 @@ body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   --cosmos-surface-1: #1b1b1b;   /* sidebar + pannelli (--background-secondary) */
   --cosmos-surface-2: #2d2d2d;   /* block / superfici elevate (--background-primary-alt) — pop sopra il canvas */
   --cosmos-surface-3: #333333;   /* card / nav attivo  (--background-secondary-alt) */
+
+  /* Piolo card ESPLICITO. Obbligatorio, non ridondante: body porta anche
+     .cupertino-dark, il cui blocco ha specificità identica (0,4,1) e dichiara
+     i propri pioli — senza questa riga il suo valore tracimerebbe qui e
+     realcraft perderebbe il #2d2d2d campionato dal vero Craft. Ogni palette
+     dichiara la sua scala: è il contratto. */
+  --cosmos-surface-card: var(--cosmos-surface-2);
+  --cosmos-surface-card-hover: var(--cosmos-surface-3);
 
   /* Bordi — Craft: hairline neutro appena percettibile. */
   --background-modifier-border:       #303030;
@@ -255,6 +320,13 @@ body.perplexity.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   --text-normal: #eae7e2;
   --text-muted:  #9c9893;
   --text-faint:  #6a6660;
+
+  /* Piolo card esplicito (vedi realcraft: .cupertino-dark tracima altrimenti). */
+  --cosmos-surface-card: var(--cosmos-surface-2);
+  --cosmos-surface-card-hover: var(--cosmos-surface-3);
+
+  /* Perplexity comunica con superfici sottili: l'ombra accompagna, non annuncia. */
+  --cosmos-shadow-scale: 0.9;
 }
 
 /* --------------------------------------------------------------------------
@@ -311,6 +383,13 @@ body.linear.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   --text-normal: #e3e4e6;
   --text-muted:  #959597;
   --text-faint:  #666668;
+
+  /* Piolo card esplicito (vedi realcraft: .cupertino-dark tracima altrimenti). */
+  --cosmos-surface-card: var(--cosmos-surface-2);
+  --cosmos-surface-card-hover: var(--cosmos-surface-3);
+
+  /* Linear comunica con la superficie, non con l'inchiostro: ombra quasi assente. */
+  --cosmos-shadow-scale: 0.6;
 }
 
 /* --------------------------------------------------------------------------
@@ -353,6 +432,13 @@ body.linear-darker.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   --text-normal: #e3e4e6;
   --text-muted:  #959597;
   --text-faint:  #666668;
+
+  /* Piolo card esplicito (vedi realcraft: .cupertino-dark tracima altrimenti). */
+  --cosmos-surface-card: var(--cosmos-surface-2);
+  --cosmos-surface-card-hover: var(--cosmos-surface-3);
+
+  /* Come Linear Lighter: la superficie fa il lavoro, l'ombra accenna soltanto. */
+  --cosmos-shadow-scale: 0.6;
 }
 
 /* Il main pane torna canvas: base, derivati e fill dell'isola. */
@@ -432,6 +518,13 @@ body.layout-notion.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-l
   --text-normal: #d4d4d4;        /* Notion dark ≈ rgba(255,255,255,.81) */
   --text-muted:  #9b9b9b;
   --text-faint:  #6f6f6f;
+
+  /* Piolo card esplicito (vedi realcraft: .cupertino-dark tracima altrimenti). */
+  --cosmos-surface-card: var(--cosmos-surface-2);
+  --cosmos-surface-card-hover: var(--cosmos-surface-3);
+
+  /* Notion è una superficie di carta: il blocco stacca col colore, non con l'ombra. */
+  --cosmos-shadow-scale: 0.8;
 }
 
 body.layout-notion.theme-light.cupertino-light {
@@ -459,6 +552,15 @@ body.layout-notion.theme-light.cupertino-light {
   --text-normal: #37352f;        /* warm near-black di Notion */
   --text-muted:  #787774;
   --text-faint:  #9b9a97;
+
+  /* Elevazione light — questo blocco (0,3,1) batte il body.theme-light (0,1,1),
+     quindi i token della card vanno ridichiarati qui o Notion light resterebbe
+     sui default dark. Card bianca su canvas bianco: stacca con l'hairline
+     (la firma di Notion) e un'ombra minima, non con un riempimento tinto. */
+  --cosmos-surface-card: var(--background-primary);
+  --cosmos-surface-card-hover: #f7f6f3;
+  --cosmos-card-border: var(--background-modifier-border);
+  --cosmos-shadow-scale: 0.5;
 }
 
 /* --------------------------------------------------------------------------
