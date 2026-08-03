@@ -3681,6 +3681,16 @@ body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .workspace-tab-container {
   background-color: var(--background-primary);
 }
+/* L'header della nota va DIPINTO, non lasciato al token. Baseline ha
+   `.is-focused .workspace-leaf.mod-active .view-header` che RI-DICHIARA
+   --file-header-background sull'elemento stesso: su quell'elemento vince la
+   dichiarazione locale, non quella ereditata dallo scope .mod-root. Risultato:
+   header scuro dentro un pannello chiaro, ma SOLO sulla leaf attiva e solo
+   quando la finestra è a fuoco — per questo sembrava a intermittenza. */
+body.linear-lighter.theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .workspace-split.mod-root .view-header {
+  background-color: var(--background-primary);
+}
 
 /* --------------------------------------------------------------------------
    § NOTION (Cosmos Flavour: layout-notion) — flavour COMPLETO, non solo palette.
