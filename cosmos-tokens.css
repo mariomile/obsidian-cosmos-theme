@@ -141,8 +141,16 @@ body {
      è l'unico che ha due misure — la pista sta sulla riga, il pill sta dentro
      la pista — quindi il pill si DERIVA sottraendo l'inset da entrambi i lati.
      Fissare 28px per tutti e due, come si era fatto prima, rende il segmentato
-     6px più alto di ogni suo vicino: era esattamente il difetto da chiudere. */
-  --mv-control-h: 30px;              /* altezza esterna di un controllo in riga */
+     6px più alto di ogni suo vicino: era esattamente il difetto da chiudere.
+
+     2026-08-04 (rettifica, stesso giorno): il primo passaggio aveva fissato
+     30px come bersaglio, ma i trigger a icona di Masonry (folder/tag/sort —
+     .masonry-menu-button--icon, .masonry-select) restano letterali a 36px e
+     NON leggono questo token: non erano mai stati migrati. Il segmentato
+     risultava quindi 6px più BASSO dei suoi vicini nella stessa toolbar,
+     l'inverso del difetto originale. Bersaglio corretto: 36px, il valore già
+     in uso — non 30, che nessun controllo reale nel vault rispettava. */
+  --mv-control-h: 36px;              /* altezza esterna di un controllo in riga */
   --mv-control-inset: 3px;           /* padding della pista di un segmentato */
   --mv-control-item-h: calc(var(--mv-control-h) - 2 * var(--mv-control-inset));
   --mv-control-h-touch: var(--cosmos-touch-min);   /* su .is-mobile */

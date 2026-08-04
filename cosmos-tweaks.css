@@ -702,7 +702,16 @@ body:is(.realcraft, .linear, .linear-darker).active-line-block .view-content > .
    contro Baseline.
 
    La scala desktop (base, pre-marker: 12/13/14/16/18px UI + 24px editor)
-   resta INTATTA — su desktop nessuna delle due regole matcha.
+   resta INTATTA — su desktop nessuna delle due regole QUI SOTTO (mobile)
+   matcha. ERRATO invece pensare che il --font-text-size a 24px del blocco
+   SCALA DIMENSIONI sopra vinca sul desktop: verificato live su QUESTO
+   vault (non test-vault) il 2026-08-04 — Obsidian scrive comunque un
+   inline style --font-text-size sul <body> rispecchiando Impostazioni →
+   Aspetto → Dimensione carattere, e quello vince sempre senza !important.
+   Oggi è a 16px (default mai toccato): il corpo nota rende a 16px, non
+   24px. La riga "resta INTATTA" sopra si riferisce solo al fatto che
+   QUESTA regola mobile-gated non interferisce sul desktop — non implica
+   che il literal 24px del blocco desktop sia effettivamente in vigore.
 
    Verificato live in test-vault via dev:css (class-injection): --font-ui-larger
    risolve pulito a base+modifier. --font-ui-smaller/small/medium/large risultano

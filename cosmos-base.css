@@ -3295,14 +3295,25 @@ body.theme-dark, body.theme-light {
 
 /* ===== SCALA DIMENSIONI — 12 / 13 (base) / 14 / 16 / 18 / 24px =====
    La UI resta compatta (12–18px); il corpo nota/editor — la più grande,
-   la superficie più letta — prende il top della scala a 24px. */
+   la superficie più letta — prende il top della scala a 24px, IN TEORIA.
+   2026-08-04: --font-ui-* torna a leggere --font-ui-modifier via calc()
+   (era literal fisso, disconnesso dallo slider "Interface font size").
+   --font-text-size resta literal — niente slider Style Settings per
+   l'editor: verificato live su QUESTO vault (non un test-vault) che
+   Obsidian scrive sempre un inline style --font-text-size sul <body>
+   rispecchiando Impostazioni → Aspetto → Dimensione carattere, e un
+   inline style vince su qualunque regola CSS senza !important. Il
+   literal sotto è quindi decorativo finché quel setting resta diverso da
+   24 — oggi è a 16 (default mai toccato), quindi il corpo nota rende
+   davvero a 16px, non 24px. Per cambiarlo serve Impostazioni → Aspetto →
+   Dimensione carattere, non questo file. */
 body.theme-dark, body.theme-light {
-  --font-ui-smaller: 12px;
-  --font-ui-small: 13px;   /* base */
-  --font-ui-medium: 14px;
-  --font-ui-large: 16px;
-  --font-ui-larger: 18px;
-  --font-text-size: 24px;  /* corpo editor/nota */
+  --font-ui-smaller: calc(12px + var(--font-ui-modifier));
+  --font-ui-small: calc(13px + var(--font-ui-modifier));   /* base */
+  --font-ui-medium: calc(14px + var(--font-ui-modifier));
+  --font-ui-large: calc(16px + var(--font-ui-modifier));
+  --font-ui-larger: calc(18px + var(--font-ui-modifier));
+  --font-text-size: 24px;  /* corpo editor/nota — vedi nota sopra: scavalcato dall'inline di Obsidian */
 }
 
 /* ===== ICONE — stroke NORMALE (2026-07-10) =====

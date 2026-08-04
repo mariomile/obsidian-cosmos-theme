@@ -3295,14 +3295,25 @@ body.theme-dark, body.theme-light {
 
 /* ===== SCALA DIMENSIONI — 12 / 13 (base) / 14 / 16 / 18 / 24px =====
    La UI resta compatta (12–18px); il corpo nota/editor — la più grande,
-   la superficie più letta — prende il top della scala a 24px. */
+   la superficie più letta — prende il top della scala a 24px, IN TEORIA.
+   2026-08-04: --font-ui-* torna a leggere --font-ui-modifier via calc()
+   (era literal fisso, disconnesso dallo slider "Interface font size").
+   --font-text-size resta literal — niente slider Style Settings per
+   l'editor: verificato live su QUESTO vault (non un test-vault) che
+   Obsidian scrive sempre un inline style --font-text-size sul <body>
+   rispecchiando Impostazioni → Aspetto → Dimensione carattere, e un
+   inline style vince su qualunque regola CSS senza !important. Il
+   literal sotto è quindi decorativo finché quel setting resta diverso da
+   24 — oggi è a 16 (default mai toccato), quindi il corpo nota rende
+   davvero a 16px, non 24px. Per cambiarlo serve Impostazioni → Aspetto →
+   Dimensione carattere, non questo file. */
 body.theme-dark, body.theme-light {
-  --font-ui-smaller: 12px;
-  --font-ui-small: 13px;   /* base */
-  --font-ui-medium: 14px;
-  --font-ui-large: 16px;
-  --font-ui-larger: 18px;
-  --font-text-size: 24px;  /* corpo editor/nota */
+  --font-ui-smaller: calc(12px + var(--font-ui-modifier));
+  --font-ui-small: calc(13px + var(--font-ui-modifier));   /* base */
+  --font-ui-medium: calc(14px + var(--font-ui-modifier));
+  --font-ui-large: calc(16px + var(--font-ui-modifier));
+  --font-ui-larger: calc(18px + var(--font-ui-modifier));
+  --font-text-size: 24px;  /* corpo editor/nota — vedi nota sopra: scavalcato dall'inline di Obsidian */
 }
 
 /* ===== ICONE — stroke NORMALE (2026-07-10) =====
@@ -3478,8 +3489,16 @@ body {
      è l'unico che ha due misure — la pista sta sulla riga, il pill sta dentro
      la pista — quindi il pill si DERIVA sottraendo l'inset da entrambi i lati.
      Fissare 28px per tutti e due, come si era fatto prima, rende il segmentato
-     6px più alto di ogni suo vicino: era esattamente il difetto da chiudere. */
-  --mv-control-h: 30px;              /* altezza esterna di un controllo in riga */
+     6px più alto di ogni suo vicino: era esattamente il difetto da chiudere.
+
+     2026-08-04 (rettifica, stesso giorno): il primo passaggio aveva fissato
+     30px come bersaglio, ma i trigger a icona di Masonry (folder/tag/sort —
+     .masonry-menu-button--icon, .masonry-select) restano letterali a 36px e
+     NON leggono questo token: non erano mai stati migrati. Il segmentato
+     risultava quindi 6px più BASSO dei suoi vicini nella stessa toolbar,
+     l'inverso del difetto originale. Bersaglio corretto: 36px, il valore già
+     in uso — non 30, che nessun controllo reale nel vault rispettava. */
+  --mv-control-h: 36px;              /* altezza esterna di un controllo in riga */
   --mv-control-inset: 3px;           /* padding della pista di un segmentato */
   --mv-control-item-h: calc(var(--mv-control-h) - 2 * var(--mv-control-inset));
   --mv-control-h-touch: var(--cosmos-touch-min);   /* su .is-mobile */
@@ -5642,7 +5661,16 @@ body:is(.realcraft, .linear, .linear-darker).active-line-block .view-content > .
    contro Baseline.
 
    La scala desktop (base, pre-marker: 12/13/14/16/18px UI + 24px editor)
-   resta INTATTA — su desktop nessuna delle due regole matcha.
+   resta INTATTA — su desktop nessuna delle due regole QUI SOTTO (mobile)
+   matcha. ERRATO invece pensare che il --font-text-size a 24px del blocco
+   SCALA DIMENSIONI sopra vinca sul desktop: verificato live su QUESTO
+   vault (non test-vault) il 2026-08-04 — Obsidian scrive comunque un
+   inline style --font-text-size sul <body> rispecchiando Impostazioni →
+   Aspetto → Dimensione carattere, e quello vince sempre senza !important.
+   Oggi è a 16px (default mai toccato): il corpo nota rende a 16px, non
+   24px. La riga "resta INTATTA" sopra si riferisce solo al fatto che
+   QUESTA regola mobile-gated non interferisce sul desktop — non implica
+   che il literal 24px del blocco desktop sia effettivamente in vigore.
 
    Verificato live in test-vault via dev:css (class-injection): --font-ui-larger
    risolve pulito a base+modifier. --font-ui-smaller/small/medium/large risultano
