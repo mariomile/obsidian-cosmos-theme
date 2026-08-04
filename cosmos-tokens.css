@@ -407,6 +407,20 @@ body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light)
   --file-header-background: #222222;
 }
 
+/* Trappola 2, e ridichiarare il token NON basta: Baseline ha
+   `.is-focused .workspace-leaf.mod-active .view-header` che ri-dichiara
+   --file-header-background SULL'ELEMENTO STESSO. Su quell'elemento la
+   dichiarazione locale batte quella ereditata dallo scope .mod-root, e
+   l'header torna del colore della cornice dentro un pannello chiaro — ma solo
+   sulla leaf attiva e solo a finestra a fuoco, quindi la barra sembra andare e
+   venire invece di essere semplicemente sbagliata.
+   L'header quindi va DIPINTO, non lasciato al token. Vale per ogni palette che
+   usa lo Scoped Token Override: chi ne aggiunge una deve aggiungersi qui. */
+body:is(.realcraft, .linear-darker).theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .workspace-split.mod-root .view-header {
+  background-color: var(--background-primary);
+}
+
 /* --------------------------------------------------------------------------
    § PERPLEXITY (Palette option) — campionato pixel dall'app Perplexity.
    WARM-dark (R>G>B di ~2-3, NON neutro come Craft): canvas #171615, chrome
@@ -567,16 +581,10 @@ body.linear-darker.theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .workspace-tab-container {
   background-color: var(--background-primary);
 }
-/* L'header della nota va DIPINTO, non lasciato al token. Baseline ha
-   `.is-focused .workspace-leaf.mod-active .view-header` che RI-DICHIARA
-   --file-header-background sull'elemento stesso: su quell'elemento vince la
-   dichiarazione locale, non quella ereditata dallo scope .mod-root. Risultato:
-   header scuro dentro un pannello chiaro, ma SOLO sulla leaf attiva e solo
-   quando la finestra è a fuoco — per questo sembrava a intermittenza. */
-body.linear-darker.theme-dark:not(.layout-baseline):not(.cosmos-light)
-  .workspace-split.mod-root .view-header {
-  background-color: var(--background-primary);
-}
+/* L'header della nota è dipinto insieme a quello di realcraft, nel blocco
+   § REAL CRAFT sopra: è lo stesso difetto, e tenerlo in un posto solo evita
+   che la prossima palette venga corretta e questa no — che è esattamente
+   com'era finita la prima volta. */
 
 /* --------------------------------------------------------------------------
    § NOTION (Cosmos Flavour: layout-notion) — flavour COMPLETO, non solo palette.
