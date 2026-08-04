@@ -3653,10 +3653,14 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
 
 /* --------------------------------------------------------------------------
    § REALCRAFT (toggle: realcraft) — superfici sui valori REALI di Craft.
-   Campionati pixel da Craft "Newcraft": editor #242424, chrome (sidebar/
-   pannelli) #1b1b1b — più SCURO dell'editor: Craft INVERTE il modello Cosmos
-   (dove il chrome è elevato/più chiaro) — e card/superfici elevate #282828 che
-   staccano verso l'alto. Neutro puro (R=G=B), come Craft. Isolato: nessun
+   Ricampionati pixel da uno screenshot di Craft il 2026-08-04, che ha corretto
+   tre valori su quattro: editor #222222 (era #242424), chrome #1b1b1b (esatto
+   già prima), superfici elevate #282828 (era #2d2d2d). Il chrome è più SCURO
+   dell'editor: Craft INVERTE il modello Cosmos, dove il chrome è elevato.
+   Nota misurata e NON replicata: in Craft il pannello destro sta a #1e1e1e,
+   tre punti sopra la sidebar sinistra. Cosmos li mappa entrambi su surface-1
+   perché Obsidian non distingue i due lati; la differenza è sotto la soglia
+   percettiva e non vale un token in più. Neutro puro (R=G=B), come Craft. Isolato: nessun
    effetto senza il toggle; scheme/temi attuali invariati. Specificità (0,4,1) =
    ai blocchi scheme, appesa dopo → vince per ordine; i --background-* pinnati
    battono comunque il mapping globale (bassa specificità) qualunque scheme.
@@ -3664,10 +3668,10 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
 body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   /* Superfici — campionate da Craft. Chrome più SCURO dell'editor (Craft
      inverte il modello Cosmos); block/card che STACCANO più chiari del canvas. */
-  --cosmos-surface-0: #242424;   /* editor / canvas    (--background-primary) */
+  --cosmos-surface-0: #222222;   /* editor / canvas    (--background-primary) */
   --cosmos-surface-1: #1b1b1b;   /* sidebar + pannelli (--background-secondary) */
-  --cosmos-surface-2: #2d2d2d;   /* block / superfici elevate (--background-primary-alt) — pop sopra il canvas */
-  --cosmos-surface-3: #333333;   /* card / nav attivo  (--background-secondary-alt) */
+  --cosmos-surface-2: #282828;   /* block / superfici elevate (--background-primary-alt) — pop sopra il canvas */
+  --cosmos-surface-3: #2e2e2e;   /* card hover / nav attivo (--background-secondary-alt) */
 
   /* Piolo card ESPLICITO. Obbligatorio, non ridondante: body porta anche
      .cupertino-dark, il cui blocco ha specificità identica (0,4,1) e dichiara
@@ -3681,10 +3685,19 @@ body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   --background-modifier-border:       #303030;
   --background-modifier-border-hover:  #3a3a3a;
 
-  /* Testo — neutro chiaro come Craft (nessun cast). */
-  --text-normal: #e8e8e8;
-  --text-muted:  #a0a0a0;
+  /* Testo — campionato dai pixel di Craft (2026-08-04). Craft DIFFERENZIA i
+     titoli dal corpo: il corpo sta a #d6d6d6, i titoli salgono a #f4f4f4.
+     Cosmos aveva un solo valore a #e8e8e8, cioè un corpo troppo brillante e
+     titoli troppo spenti — la gerarchia si perdeva in mezzo. */
+  --text-normal: #d6d6d6;
+  --text-muted:  #a5a5a5;
   --text-faint:  #6e6e6e;
+  --h1-color: #f4f4f4;
+  --h2-color: #f4f4f4;
+  --h3-color: #f4f4f4;
+  --h4-color: #f4f4f4;
+  --h5-color: #f4f4f4;
+  --h6-color: #f4f4f4;
 
   /* Accent — lasciato quello di sistema/vault (niente tasti blu). */
 }
