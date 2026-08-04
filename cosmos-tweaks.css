@@ -285,30 +285,30 @@ body.theme-dark, body.theme-light {
 }
 
 /* ==========================================================================
-   § RAGGI GENEROSI (Tier 3, toggle Style Settings: cosmos-generous-radii)
+   § RAGGI GENEROSI (select Style Settings: cosmos-radius-scale → radius-generous)
    --------------------------------------------------------------------------
    Craft arrotonda generosamente i contenitori. Alziamo la SCALA base dei
    raggi (non un modifier globale: così i chip piccoli non diventano bolle) —
    pill/card/pannelli/modali si ammorbidiscono. Composabile con lo slider
    Roundness (--radius-modifier resta il fattore). island/pill derivano da
-   --tab-radius/--radius-s → scalano di conseguenza. Default OFF. ========================================================================== */
-/* Ribasato 2026-08-03: la scala New Craft (10/14/18/24) è ora il DEFAULT del
-   flavour layout-cupertino, quindi questo toggle non è più "più rotondo di
-   Baseline" ma "più rotondo di Craft" — che è ciò che si aspetta chi lo
-   accende. Coppia scheme per pareggiare la specificità (0,2,1) del blocco
-   New Craft in cosmos-tokens: a parità vince questo, perché cosmos-tweaks
-   è concatenato dopo.
-   --tab-radius rimosso: era riga morta dal 2026-07. cosmos-base fissa
-   body.input-cupertino{--tab-radius: var(--radius-s) !important}, che non
-   si può battere da qui — misurato, il raggio dei tab risolveva a --radius-s
-   e mai a questi 10px. Ora il tab segue --radius-s per costruzione. */
-body.cosmos-generous-radii.theme-dark,
-body.cosmos-generous-radii.theme-light {
-  --radius-s: calc(14px * var(--radius-modifier));
-  --radius-m: calc(18px * var(--radius-modifier));
+   --tab-radius/--radius-s → scalano di conseguenza, ed è ciò che li tiene
+   uguali fra loro. ========================================================================== */
+/* Opzione "Classic generous" del select `cosmos-radius-scale` (2026-08-04): la
+   scala Classic, più larga. Valori invariati dal toggle booleano che sostituisce,
+   inclusa la scelta di NON toccare --mv-r-card: le card restano a 11 in entrambe
+   le versioni Classic, ed è la ragione per cui questa opzione si legge "più
+   morbida" senza diventare pronunciata.
+   --tab-radius rimosso rispetto al vecchio toggle: era riga morta dal 2026-07.
+   cosmos-base fissa body.input-cupertino{--tab-radius: var(--radius-s)
+   !important}, che non si può battere da qui — misurato, il raggio dei tab
+   risolveva a --radius-s e mai a quei 10px. Ora il tab segue --radius-s per
+   costruzione, che è anche ciò che lo tiene uguale al pannello. */
+body.radius-generous.theme-dark,
+body.radius-generous.theme-light {
+  --radius-s: calc(12px * var(--radius-modifier));
+  --radius-m: calc(16px * var(--radius-modifier));
   --radius-l: calc(24px * var(--radius-modifier));
   --radius-xl: calc(32px * var(--radius-modifier));
-  --mv-r-card: 18px;
 }
 
 /* ==========================================================================

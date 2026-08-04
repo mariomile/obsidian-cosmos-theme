@@ -42,10 +42,13 @@ body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-
 body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-left-split .workspace-tab-container {
   margin: 0 var(--island-gap) var(--island-gap);
-  /* --radius-l, non --tab-radius: l'isola è un PANNELLO flottante, e in Craft
-     i pannelli stanno a 16-18 mentre i tab stanno a 10. Derivare dal raggio
-     dei tab li teneva legati alla scala sbagliata. */
-  border-radius: var(--radius-l);
+  /* --tab-radius, lo STESSO token del .workspace-tab-container del pannello
+     centrale. Provato --radius-l il 2026-08-03 con l'argomento "l'isola è un
+     pannello, non un tab": corretto in astratto, sbagliato qui. Misurato, dava
+     pannello principale 10px contro isola 18px — due superfici adiacenti con
+     angoli diversi, che si legge come un errore di allineamento. Fra la
+     correttezza del ruolo e la coerenza fra vicini, vince la coerenza. */
+  border-radius: var(--tab-radius);
   outline: var(--tab-outline-width) solid var(--tab-outline-color);
   overflow: hidden;   /* clippa il contenuto della leaf agli angoli */
   box-shadow: var(--cosmos-island-shadow);

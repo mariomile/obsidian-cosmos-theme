@@ -613,33 +613,25 @@ body.layout-notion.theme-light.cupertino-light {
 }
 
 /* --------------------------------------------------------------------------
-   § GEOMETRIA NEW CRAFT — la scala raggi del flavour layout-cupertino.
-   Craft arrotonda più di Obsidian: bottoni ~10, card 14-16, pannelli
-   flottanti 16-18, sheet ~24, pill full-round. La scala base è 8/12/20/28.
+   § GEOMETRIA NEW CRAFT — opzione "New Craft" del select `cosmos-radius-scale`.
+   Craft arrotonda più di Obsidian: bottoni ~10, card 14-16, pannelli 16-18,
+   sheet ~24, pill full-round.
 
-   Perché sul FLAVOUR e non sulla scala base: layout-baseline ("Standard") ha
-   un contratto esplicito di Baseline pulito, layout-notion squadra
-   deliberatamente a 3/5/8/12, e Fusion/Border sono altri look. Solo
-   layout-cupertino rivendica Craft.
+   Questa scala è OPT-IN, non il default del flavour. Provata come default il
+   2026-08-03 e rifiutata: le card a 14 (contro gli 11 storici) leggono troppo
+   pronunciate su una griglia fitta. La scala di riferimento resta Classic; chi
+   vuole i valori di Craft la sceglie. La scelta vive in un select a tre voci
+   invece che in un toggle booleano, perché "quanto arrotondiamo" ha più di due
+   risposte sensate e un booleano costringeva a inventarne il significato.
 
-   Perché NON promuovendo cosmos-generous-radii a default: quello è la via di
-   fuga dell'UTENTE, ortogonale al flavour. Promuoverlo confonderebbe "il look
-   New Craft" con "l'utente ha chiesto più rotondo", e non lascerebbe modo di
-   andare ancora più rotondi.
+   Coppia scheme comma-joined: il check #5 blanka il blocco (la regex matcha il
+   ramo destro), quindi la geometria si scrive UNA volta sola.
 
-   Coppia scheme comma-joined: il check #5 blanka il blocco (la regex matcha
-   il ramo destro), quindi la geometria si scrive UNA volta sola — senza la
-   duplicazione dark/light del blocco Notion qui sopra.
-
-   NIENTE :not(.layout-baseline): i layout-* sono mutuamente esclusivi (stesso
-   class-select di Style Settings), e il ratchet dei gate mobile è al soffitto.
-
-   Cascata: (0,2,1) batte la scala base di cosmos-base (body, 0,1,0). Il
-   toggle generous in cosmos-tweaks pareggia la specificità e vince per
-   ordine di concatenazione (tokens → ... → tweaks), quindi resta funzionante.
+   Cascata: (0,2,1) batte la scala base di cosmos-base (body). Le tre opzioni
+   sono mutuamente esclusive per costruzione — stesso class-select.
    -------------------------------------------------------------------------- */
-body.layout-cupertino.theme-dark,
-body.layout-cupertino.theme-light {
+body.radius-newcraft.theme-dark,
+body.radius-newcraft.theme-light {
   --radius-s: calc(10px * var(--radius-modifier));    /* bottoni, input, tab, clickable-icon */
   --radius-m: calc(14px * var(--radius-modifier));    /* card, popover, superfici flottanti */
   --radius-l: calc(18px * var(--radius-modifier));    /* isole, pannelli */
@@ -652,8 +644,8 @@ body.layout-cupertino.theme-light {
 /* Phone: Craft su iPhone è più morbido (sheet a tutta larghezza, pollice).
    Gate POSITIVO .is-phone — non conta nel ratchet mobile, che pesa solo i
    :not(.is-phone)/:not(.is-mobile) escludenti. */
-body.layout-cupertino.is-phone.theme-dark,
-body.layout-cupertino.is-phone.theme-light {
+body.radius-newcraft.is-phone.theme-dark,
+body.radius-newcraft.is-phone.theme-light {
   --radius-s: calc(12px * var(--radius-modifier));
   --radius-m: calc(16px * var(--radius-modifier));
   --radius-l: calc(22px * var(--radius-modifier));

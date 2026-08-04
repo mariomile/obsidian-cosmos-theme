@@ -582,10 +582,22 @@ settings:
 		max: 1.5
 		step: 0.25
 	-
-		id: cosmos-generous-radii
-		title: Generous radii (Craft)
-		description: Wider base radii (pill/card/panels/modals) for a softer, Craft-like look. Combines with Roundness.
-		type: class-toggle
+		id: cosmos-radius-scale
+		title: Radius scale
+		description: How rounded containers are — tabs, cards, panels, modals. Classic is the long-standing Cosmos scale. Classic generous is that same scale, wider. New Craft matches Craft’s own values and rounds cards more. Combines with Roundness.
+		type: class-select
+		allowEmpty: false
+		default: radius-classic
+		options:
+			-
+				label: Classic
+				value: radius-classic
+			-
+				label: Classic generous
+				value: radius-generous
+			-
+				label: New Craft
+				value: radius-newcraft
 	-
 		id: cosmos-phone-edition
 		title: Phone Edition (native mobile)
@@ -3935,33 +3947,25 @@ body.layout-notion.theme-light.cupertino-light {
 }
 
 /* --------------------------------------------------------------------------
-   § GEOMETRIA NEW CRAFT — la scala raggi del flavour layout-cupertino.
-   Craft arrotonda più di Obsidian: bottoni ~10, card 14-16, pannelli
-   flottanti 16-18, sheet ~24, pill full-round. La scala base è 8/12/20/28.
+   § GEOMETRIA NEW CRAFT — opzione "New Craft" del select `cosmos-radius-scale`.
+   Craft arrotonda più di Obsidian: bottoni ~10, card 14-16, pannelli 16-18,
+   sheet ~24, pill full-round.
 
-   Perché sul FLAVOUR e non sulla scala base: layout-baseline ("Standard") ha
-   un contratto esplicito di Baseline pulito, layout-notion squadra
-   deliberatamente a 3/5/8/12, e Fusion/Border sono altri look. Solo
-   layout-cupertino rivendica Craft.
+   Questa scala è OPT-IN, non il default del flavour. Provata come default il
+   2026-08-03 e rifiutata: le card a 14 (contro gli 11 storici) leggono troppo
+   pronunciate su una griglia fitta. La scala di riferimento resta Classic; chi
+   vuole i valori di Craft la sceglie. La scelta vive in un select a tre voci
+   invece che in un toggle booleano, perché "quanto arrotondiamo" ha più di due
+   risposte sensate e un booleano costringeva a inventarne il significato.
 
-   Perché NON promuovendo cosmos-generous-radii a default: quello è la via di
-   fuga dell'UTENTE, ortogonale al flavour. Promuoverlo confonderebbe "il look
-   New Craft" con "l'utente ha chiesto più rotondo", e non lascerebbe modo di
-   andare ancora più rotondi.
+   Coppia scheme comma-joined: il check #5 blanka il blocco (la regex matcha il
+   ramo destro), quindi la geometria si scrive UNA volta sola.
 
-   Coppia scheme comma-joined: il check #5 blanka il blocco (la regex matcha
-   il ramo destro), quindi la geometria si scrive UNA volta sola — senza la
-   duplicazione dark/light del blocco Notion qui sopra.
-
-   NIENTE :not(.layout-baseline): i layout-* sono mutuamente esclusivi (stesso
-   class-select di Style Settings), e il ratchet dei gate mobile è al soffitto.
-
-   Cascata: (0,2,1) batte la scala base di cosmos-base (body, 0,1,0). Il
-   toggle generous in cosmos-tweaks pareggia la specificità e vince per
-   ordine di concatenazione (tokens → ... → tweaks), quindi resta funzionante.
+   Cascata: (0,2,1) batte la scala base di cosmos-base (body). Le tre opzioni
+   sono mutuamente esclusive per costruzione — stesso class-select.
    -------------------------------------------------------------------------- */
-body.layout-cupertino.theme-dark,
-body.layout-cupertino.theme-light {
+body.radius-newcraft.theme-dark,
+body.radius-newcraft.theme-light {
   --radius-s: calc(10px * var(--radius-modifier));    /* bottoni, input, tab, clickable-icon */
   --radius-m: calc(14px * var(--radius-modifier));    /* card, popover, superfici flottanti */
   --radius-l: calc(18px * var(--radius-modifier));    /* isole, pannelli */
@@ -3974,8 +3978,8 @@ body.layout-cupertino.theme-light {
 /* Phone: Craft su iPhone è più morbido (sheet a tutta larghezza, pollice).
    Gate POSITIVO .is-phone — non conta nel ratchet mobile, che pesa solo i
    :not(.is-phone)/:not(.is-mobile) escludenti. */
-body.layout-cupertino.is-phone.theme-dark,
-body.layout-cupertino.is-phone.theme-light {
+body.radius-newcraft.is-phone.theme-dark,
+body.radius-newcraft.is-phone.theme-light {
   --radius-s: calc(12px * var(--radius-modifier));
   --radius-m: calc(16px * var(--radius-modifier));
   --radius-l: calc(22px * var(--radius-modifier));
@@ -4807,10 +4811,13 @@ body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-
 body:is(.layout-cupertino, .layout-fusion, .layout-cosmos-fusion-glass):not(.is-phone)
   .workspace-split.mod-left-split .workspace-tab-container {
   margin: 0 var(--island-gap) var(--island-gap);
-  /* --radius-l, non --tab-radius: l'isola è un PANNELLO flottante, e in Craft
-     i pannelli stanno a 16-18 mentre i tab stanno a 10. Derivare dal raggio
-     dei tab li teneva legati alla scala sbagliata. */
-  border-radius: var(--radius-l);
+  /* --tab-radius, lo STESSO token del .workspace-tab-container del pannello
+     centrale. Provato --radius-l il 2026-08-03 con l'argomento "l'isola è un
+     pannello, non un tab": corretto in astratto, sbagliato qui. Misurato, dava
+     pannello principale 10px contro isola 18px — due superfici adiacenti con
+     angoli diversi, che si legge come un errore di allineamento. Fra la
+     correttezza del ruolo e la coerenza fra vicini, vince la coerenza. */
+  border-radius: var(--tab-radius);
   outline: var(--tab-outline-width) solid var(--tab-outline-color);
   overflow: hidden;   /* clippa il contenuto della leaf agli angoli */
   box-shadow: var(--cosmos-island-shadow);
@@ -5117,30 +5124,30 @@ body.theme-dark, body.theme-light {
 }
 
 /* ==========================================================================
-   § RAGGI GENEROSI (Tier 3, toggle Style Settings: cosmos-generous-radii)
+   § RAGGI GENEROSI (select Style Settings: cosmos-radius-scale → radius-generous)
    --------------------------------------------------------------------------
    Craft arrotonda generosamente i contenitori. Alziamo la SCALA base dei
    raggi (non un modifier globale: così i chip piccoli non diventano bolle) —
    pill/card/pannelli/modali si ammorbidiscono. Composabile con lo slider
    Roundness (--radius-modifier resta il fattore). island/pill derivano da
-   --tab-radius/--radius-s → scalano di conseguenza. Default OFF. ========================================================================== */
-/* Ribasato 2026-08-03: la scala New Craft (10/14/18/24) è ora il DEFAULT del
-   flavour layout-cupertino, quindi questo toggle non è più "più rotondo di
-   Baseline" ma "più rotondo di Craft" — che è ciò che si aspetta chi lo
-   accende. Coppia scheme per pareggiare la specificità (0,2,1) del blocco
-   New Craft in cosmos-tokens: a parità vince questo, perché cosmos-tweaks
-   è concatenato dopo.
-   --tab-radius rimosso: era riga morta dal 2026-07. cosmos-base fissa
-   body.input-cupertino{--tab-radius: var(--radius-s) !important}, che non
-   si può battere da qui — misurato, il raggio dei tab risolveva a --radius-s
-   e mai a questi 10px. Ora il tab segue --radius-s per costruzione. */
-body.cosmos-generous-radii.theme-dark,
-body.cosmos-generous-radii.theme-light {
-  --radius-s: calc(14px * var(--radius-modifier));
-  --radius-m: calc(18px * var(--radius-modifier));
+   --tab-radius/--radius-s → scalano di conseguenza, ed è ciò che li tiene
+   uguali fra loro. ========================================================================== */
+/* Opzione "Classic generous" del select `cosmos-radius-scale` (2026-08-04): la
+   scala Classic, più larga. Valori invariati dal toggle booleano che sostituisce,
+   inclusa la scelta di NON toccare --mv-r-card: le card restano a 11 in entrambe
+   le versioni Classic, ed è la ragione per cui questa opzione si legge "più
+   morbida" senza diventare pronunciata.
+   --tab-radius rimosso rispetto al vecchio toggle: era riga morta dal 2026-07.
+   cosmos-base fissa body.input-cupertino{--tab-radius: var(--radius-s)
+   !important}, che non si può battere da qui — misurato, il raggio dei tab
+   risolveva a --radius-s e mai a quei 10px. Ora il tab segue --radius-s per
+   costruzione, che è anche ciò che lo tiene uguale al pannello. */
+body.radius-generous.theme-dark,
+body.radius-generous.theme-light {
+  --radius-s: calc(12px * var(--radius-modifier));
+  --radius-m: calc(16px * var(--radius-modifier));
   --radius-l: calc(24px * var(--radius-modifier));
   --radius-xl: calc(32px * var(--radius-modifier));
-  --mv-r-card: 18px;
 }
 
 /* ==========================================================================
