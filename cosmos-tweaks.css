@@ -309,6 +309,15 @@ body.radius-generous.theme-light {
   --radius-m: calc(16px * var(--radius-modifier));
   --radius-l: calc(24px * var(--radius-modifier));
   --radius-xl: calc(32px * var(--radius-modifier));
+  /* Card, chip e controlli seguono la scala. Il vecchio toggle booleano NON li
+     toccava, e la conseguenza si è vista appena è diventato un select: fra
+     Classic e Classic generous le card restavano identiche a 11px, e siccome
+     una griglia di card è ciò che si guarda tutto il giorno, il selettore
+     sembrava inerte. Una scala dei raggi che lascia ferma la superficie più
+     grande dell'interfaccia non è una scala. */
+  --mv-r-card: 16px;
+  --mv-r1: 9px;
+  --mv-r-chip: 7px;
 }
 
 /* ==========================================================================
