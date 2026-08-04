@@ -3668,15 +3668,22 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
 body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   /* Superfici — campionate da Craft. Chrome più SCURO dell'editor (Craft
      inverte il modello Cosmos); block/card che STACCANO più chiari del canvas. */
-  --cosmos-surface-0: #222222;   /* editor / canvas    (--background-primary) */
-  --cosmos-surface-1: #1b1b1b;   /* sidebar + pannelli (--background-secondary) */
+  /* Scoped Token Override (vedi la nota omonima nel vault): il globale porta
+     il valore della CORNICE, non dell'editor. Così ribbon, tab bar, sidebar,
+     fondo e view dei plugin diventano scuri GRATIS, senza dipingere un solo
+     elemento — e il pannello centrale torna chiaro nel blocco scoped più sotto.
+     Provato prima il verso opposto (dipingere .workspace-split): ribbon e tab
+     bar restavano fuori, perché non stanno dentro quel contenitore. È il
+     fallimento caratteristico che la nota descrive. */
+  --cosmos-surface-0: #1b1b1b;   /* CORNICE — sidebar, ribbon, tab bar, fondo */
+  --cosmos-surface-1: #1b1b1b;   /* allineato: Cosmos non lo consuma per la chrome */
   --cosmos-surface-2: #282828;   /* block / superfici elevate (--background-primary-alt) — pop sopra il canvas */
   --cosmos-surface-3: #2e2e2e;   /* card hover / nav attivo (--background-secondary-alt) */
 
   /* Piolo card ESPLICITO. Obbligatorio, non ridondante: body porta anche
      .cupertino-dark, il cui blocco ha specificità identica (0,4,1) e dichiara
      i propri pioli — senza questa riga il suo valore tracimerebbe qui e
-     realcraft perderebbe il #2d2d2d campionato dal vero Craft. Ogni palette
+     realcraft perderebbe il #282828 campionato dal vero Craft. Ogni palette
      dichiara la sua scala: è il contratto. */
   --cosmos-surface-card: var(--cosmos-surface-2);
   --cosmos-surface-card-hover: var(--cosmos-surface-3);
@@ -3700,6 +3707,19 @@ body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   --h6-color: #f4f4f4;
 
   /* Accent — lasciato quello di sistema/vault (niente tasti blu). */
+}
+
+/* Il main pane torna canvas — seconda mossa dello Scoped Token Override.
+   La geometria lavora gratis: il pannello ha già border-radius e overflow
+   hidden, quindi ritaglia da solo il colore chiaro nella forma giusta.
+   --file-header-background va ridichiarato: è un derivato di
+   --background-secondary sul body, quindi si è già risolto lì come valore
+   letterale e la ridefinizione di scope non lo raggiunge (trappola 1 della
+   nota). */
+body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .workspace-split.mod-root {
+  --background-primary:     #222222;
+  --file-header-background: #222222;
 }
 
 /* --------------------------------------------------------------------------
@@ -4341,26 +4361,6 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --background-secondary-alt: var(--cosmos-surface-3);   /* nav item attivo / card */
 }
 
-/* --------------------------------------------------------------------------
-   Il chrome CONSUMA il proprio colore. --background-secondary era definito da
-   ogni palette ma non lo dipingeva nessuno: misurato il 2026-08-04, l'unica
-   superficie colorata dell'app era app-container, e sidebar e canvas
-   rendevano lo stesso identico valore. Era l'eredità del layer "darker",
-   nato per unificare tutto su una superficie sola.
-
-   Craft invece SEPARA: sidebar #1b1b1b contro canvas #222222, sette punti di
-   stacco. È la struttura che si vede al primo colpo d'occhio, prima di
-   qualunque dettaglio.
-
-   La regola è una sola e il colore lo decide la palette, quindi ognuna
-   esprime l'intento che ha già dichiarato: realcraft e Notion vogliono il
-   chrome più scuro dell'editor, Linear lo vuole ancora più scuro,
-   linear-darker li dichiara uguali e qui non cambia nulla per costruzione.
-   -------------------------------------------------------------------------- */
-body:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-split:is(.mod-left-split, .mod-right-split) {
-  background-color: var(--background-secondary);
-}
 
 /* ==========================================================================
    § OPACITÀ — dark opaco legato al CSS, indipendente dal toggle translucency

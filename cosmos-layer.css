@@ -287,26 +287,6 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --background-secondary-alt: var(--cosmos-surface-3);   /* nav item attivo / card */
 }
 
-/* --------------------------------------------------------------------------
-   Il chrome CONSUMA il proprio colore. --background-secondary era definito da
-   ogni palette ma non lo dipingeva nessuno: misurato il 2026-08-04, l'unica
-   superficie colorata dell'app era app-container, e sidebar e canvas
-   rendevano lo stesso identico valore. Era l'eredità del layer "darker",
-   nato per unificare tutto su una superficie sola.
-
-   Craft invece SEPARA: sidebar #1b1b1b contro canvas #222222, sette punti di
-   stacco. È la struttura che si vede al primo colpo d'occhio, prima di
-   qualunque dettaglio.
-
-   La regola è una sola e il colore lo decide la palette, quindi ognuna
-   esprime l'intento che ha già dichiarato: realcraft e Notion vogliono il
-   chrome più scuro dell'editor, Linear lo vuole ancora più scuro,
-   linear-darker li dichiara uguali e qui non cambia nulla per costruzione.
-   -------------------------------------------------------------------------- */
-body:is(.theme-dark, .theme-light):not(.layout-baseline)
-  .workspace-split:is(.mod-left-split, .mod-right-split) {
-  background-color: var(--background-secondary);
-}
 
 /* ==========================================================================
    § OPACITÀ — dark opaco legato al CSS, indipendente dal toggle translucency

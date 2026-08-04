@@ -36,9 +36,11 @@
     "--accent-h",
     "--accent-s",
     "--accent-l",
-    "--text-selection"
+    "--text-selection",
+    "--background-primary",
+    "--file-header-background"
   ],
-  "duplicate_prop_allowlist_comment": "craft-tab-active & island-shadow: theme-branch override; cosmos-t-*: azzerati nel media query reduced-motion; mv-pill-color: 9 varianti colore; cosmos-filled-icon: una mask per ciascuna famiglia semantica whitelisted; accent-h/-s/-l: 6 preset accent (body.cosmos-accent-*) + il default, Style Settings.",
+  "duplicate_prop_allowlist_comment": "craft-tab-active & island-shadow: theme-branch override; cosmos-t-*: azzerati nel media query reduced-motion; mv-pill-color: 9 varianti colore; cosmos-filled-icon: una mask per ciascuna famiglia semantica whitelisted; accent-h/-s/-l: 6 preset accent (body.cosmos-accent-*) + il default, Style Settings; background-primary & file-header-background: Scoped Token Override — le palette che vogliono cornice scura e pannello centrale chiaro (linear-darker, realcraft) portano il globale al valore della cornice e ridichiarano il token dentro .workspace-split.mod-root. Quei blocchi hanno un selettore discendente, quindi il blanking degli scheme-block non li copre: la duplicazione e VOLUTA, ed e il cuore della tecnica (vedi la nota Scoped Token Override nel vault).",
   "outline_none_requires_comment": true,
   "mobile_excluding_gates_max": 24,
   "mobile_excluding_gates_comment": "Gate :not(.is-phone)/:not(.is-mobile) nei 4 layer. Può solo SCENDERE (polarity flip in corso). Slice 3 (2026-07-11): 25→24 (flip press-scale del tab); i 24 restanti sono KEEP documentati in docs/2026-07-11-mobile-gate-audit.md.",
