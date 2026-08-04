@@ -3465,6 +3465,28 @@ body {
   --mv-lift: cubic-bezier(0.22, 1, 0.36, 1);       /* = exo --mva-ease-out · fisico */
   --mv-t: var(--cosmos-t-fast);                    /* = exo --mva-t (0.14s) */
 
+  /* --- Scala dei CONTROLLI (2026-08-04) ------------------------------------
+     Un solo set di numeri per segmentati, bottoni-icona, chip e campi. Serve
+     perché prima ogni controllo inventava le proprie misure sul posto: fra
+     Horizon e Runway convivevano altezze 26/28/30/42/44px e cinque scale di
+     raggio, per ruoli identici. Con questi token i primitivi concordano per
+     COSTRUZIONE, non per disciplina di chi scrive.
+     I plugin li consumano con fallback letterale: senza Cosmos rendono uguale.
+
+     --mv-control-h è l'altezza ESTERNA della riga: la misura che deve tornare
+     identica per ogni controllo appoggiato alla stessa toolbar. Un segmentato
+     è l'unico che ha due misure — la pista sta sulla riga, il pill sta dentro
+     la pista — quindi il pill si DERIVA sottraendo l'inset da entrambi i lati.
+     Fissare 28px per tutti e due, come si era fatto prima, rende il segmentato
+     6px più alto di ogni suo vicino: era esattamente il difetto da chiudere. */
+  --mv-control-h: 30px;              /* altezza esterna di un controllo in riga */
+  --mv-control-inset: 3px;           /* padding della pista di un segmentato */
+  --mv-control-item-h: calc(var(--mv-control-h) - 2 * var(--mv-control-inset));
+  --mv-control-h-touch: var(--cosmos-touch-min);   /* su .is-mobile */
+  --mv-control-pad: 8px;             /* padding orizzontale */
+  --mv-control-gap: 6px;             /* icona ↔ etichetta */
+  --mv-control-icon: 16px;           /* glifo dentro un controllo */
+
   --mv-hairline: color-mix(in srgb, var(--text-muted) 14%, transparent);
   --mv-ring: color-mix(in srgb, var(--interactive-accent) 16%, transparent);
 
