@@ -3488,7 +3488,13 @@ body {
      due rese corrette. --cosmos-shadow-scale è il trim per palette. */
   --cosmos-surface-card: var(--cosmos-surface-2, var(--background-primary-alt));
   --cosmos-surface-card-hover: var(--cosmos-surface-3, var(--background-secondary-alt));
-  --cosmos-card-border: color-mix(in srgb, var(--text-muted) 12%, transparent);
+  /* Il token che OGNI palette dedica ai bordi, non una derivazione dal colore
+     del testo. La derivazione (text-muted al 12%) era una hairline alla Craft,
+     ma sostituiva una scelta della palette con una mia: realcraft dichiara
+     #303030, Linear #1e1f21, Notion #e9e9e7 — valori campionati, ognuno tarato
+     sul proprio canvas. Chiedere alla palette è sempre meglio che indovinare
+     al posto suo. */
+  --cosmos-card-border: var(--background-modifier-border);
   --cosmos-shadow-ink: var(--background-modifier-box-shadow);
   --cosmos-shadow-scale: 1;
   --cosmos-card-rest:
@@ -3611,7 +3617,7 @@ body.theme-light {
      modello Craft light, ed è un cantiere a parte: fuori scope.) */
   --cosmos-surface-card: var(--background-primary);
   --cosmos-surface-card-hover: color-mix(in srgb, var(--background-primary), black 3%);
-  --cosmos-card-border: color-mix(in srgb, var(--text-muted) 20%, transparent);
+  --cosmos-card-border: var(--background-modifier-border);
   --cosmos-shadow-scale: 1.8;
 }
 
