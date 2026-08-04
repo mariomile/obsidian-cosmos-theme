@@ -8,8 +8,58 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 python3 - <<'PY'
-import os
-base = open('cosmos-base.css').read().rstrip('\n').split('\n')
+import os, re
+
+# --- Sfrondatura delle personalità inutilizzate (2026-08-04) ----------------
+# Baseline spedisce sei "Personality" (cupertino, material, fluent, adwaita,
+# tactile, baseline). Cosmos ne usa UNA: input-cupertino è il default e la sola
+# su cui è tarata l'identità New Craft. Le altre restano nel foglio e ogni loro
+# regola va comunque confrontata con ogni elemento a ogni ricalcolo di stile.
+#
+# Misurato il 2026-08-04, apertura di una nota (long task, PerformanceObserver):
+#   nessun tema        1 task,  60-77ms
+#   base completa      2-5 task, 230-347ms
+#   base sfrondata     1 task,  105-132ms
+# 228 regole in meno — l'8% dei byte — dimezzano abbondantemente il costo.
+#
+# La sfrondatura avviene QUI, a build time: cosmos-base.css resta il fork
+# pinnato e intatto, quindi ri-sincronizzare Baseline resta possibile e questa
+# scelta si annulla svuotando la lista.
+DROP_PERSONALITIES = ()
+
+def trim_personalities(css: str) -> tuple[str, int]:
+    kept, dropped, i, n = [], 0, 0, len(css)
+    while i < n:
+        j = css.find('{', i)
+        if j == -1:
+            kept.append(css[i:]); break
+        sel = css[i:j]
+        depth, k = 1, j + 1
+        while k < n and depth:
+            if css[k] == '{': depth += 1
+            elif css[k] == '}': depth -= 1
+            k += 1
+        if not sel.lstrip().startswith('@') and any(d in sel for d in DROP_PERSONALITIES):
+            dropped += 1
+        else:
+            kept.append(css[i:k])
+        i = k
+    return ''.join(kept), dropped
+
+raw = open('cosmos-base.css').read().rstrip('\n')
+if DROP_PERSONALITIES:
+    # Il blocco @settings è un commento: si estrae, si sfronda il solo CSS, si
+    # rimette. Altrimenti il conteggio graffe della sfronda leggerebbe le
+    # parentesi dentro la prosa delle description.
+    comments = []
+    def _stash(m):
+        comments.append(m.group(0)); return f'/*__C{len(comments)-1}__*/'
+    stashed = re.sub(r'/\*.*?\*/', _stash, raw, flags=re.S)
+    trimmed, n_dropped = trim_personalities(stashed)
+    raw = re.sub(r'/\*__C(\d+)__\*/', lambda m: comments[int(m.group(1))], trimmed)
+    print(f'sfrondate {n_dropped} regole delle personalità non usate')
+
+base = raw.split('\n')
 parts = base + ['']
 LAYERS = ['cosmos-tokens.css','cosmos-layer.css','cosmos-islands.css','cosmos-tweaks.css','cosmos-phone.css']
 used = [fn for fn in LAYERS if os.path.exists(fn)]
