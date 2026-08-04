@@ -584,7 +584,7 @@ settings:
 	-
 		id: cosmos-radius-scale
 		title: Radius scale
-		description: How rounded everything is — tabs, cards, chips, panels, modals. Classic is the long-standing Cosmos scale. Classic generous is noticeably softer throughout. New Craft matches Craft’s own values. Combines with Roundness.
+		description: How rounded everything is — tabs, cards, chips, panels, modals. Classic is the long-standing Cosmos scale, Classic generous a softer version of it. New Craft matches Craft’s own values; Craft goes further, the way Craft rounds its sidebar and panels. Combines with Roundness.
 		type: class-select
 		allowEmpty: false
 		default: radius-classic
@@ -598,6 +598,9 @@ settings:
 			-
 				label: New Craft
 				value: radius-newcraft
+			-
+				label: Craft
+				value: radius-craft
 	-
 		id: cosmos-phone-edition
 		title: Phone Edition (native mobile)

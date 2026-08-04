@@ -584,7 +584,7 @@ settings:
 	-
 		id: cosmos-radius-scale
 		title: Radius scale
-		description: How rounded everything is — tabs, cards, chips, panels, modals. Classic is the long-standing Cosmos scale. Classic generous is noticeably softer throughout. New Craft matches Craft’s own values. Combines with Roundness.
+		description: How rounded everything is — tabs, cards, chips, panels, modals. Classic is the long-standing Cosmos scale, Classic generous a softer version of it. New Craft matches Craft’s own values; Craft goes further, the way Craft rounds its sidebar and panels. Combines with Roundness.
 		type: class-select
 		allowEmpty: false
 		default: radius-classic
@@ -598,6 +598,9 @@ settings:
 			-
 				label: New Craft
 				value: radius-newcraft
+			-
+				label: Craft
+				value: radius-craft
 	-
 		id: cosmos-phone-edition
 		title: Phone Edition (native mobile)
@@ -3984,6 +3987,34 @@ body.radius-newcraft.is-phone.theme-light {
   --radius-m: calc(16px * var(--radius-modifier));
   --radius-l: calc(22px * var(--radius-modifier));
   --radius-xl: calc(30px * var(--radius-modifier));
+}
+
+/* --------------------------------------------------------------------------
+   § GEOMETRIA CRAFT — opzione "Craft" del select `cosmos-radius-scale`.
+   Più generosa di New Craft. New Craft riproduce i raggi dei CONTROLLI di
+   Craft (bottoni ~10, card 14-16); questa riproduce come Craft arrotonda i
+   suoi CONTENITORI grandi — la sidebar, i pannelli, i riquadri di sezione,
+   che stanno visibilmente più in alto sulla scala.
+   Il salto è sui contenitori, non sui chip: --mv-r-chip resta contenuto,
+   perché alzare anche quello trasforma le etichette in bolle.
+   -------------------------------------------------------------------------- */
+body.radius-craft.theme-dark,
+body.radius-craft.theme-light {
+  --radius-s: calc(14px * var(--radius-modifier));    /* bottoni, input, tab */
+  --radius-m: calc(20px * var(--radius-modifier));    /* card, popover */
+  --radius-l: calc(26px * var(--radius-modifier));    /* isole, pannelli */
+  --radius-xl: calc(34px * var(--radius-modifier));   /* modali, sheet */
+  --mv-r-card: 20px;
+  --mv-r1: 12px;
+  --mv-r-chip: 8px;
+}
+
+body.radius-craft.is-phone.theme-dark,
+body.radius-craft.is-phone.theme-light {
+  --radius-s: calc(16px * var(--radius-modifier));
+  --radius-m: calc(22px * var(--radius-modifier));
+  --radius-l: calc(28px * var(--radius-modifier));
+  --radius-xl: calc(38px * var(--radius-modifier));
 }
 
 /* --------------------------------------------------------------------------
