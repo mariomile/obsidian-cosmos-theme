@@ -423,10 +423,22 @@ body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light)
    sulla leaf attiva e solo a finestra a fuoco, quindi la barra sembra andare e
    venire invece di essere semplicemente sbagliata.
    L'header quindi va DIPINTO, non lasciato al token. Vale per ogni palette che
-   usa lo Scoped Token Override: chi ne aggiunge una deve aggiungersi qui. */
+   usa lo Scoped Token Override: chi ne aggiunge una deve aggiungersi qui.
+
+   2026-08-04, variante mobile: stesso "andare e venire", ma innescato dal
+   ritorno di focus della leaf quando si chiude un drawer su .is-phone
+   (Baseline mette --view-header su will-change:top con transition, per
+   l'auto-hide della barra allo scroll — vedi cosmos-base.css). Non
+   riproducibile in Electron/Chromium (WebKit-only): la teoria è che il primo
+   frame di un layer di compositing promosso "a freddo" da un elemento con
+   will-change dipinga nero prima che il background sopra si sincronizzi.
+   translateZ(0) forza la promozione ORA, con il colore giusto già noto,
+   invece che al primo frame della transizione — mitigazione standard per
+   questa classe di bug, non verificata su device reale da qui. */
 body:is(.realcraft, .linear-darker).theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .view-header {
   background-color: var(--background-primary);
+  transform: translateZ(0);
 }
 
 /* --------------------------------------------------------------------------
