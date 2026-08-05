@@ -849,18 +849,20 @@ body.is-mobile.theme-dark, body.is-mobile.theme-light {
 }
 
 /* Card bg delle sezioni raggruppate (.setting-group .setting-items / …-search,
-   Obsidian 1.12) mai armonizzata quando sopra è arrivato lo stile heading:
-   Obsidian nativo la lascia su --background-primary-alt mentre la pagina dei
-   settings è --background-primary — due superfici diverse per design nativo,
-   ma non nel linguaggio di elevazione di Cosmos (surface-0..3), quindi la
-   card leggeva come "il colore sbagliato" invece che come un gradino
-   intenzionale. Riuso --mv-card-bg: lo stesso token-card già usato ovunque
-   nel tema, non un nuovo colore. Niente gate is-phone qui (ratchet mobile-
-   excluding già al ceiling): non serve — la regola phone di Baseline
+   Obsidian 1.12): Obsidian nativo la lascia su --background-primary-alt
+   mentre la pagina dei settings è --background-primary — due superfici
+   diverse per design nativo. Il tentativo del 2026-08-01 la riportava a
+   --mv-card-bg (lo stesso token-card usato ovunque nel tema) per farla
+   leggere come un gradino di elevazione intenzionale invece che come "il
+   colore sbagliato" — ma Mario, guardandola dal vivo il 2026-08-05, l'ha
+   bocciata comunque: un riquadro rialzato non è il linguaggio di un pannello
+   Settings (Craft vero, il riferimento di realcraft, li tiene piatti).
+   Trasparente: le sezioni raggruppate si fondono nella pagina, zero
+   differenziazione. Niente gate is-phone: la regola phone di Baseline
    (`body.is-phone:is(.input-baseline,:not(.css-settings-manager))
    .modal.mod-settings`) è più specifica (0,4,1 vs 0,2,0 nostro) e vince lì
    comunque. Nessun !important: vince per specificità + source-order sulla
-   definizione root di app.css. 2026-08-01. */
+   definizione root di app.css. */
 .modal.mod-settings {
-  --setting-items-background: var(--mv-card-bg);
+  --setting-items-background: transparent;
 }
