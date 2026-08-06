@@ -461,7 +461,17 @@ body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light)
    Nessun background-color scritto qui = nessuna (0,7,1) che schiacci il phone. */
 body:is(.realcraft, .linear-darker).theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .view-header {
+  /* ENTRAMBI i token: core ne usa uno diverso sulla leaf attiva a fuoco
+     (`.is-focused .workspace-leaf.mod-active .view-header { background-color:
+     var(--file-header-background-focused) }`), ed è proprio quella che stai
+     guardando. Ridichiararne uno solo lascia l'header del pannello attivo del
+     colore della cornice — regressione desktop del 2026-08-06, invisibile da
+     CLI perché senza focus della finestra `.is-focused` non c'è e vince il
+     ramo non-focused. Entrambi sono derivati di --background-primary risolti
+     sul body (trappola 1), quindi lo scope .mod-root da solo non li raggiunge:
+     vanno ridichiarati qui, tutti e due. */
   --file-header-background: var(--background-primary);
+  --file-header-background-focused: var(--background-primary);
   transform: translateZ(0);
 }
 
