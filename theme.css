@@ -3773,19 +3773,43 @@ body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light)
    L'header quindi va DIPINTO, non lasciato al token. Vale per ogni palette che
    usa lo Scoped Token Override: chi ne aggiunge una deve aggiungersi qui.
 
-   2026-08-04, variante mobile: stesso "andare e venire", ma innescato dal
-   ritorno di focus della leaf quando si chiude un drawer su .is-phone
-   (Baseline mette --view-header su will-change:top con transition, per
-   l'auto-hide della barra allo scroll — vedi cosmos-base.css). Non
-   riproducibile in Electron/Chromium (WebKit-only): la teoria è che il primo
-   frame di un layer di compositing promosso "a freddo" da un elemento con
-   will-change dipinga nero prima che il background sopra si sincronizzi.
-   translateZ(0) forza la promozione ORA, con il colore giusto già noto,
-   invece che al primo frame della transizione — mitigazione standard per
-   questa classe di bug, non verificata su device reale da qui. */
+   RISOLTO 2026-08-06 — dipingere era la mossa sbagliata.
+
+   Tutto il ragionamento sopra vale perché sul desktop il pannello nota è
+   un'isola CHIARA dentro una cornice scura: l'header va dipinto per stare
+   nell'isola. Su phone quell'isola non esiste — la nota occupa lo schermo — e
+   Obsidian rende l'header trasparente APPOSTA, così la nota ci scorre sotto:
+
+     .is-mobile.is-floating-nav.is-phone .view-header
+       { background-color: transparent }                            (0,4,1)
+
+   Questa regola è (0,7,1) e lo batteva, trasformando l'header in una striscia
+   opaca a tutta larghezza all'altezza del back button e della pill: la "fascia
+   nera" in cima a ogni nota. Letta dal DOM phone vero con
+   CSS.getMatchedStylesForNode — nei fogli di stile non si vede, la racconta
+   solo la cascata.
+
+   Il "variante mobile / andare e venire" del 2026-08-04 era questo stesso bug
+   diagnosticato male: attribuito a un primo frame di compositing WebKit e
+   mitigato con translateZ(0) senza mai verificarlo su device.
+
+   La correzione non è un gate :not(.is-phone) — sarebbe un gate mobile
+   escludente in più, e il ratchet del contract lo rifiuta a ragione. È non
+   dipingere affatto: ridichiarare il TOKEN a specificità sufficiente a battere
+   la dichiarazione element-level di Baseline (`.is-focused
+   .workspace-leaf.mod-active .view-header`, (0,3,1)) e lasciare che sia core a
+   usarlo, con `.view-header { background-color: var(--file-header-background) }`
+   a (0,1,0).
+
+   Così le due piattaforme si servono da sole, senza gate:
+   - desktop → core dipinge il token corretto: isola giusta, niente flicker;
+   - phone → la regola nativa `.is-mobile.is-floating-nav.is-phone .view-header
+     { background-color: transparent }` è (0,4,1) e batte core (0,1,0), quindi
+     l'header resta trasparente com'è previsto e la nota ci scorre sotto.
+   Nessun background-color scritto qui = nessuna (0,7,1) che schiacci il phone. */
 body:is(.realcraft, .linear-darker).theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .view-header {
-  background-color: var(--background-primary);
+  --file-header-background: var(--background-primary);
   transform: translateZ(0);
 }
 
