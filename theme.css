@@ -5672,6 +5672,29 @@ body:is(.realcraft, .linear, .linear-darker).active-line-block .view-content > .
 }
 
 /* ==========================================================================
+   § RIGA ATTIVA SUGLI HEADING — il box non deve inghiottire il respiro sopra
+   il titolo. La regola base ancora il ::before al padding box della .cm-line
+   (`inset: -2px -4px`), ma su un heading quella box include anche
+   `padding-top: var(--p-spacing)` — la spaziatura che stacca il titolo dal
+   paragrafo precedente, NON parte del titolo. Risultato: un rettangolo che
+   sborda in alto molto oltre il testo (misurato live su un H1 di questo
+   vault: box 51.06px contro 30.5px di testo) e legge come un blocco gonfio
+   e disallineato invece che come la riga evidenziata.
+   Riportando il top di una spaziatura, il box torna ad avvolgere il testo:
+   35.06px = 30.5 di testo + i 4px dei due inset da -2px. Verificato live
+   iniettando la regola e ricampionando il ::before, non stimato.
+   Si àncora allo STESSO token che genera il padding (--p-spacing, dalla
+   regola nativa `.cm-s-obsidian .cm-line.HyperMD-header`), così se quella
+   spaziatura cambia le due restano allineate invece di driftare.
+   Specificità: (0,7,2) contro (0,6,1) della base — una classe
+   (.HyperMD-header) e un elemento (body) in più, vince per cascata naturale.
+   Nessun !important: il budget di cosmos-tweaks è già a 2/2.
+   ========================================================================== */
+body.active-line-block .view-content > .markdown-source-view .cm-line.cm-active.HyperMD-header:not(.cm-gutterElement, .HyperMD-callout, .HyperMD-codeblock-bg, .HyperMD-quote)::before {
+  top: calc(var(--p-spacing) - 2px);
+}
+
+/* ==========================================================================
    § FONT SIZE MOBILE (2026-07-16) — testo (chrome UI + corpo editor) più
    grande solo su phone/tablet, regolabile da Style Settings
    --------------------------------------------------------------------------
