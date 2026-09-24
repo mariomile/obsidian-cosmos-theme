@@ -83,7 +83,7 @@ for fn in used:
 # blocchi @settings, che Style Settings legge dal foglio. Il check dei commenti
 # bilanciati qui sopra gira sui sorgenti, prima di questo punto.
 def strip_comments(css: str) -> str:
-    return re.sub(r'/\*.*?\*/', lambda m: m.group(0) if '@settings' in m.group(0) else '', css, flags=re.S)
+    return re.sub(r'/\*.*?\*/', lambda m: m.group(0) if re.match(r'/\*!?\s*(?:/\*\s*)?@settings', m.group(0)) else '', css, flags=re.S)
 
 o = strip_comments('\n'.join(parts))
 o = '\n'.join(l for l in o.split('\n') if l.strip()) + '\n'

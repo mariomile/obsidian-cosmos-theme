@@ -4306,56 +4306,6 @@ body:is(.realcraft, .linear, .linear-darker).active-line-block .view-content > .
 body.active-line-block .view-content > .markdown-source-view .cm-line.cm-active.HyperMD-header:not(.cm-gutterElement, .HyperMD-callout, .HyperMD-codeblock-bg, .HyperMD-quote)::before {
   top: calc(var(--p-spacing) - 2px);
 }
-/* ==========================================================================
-   § FONT SIZE MOBILE (2026-07-16) — testo (chrome UI + corpo editor) più
-   grande solo su phone/tablet, regolabile da Style Settings
-   --------------------------------------------------------------------------
-   Due slider in @settings (heading "Mobile", theme.css — vive nel base
-   pre-marker insieme a font-ui-modifier/icon-size-modifier, stesso motivo:
-   non è generato da nessuno dei 4 layer file, va editato lì a mano):
-     • font-mobile-ui-modifier (default 0px) — sommato alla scala UI desktop
-       LITERALE di Cosmos (12/13/14/16/18, non al calc di Baseline). Default 0
-       = font mobile al DEFAULT (nessun bump); lo slider resta per alzarlo.
-     • font-mobile-text-size (default 18px) — valore assoluto per l'editor
-       mobile. Era 16 (= --font-text-size desktop); portato a 18 il 2026-07-26
-       su verdetto d'uso di Mario ("quella che ho sul telefono è quella in cui
-       mi trovo davvero bene, vorrei fosse il default"): 18px è il corpo che
-       legge bene su iPhone Pro Max, il desktop resta sui suoi 24px. Il
-       fallback nel var() qui sotto e il `default:` dello slider in
-       cosmos-base.css DEVONO restare allineati: Style Settings non inietta la
-       variabile finché lo slider non viene toccato, quindi è il fallback CSS
-       a fare da default reale su un vault pulito.
-   --font-ui-*: sidebar, tab, menu, impostazioni. Gated body.is-mobile,
-   specificità (0,2,1) — una classe in più della base (0,1,1) — batte la base
-   per cascata naturale, niente !important. is-mobile (non is-phone): copre
-   sia phone che tablet.
-   --font-text-size (corpo editor/nota) è un caso diverso: Obsidian lo setta
-   come inline style sul body ("Appearance → Font size", sincronizzato
-   cross-device — nessuna regola CSS sul body, per quanto specifica, vince un
-   inline style senza !important). Fino al 2026-09-24 si spendeva uno slot
-   !important; il validatore dei temi Obsidian lo segnala, quindi ora il
-   fight si vince spostando il token sui figli del body (regola sotto).
-   La scala desktop (base, pre-marker: 12/13/14/16/18px UI + 24px editor)
-   resta INTATTA — su desktop nessuna delle due regole QUI SOTTO (mobile)
-   matcha. ERRATO invece pensare che il --font-text-size a 24px del blocco
-   SCALA DIMENSIONI sopra vinca sul desktop: verificato live su QUESTO
-   vault (non test-vault) il 2026-08-04 — Obsidian scrive comunque un
-   inline style --font-text-size sul <body> rispecchiando Impostazioni →
-   Aspetto → Dimensione carattere, e quello vince sempre senza !important.
-   Oggi è a 16px (default mai toccato): il corpo nota rende a 16px, non
-   24px. La riga "resta INTATTA" sopra si riferisce solo al fatto che
-   QUESTA regola mobile-gated non interferisce sul desktop — non implica
-   che il literal 24px del blocco desktop sia effettivamente in vigore.
-   Verificato live in test-vault via dev:css (class-injection): --font-ui-larger
-   risolve pulito a base+modifier. --font-ui-smaller/small/medium/large risultano
-   invece contesi dalla regola dynamic-type di Baseline
-   `body.is-mobile.mod-macos:not(.dynamic-type-off)` (specificità 0,3,1, più
-   alta della mia) quando il test gira su macOS con le classi is-mobile
-   iniettate — combinazione che NON esiste su device reale (iOS non porta
-   mod-macos). Su iPhone/iPad reale questa regola non è in gioco e il bump si
-   applica pulito; il conflitto è un artefatto del test-harness desktop, non
-   un bug — sign-off finale da fare su device reale (stesso limite dichiarato
-   in verify-mobile.sh). */
 body.is-mobile.theme-dark, body.is-mobile.theme-light {
   --font-ui-smaller: calc(12px + var(--font-mobile-ui-modifier, 0px));
   --font-ui-small: calc(13px + var(--font-mobile-ui-modifier, 0px));
@@ -4423,26 +4373,6 @@ body.is-mobile.theme-dark > *, body.is-mobile.theme-light > * {
 .modal.mod-settings {
   --setting-items-background: transparent;
 }
-/* ==========================================================================
-   COSMOS PHONE EDITION — layer additivo `is-phone`.
-   Il toggle Style Settings ("Phone Edition") vive nel blocco @settings
-   PRINCIPALE (cosmos-base.css), NON qui: Style Settings legge solo il primo
-   blocco @settings del foglio → un secondo blocco separato veniva ignorato
-   (bug diagnosticato 2026-07-23: la classe non si applicava mai su mobile).
-   --------------------------------------------------------------------------
-   Polarity POSITIVA: qui non si de-gata desktop, si DISEGNA per il phone.
-   Riferimento visivo: Craft + Notion mobile (thumb-zone, pillole flottanti,
-   bottoni circolari, feedback tattile). Vault:
-   Atlas/Concepts/Product/Design/Design references.md §Mobile.
-   Doppio gate su OGNI regola: `body.cosmos-phone-edition.is-phone`
-     - .is-phone            → desktop e tablet mai toccati (Mario: solo iPhone)
-     - .cosmos-phone-edition → toggle Style Settings, default OFF = opt-in;
-                               spegnerlo = revert soft immediato dal telefono.
-   Contract: 0 !important (theme.css carica DOPO app.css → source-order vince),
-   0 hex/ms raw (tutto da token). Consuma i token già in cosmos-tokens.css
-   (--cosmos-safe-*, --cosmos-touch-min, --cosmos-press-scale, --cosmos-native)
-   e i token nativi di Obsidian (--raised-*, --navbar-*, --touch-size-*).
-   ========================================================================== */
 body.cosmos-phone-edition.is-phone {
   --navbar-height: var(--touch-size-l);   
   --navbar-radius: var(--touch-size-l);   
