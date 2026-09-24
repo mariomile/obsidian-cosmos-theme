@@ -208,8 +208,8 @@ body.cosmos-left-island-off:is(.layout-cupertino, .layout-fusion, .layout-cosmos
    KEEP gate (slice 3): divider tra pannelli impilati in sidebar; su phone le
    sidebar sono drawer, niente maniglie di resize impilate → gate corretto.
    Audit: docs/2026-07-11-mobile-gate-audit.md. */
-body:not(.is-phone) .workspace-split.mod-sidedock .workspace-leaf-resize-handle {
-  border: none !important;   /* beats: border del divider Baseline (selettore più specifico) */
+body:not(.is-phone) .workspace-split.mod-sidedock .workspace-leaf-resize-handle:not(#x#x#x) {
+  border: none;   /* beats: border del divider Baseline (selettore più specifico) */
 }
 
 /* ==========================================================================
@@ -716,13 +716,10 @@ body.active-line-block .view-content > .markdown-source-view .cm-line.cm-active.
 
    --font-text-size (corpo editor/nota) è un caso diverso: Obsidian lo setta
    come inline style sul body ("Appearance → Font size", sincronizzato
-   cross-device — nessuna regola CSS, per quanto specifica, vince un inline
-   style senza !important). Decisione esplicita di Mario (2026-07-16): spende
-   l'unico slot !important aggiuntivo del tema (design-contract.json
-   important_max cosmos-tweaks.css 1→2, vedi important_max_bump_log) per
-   questo fight — coerente col vincolo del contract ("!important solo nei
-   fight documentati"), qui contro un inline style della piattaforma anziché
-   contro Baseline.
+   cross-device — nessuna regola CSS sul body, per quanto specifica, vince un
+   inline style senza !important). Fino al 2026-09-24 si spendeva uno slot
+   !important; il validatore dei temi Obsidian lo segnala, quindi ora il
+   fight si vince spostando il token sui figli del body (regola sotto).
 
    La scala desktop (base, pre-marker: 12/13/14/16/18px UI + 24px editor)
    resta INTATTA — su desktop nessuna delle due regole QUI SOTTO (mobile)
@@ -752,7 +749,22 @@ body.is-mobile.theme-dark, body.is-mobile.theme-light {
   --font-ui-medium: calc(14px + var(--font-mobile-ui-modifier, 0px));
   --font-ui-large: calc(16px + var(--font-mobile-ui-modifier, 0px));
   --font-ui-larger: calc(18px + var(--font-mobile-ui-modifier, 0px));
-  --font-text-size: var(--font-mobile-text-size, 18px) !important;
+}
+
+/* L'inline style --font-text-size che Obsidian scrive sul <body> si batte
+   senza !important con uno Scoped Token Override: il token si ridichiara sui
+   FIGLI del body, e da lì eredita tutto il resto dell'app. Trappola
+   obbligatoria: i derivati che app.css e la base dichiarano sul body si sono
+   già risolti lì con il valore inline, quindi vanno ridichiarati qui dentro
+   con la stessa formula. (--font-ui-* no: sopra sono letterali px.) */
+body.is-mobile.theme-dark > *, body.is-mobile.theme-light > * {
+  --font-text-size: var(--font-mobile-text-size, 18px);
+  --checkbox-size: calc(var(--font-text-size) * 1.15);
+  --metadata-input-height: calc(var(--font-text-size) * 1.75);
+  --popover-font-size: var(--font-text-size);
+  --sidebar-markdown-font-size: calc(var(--font-text-size) * 0.9);
+  --blockquote-size: var(--font-text-size);
+  --callout-size: var(--font-text-size);
 }
 
 /* ==========================================================================

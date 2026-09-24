@@ -28,9 +28,11 @@
    ========================================================================== */
 
 .workspace-split.mod-root .workspace-tab-header {
-  min-width: var(--cosmos-tab-min, 52px) !important;   /* floor content-hug (era 108px) */
-  flex: 0 0 auto !important;     /* rimpiazza flex-shrink:0 E uccide flex-grow:1 → niente stretch, i tab abbracciano il contenuto (look Craft) */
   max-width: var(--cosmos-tab-max, 184px);             /* soffitto: titoli lunghi troncano (…). NO !important: la base non setta max-width */
+  &:not(#x#x#x) {
+    min-width: var(--cosmos-tab-min, 52px);   /* floor content-hug (era 108px) */
+    flex: 0 0 auto;     /* rimpiazza flex-shrink:0 E uccide flex-grow:1 → niente stretch, i tab abbracciano il contenuto (look Craft) */
+  }
 }
 
 /* Scroll attivo ma scrollbar nascosta (trackpad / shift+rotella funzionano) */
@@ -102,15 +104,18 @@
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
-  /* Concentricità by-construction: raggio barra = pill + inset (cosmos-tokens).
-     !important: nelle sidebar la base setta radius/padding con selettore più
-     specifico (il tentativo @layer è stato ritirato — vedi build.sh). */
-  border-radius: var(--cosmos-tabbar-radius, var(--cosmos-r-tabbar)) !important;
-  padding: var(--cosmos-tab-inset) !important;
   width: fit-content;
   max-width: 100%;
   align-self: center;
   height: fit-content;
+  /* Concentricità by-construction: raggio barra = pill + inset (cosmos-tokens).
+     :not(#x#x#x) = +3 id di specificità: nelle sidebar la base setta
+     radius/padding con selettore più specifico (il tentativo @layer è stato
+     ritirato — vedi build.sh; !important è vietato dal validatore Obsidian). */
+  &:not(#x#x#x) {
+    border-radius: var(--cosmos-tabbar-radius, var(--cosmos-r-tabbar));
+    padding: var(--cosmos-tab-inset);
+  }
 }
 /* Il margin verticale Baseline (6px 0) gonfierebbe la card: l'inset del pill
    nella card è il padding 4px della card, non il margin del tab. */
@@ -124,8 +129,6 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 /* --- Geometria: radius morbido + lift animato su ogni tab floating -------- */
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked) .workspace-tab-header {
-  /* !important: in sidebar la base setta 8px con selettore più specifico */
-  border-radius: var(--cosmos-tab-radius, var(--cosmos-r-pill)) !important;
   /* 2026-07-25 — dynamics-and-depth §B: attivazione ancora di scatto nonostante
      questa transition (misurato via obsidian-cli eval + getAnimations(): al
      flip di .is-active correvano SOLO background-color/box-shadow — transform
@@ -142,6 +145,10 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
     background-color var(--anim-duration-fast) var(--anim-motion-baseline, ease),
     box-shadow       var(--anim-duration-fast) var(--anim-motion-baseline, ease),
     transform        var(--cosmos-t-fast) var(--cosmos-native);
+  &:not(#x#x#x) {
+    /* :not(#x#x#x): in sidebar la base setta 8px con selettore più specifico */
+    border-radius: var(--cosmos-tab-radius, var(--cosmos-r-pill));
+  }
 }
 
 /* --- Gap compatto tra i tab — SOLO editor (2026-07-10: la sidebar vuole le
@@ -177,7 +184,6 @@ body.theme-dark:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layo
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header.is-active {
-  background-color: var(--craft-tab-active) !important;  /* beats: hard-set base per-selettore */
   box-shadow: var(--shadow-tactile);
   transform: scale(1);
   /* 2026-08-03 — ACCENSIONE. Vedi § lato :not(.is-active) per il perché
@@ -193,14 +199,15 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
     background-color var(--anim-duration-fast) var(--cosmos-native),
     box-shadow       var(--anim-duration-fast) var(--cosmos-native),
     transform        var(--cosmos-t-fast) var(--cosmos-native);
+  &:not(#x#x#x) {
+    background-color: var(--craft-tab-active);  /* beats: hard-set base per-selettore */
+  }
 }
 
 /* --- Inattivi: kill del ghost (opacity .5) → flat, testo muto ------------- */
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header:not(.is-active) {
-  opacity: 1 !important;                    /* beats: ghost opacity .5 della base */
-  background-color: transparent !important;
   /* 2026-07-25 — dynamics-and-depth §B: riposo dell'attivazione, leggermente
      sotto scala, cosicché il flip a .is-active abbia un delta transform
      reale da animare (misurato prima: transform restava "none" su ENTRAMBI
@@ -226,6 +233,10 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
     background-color 0s,
     box-shadow       0s,
     transform        var(--cosmos-t-fast) var(--cosmos-native);
+  &:not(#x#x#x) {
+    opacity: 1;                    /* beats: ghost opacity .5 della base */
+    background-color: transparent;
+  }
 }
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
@@ -236,8 +247,8 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
 /* --- Hover inattivo: wash morbido, testo torna pieno --------------------- */
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
-  .workspace-tab-header:not(.is-active):hover {
-  background-color: var(--background-modifier-hover) !important;
+  .workspace-tab-header:not(.is-active):hover:not(#x#x#x) {
+  background-color: var(--background-modifier-hover);
 }
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline)
   .workspace-split:is(.mod-root, .mod-sidedock) .workspace-tabs:not(.mod-stacked)
@@ -297,9 +308,9 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
    container radice in dark, così la vibrancy resta coperta → sempre opaco,
    anche con translucency: true. Snippet attivo = dark opaco, comunque.
    ========================================================================== */
-body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light),
-body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-container {
-  background-color: var(--background-primary) !important;  /* copre la vibrancy anche con translucency: true */
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light):not(#x#x#x),
+body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-container:not(#x#x#x) {
+  background-color: var(--background-primary);  /* copre la vibrancy anche con translucency: true */
 }
 
 

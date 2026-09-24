@@ -2,12 +2,12 @@
   "comment": "Design-contract ratchet. Numbers may only go DOWN (or stay equal). !important solo nei fight documentati contro la base Baseline (il tentativo @layer e' stato ritirato: app.css unlayered batte qualsiasi base layerata). cosmos-tokens.css e' l'unica casa per hex/ms raw.",
   "important_max": {
     "cosmos-tokens.css": 0,
-    "cosmos-layer.css": 10,
+    "cosmos-layer.css": 0,
     "cosmos-islands.css": 0,
-    "cosmos-tweaks.css": 2,
+    "cosmos-tweaks.css": 0,
     "cosmos-phone.css": 0
   },
-  "important_max_bump_log": "2026-07-16: cosmos-tweaks.css 1→2, decisione esplicita di Mario. Il nuovo slot fight-a contro un inline style di Obsidian stesso (--font-text-size sul body, Appearance→Font size), non contro Baseline — nessuna regola CSS senza !important può vincere un inline style. Vedi § FONT SIZE MOBILE. (Il bump cosmos-layer 10→11 del 2026-07-18 per il layout card è stato RITIRATO: le card view Bases sono posizionate absolute da JS, il CSS non le ridispone — fix rimosso, budget tornato a 10.)",
+  "important_max_bump_log": "2026-07-16: cosmos-tweaks.css 1→2, decisione esplicita di Mario. Il nuovo slot fight-a contro un inline style di Obsidian stesso (--font-text-size sul body, Appearance→Font size), non contro Baseline — nessuna regola CSS senza !important può vincere un inline style. Vedi § FONT SIZE MOBILE. (Il bump cosmos-layer 10→11 del 2026-07-18 per il layout card è stato RITIRATO: le card view Bases sono posizionate absolute da JS, il CSS non le ridispone — fix rimosso, budget tornato a 10.) 2026-09-24: tutti i ceiling a 0. Il validatore dei temi Obsidian segnala ogni !important: le dichiarazioni sono state convertite in regole con :not(#x#x#x) (+3 id di specificità), il fight --font-text-size contro l'inline style del body si vince ridichiarando il token sui figli del body.",
   "raw_hex_max": {
     "comment": "Raw color hexes outside cosmos-tokens.css (comments stripped). Tokenized 2026-07-10.",
     "cosmos-layer.css": 0,
@@ -45,7 +45,10 @@
   "mobile_excluding_gates_max": 24,
   "mobile_excluding_gates_comment": "Gate :not(.is-phone)/:not(.is-mobile) nei 4 layer. Può solo SCENDERE (polarity flip in corso). Slice 3 (2026-07-11): 25→24 (flip press-scale del tab); i 24 restanti sono KEEP documentati in docs/2026-07-11-mobile-gate-audit.md.",
   "raw_100vh_max": 0,
-  "style_settings_first_block_required_ids": ["cosmos-phone-edition", "cosmos-craft-care"],
+  "style_settings_first_block_required_ids": [
+    "cosmos-phone-edition",
+    "cosmos-craft-care"
+  ],
   "style_settings_first_block_comment": "Style Settings legge SOLO il primo blocco @settings di un foglio (bug reale 2026-07-23: toggle in un secondo blocco = mai registrato, classe mai applicata, feature silenziosamente inerte). Ogni toggle consumato dai layer va dichiarato nel blocco principale di cosmos-base.css; questo check lo verifica sul theme.css buildato.",
   "elevation_anti_dup_check": true,
   "elevation_anti_dup_comment": "dynamics-and-depth §A/Contract#1 (2026-07-25). Le sei superfici flottanti (.menu/.suggestion-container/.prompt/.popover/.modal/.tooltip) prendono il loro gradino di elevazione — box-shadow: var(--cosmos-pop-shadow) — da UNA sola regola flavour-agnostica in cosmos-layer.css § ANGLAGE, gated body:is(.theme-dark, .theme-light):not(.layout-baseline) — il gate scheme serve al PESO di specificità (0,3,1), non a escludere: batte app.css .modal-container.mod-dim .modal (0,3,0). Ogni altra dichiarazione della stessa ombra su una di quelle sei classi (match per token di classe esatto sul compound rightmost) è una violazione: le flavour aggiungono i propri delta (surface, backdrop-filter, geometria), non ridichiarano la base. Codifica il difetto misurato (finding 1): .menu assente dalla base, presente solo in fusion-glass. Le superfici non-flottanti che usano lo stesso token (navbar, toolbar, ribbon, pannelli interni) restano libere."
