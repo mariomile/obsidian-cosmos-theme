@@ -78,8 +78,17 @@ for fn in used:
     o_, c_ = src.count('/*'), src.count('*/')
     assert o_ == c_, f"{fn}: commenti sbilanciati — {o_} aperture '/*' vs {c_} chiusure '*/' (un '*/' orfano uccide la regola che segue)"
 
-open('theme.css','w').write('\n'.join(parts))
-o = '\n'.join(parts)
+# I commenti restano nei sorgenti, non nel theme.css spedito: ~110KB di prosa
+# che il validatore di Obsidian conta nel peso del file. Si salvano solo i
+# blocchi @settings, che Style Settings legge dal foglio. Il check dei commenti
+# bilanciati qui sopra gira sui sorgenti, prima di questo punto.
+def strip_comments(css: str) -> str:
+    return re.sub(r'/\*.*?\*/', lambda m: m.group(0) if '@settings' in m.group(0) else '', css, flags=re.S)
+
+o = strip_comments('\n'.join(parts))
+o = '\n'.join(l for l in o.split('\n') if l.strip()) + '\n'
+open('theme.css','w').write(o)
+parts = o.split('\n')
 assert o.count('{') == o.count('}'), f"brace mismatch {o.count('{{')} vs {o.count('}}')}"
 print(f"theme.css rebuilt — base {len(base)} lines + {len(used)} layers = {len(parts)} lines, braces + comments balanced")
 PY
