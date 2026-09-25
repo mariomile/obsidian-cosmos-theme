@@ -684,7 +684,7 @@ settings:
 	-
 		id: cosmos-flavour
 		title: Palette
-		description: The color/surface palette — distinct from the "Cosmos Flavour" (layout) above. Mutually exclusive, you always end up on one. New Craft Darker = dark by default. New Craft Lighter = light surfaces. Real Craft = Craft's real colors.
+		description: The color/surface palette — distinct from the "Cosmos Flavour" (layout) above. Mutually exclusive, you always end up on one. New Craft Darker = dark by default. New Craft Lighter = light surfaces. Real Craft = Craft's real colors. Every palette has a light version, applied when Obsidian is set to light.
 		type: class-select
 		allowEmpty: false
 		default: nc-darker
@@ -3383,6 +3383,11 @@ body.theme-dark {
   --accent-s: 15%;
   --accent-l: 58%;
 }
+body.theme-light:not(.layout-baseline) {
+  --color-accent:   hsl(var(--accent-h), var(--accent-s), min(var(--accent-l), 38%));
+  --color-accent-1: hsl(calc(var(--accent-h) - 1), calc(var(--accent-s) * 1.01), min(var(--accent-l), 41%));
+  --color-accent-2: hsl(calc(var(--accent-h) - 3), calc(var(--accent-s) * 1.02), min(var(--accent-l), 44%));
+}
 body.theme-light {
   --cosmos-island-shadow:
     rgba(0, 0, 0, 0.04) 0px 24px 48px,
@@ -3491,6 +3496,49 @@ body.linear-darker.theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .workspace-tab-container {
   background-color: var(--background-primary);
 }
+body.realcraft.theme-light.cupertino-light:not(.layout-baseline) {
+  --background-primary:       #fcfdfe;   
+  --background-primary-alt:   #fafafa;   
+  --background-secondary:     #f3f4f5;   
+  --background-secondary-alt: #eaebec;   
+  --background-modifier-border:       #f1f1f2;   
+  --background-modifier-border-hover:  #e4e5e6;   
+  --background-modifier-hover:         #f8f8f8;   
+  --text-normal: #35383b;        
+  --text-muted:  #5f6062;        
+  --text-faint:  #a3a4a5;        
+  --h1-color: #1a1c1e;           
+  --h2-color: #1a1c1e;
+  --h3-color: #1a1c1e;
+  --h4-color: #1a1c1e;
+  --h5-color: #1a1c1e;
+  --h6-color: #1a1c1e;
+}
+body.linear.theme-light.cupertino-light:not(.layout-baseline),
+body.linear-darker.theme-light.cupertino-light:not(.layout-baseline) {
+  --background-primary:       #ffffff;   
+  --background-primary-alt:   #f8f8f8;   
+  --background-secondary:     #f9f8f9;   
+  --background-secondary-alt: #f4f2f4;   
+  --background-modifier-border:       #e9e8ea;   
+  --background-modifier-border-hover:  #e4e2e4;   
+  --background-modifier-hover:         #f8f8f8;   
+  --text-normal: #282a30;        
+  --text-muted:  #3c4149;        
+  --text-faint:  #6f6e77;        
+}
+body.perplexity.theme-light.cupertino-light:not(.layout-baseline) {
+  --background-primary:       #fdfbfa;   
+  --background-primary-alt:   #f6f3f1;   
+  --background-secondary:     #f6f3f1;   
+  --background-secondary-alt: #e8e4e0;   
+  --background-modifier-border:       #eeebe8;   
+  --background-modifier-border-hover:  #dfdcd7;   
+  --background-modifier-hover:         #efebe9;   
+  --text-normal: #27251e;        
+  --text-muted:  #72706b;        
+  --text-faint:  #92908c;        
+}
 body.layout-notion.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --corner-shape: round;                             
   --radius-s:  calc(3px * var(--radius-modifier));
@@ -3515,7 +3563,7 @@ body.layout-notion.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-l
   --cosmos-surface-card-hover: var(--cosmos-surface-3);
   --cosmos-shadow-scale: 0.8;
 }
-body.layout-notion.theme-light.cupertino-light {
+body.layout-notion.theme-light.cupertino-light:not(.layout-baseline) {
   --corner-shape: round;
   --radius-s:  calc(3px * var(--radius-modifier));
   --radius-m:  calc(5px * var(--radius-modifier));

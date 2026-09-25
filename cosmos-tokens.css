@@ -279,6 +279,22 @@ body.theme-dark {
   --accent-l: 58%;
 }
 
+/* --- Accent in LIGHT: leggibile sul bianco --------------------------------
+   Le luminosità dell'accent (slate 58%, preset 44-63%) sono tarate sul canvas
+   scuro. Sul bianco lo slate misura 3.27:1 e l'amber 2.66:1: link e tag sotto
+   la soglia AA (4.5:1). In light la luminosità ha quindi un TETTO a 38%:
+   min() e non un offset fisso, così un accent già scuro scelto col picker
+   resta com'è invece di finire quasi nero. Con il tetto tutti e sei i preset
+   stanno sopra 4.5:1 sul bianco (misurato: slate 6.2, amber 5.0).
+   Si ridefinisce --color-accent (e i due gradini hover che app.css ne deriva)
+   perché è la radice di --text-accent, link e tag: un override solo, zero
+   selettori di elemento. Tonalità e saturazione restano quelle scelte. */
+body.theme-light:not(.layout-baseline) {
+  --color-accent:   hsl(var(--accent-h), var(--accent-s), min(var(--accent-l), 38%));
+  --color-accent-1: hsl(calc(var(--accent-h) - 1), calc(var(--accent-s) * 1.01), min(var(--accent-l), 41%));
+  --color-accent-2: hsl(calc(var(--accent-h) - 3), calc(var(--accent-s) * 1.02), min(var(--accent-l), 44%));
+}
+
 /* Island shadow — variante light (più tenue del dark). */
 body.theme-light {
   --cosmos-island-shadow:
@@ -641,6 +657,95 @@ body.linear-darker.theme-dark:not(.layout-baseline):not(.cosmos-light)
    com'era finita la prima volta. */
 
 /* --------------------------------------------------------------------------
+   § PALETTE IN LIGHT — ogni voce del select "Palette" ha la sua versione
+   chiara. Fino al 2026-09-25 le palette erano solo dark: in light venivano
+   ignorate e restava la scala cupertino-light di Baseline per tutte.
+
+   Il modello light è già quello giusto e NON serve lo Scoped Token Override:
+   in light Baseline dipinge .workspace con --background-secondary (la cornice)
+   e l'isola centrale con --background-primary (il canvas). Una palette light
+   quindi setta i token diretti, come fa § NOTION light, e la geometria resta
+   quella di tutte le altre (palette = solo colore).
+
+   Specificità (0,4,1): batte Baseline `.theme-light.cupertino-light:not(.is-mobile)`
+   (0,3,0) e la variante .is-mobile (0,3,0), quindi vale anche su phone.
+   § NOTION light, subito sotto, ha lo stesso peso e vince per ordine, come
+   in dark Notion batte le palette.
+
+   New Craft Darker / New Craft Lighter in light = la scala cupertino-light di
+   Baseline (#fff su cornice #f2f2f2), nessun blocco: è già il New Craft chiaro.
+
+   Valori estratti il 2026-09-25 dal CSS pubblicato dai tre prodotti, non da
+   stime. "misurato" = token letto; "composto" = token rgba composto sul
+   canvas; "derivato" = il prodotto non espone lo slot, ricavato dalla sua
+   scala e dichiarato come tale.
+   -------------------------------------------------------------------------- */
+
+/* Real Craft light — docs.craft.do, blocco `:root,[data-theme=light]`.
+   Neutro freddo di un punto (B > R), come il --base di Craft. Il corpo del
+   testo è più morbido dei titoli (--editor-text al 90%), specchio della
+   gerarchia che realcraft dark già riproduce. */
+body.realcraft.theme-light.cupertino-light:not(.layout-baseline) {
+  --background-primary:       #fcfdfe;   /* --base, misurato */
+  --background-primary-alt:   #fafafa;   /* --popupbase-blurred, misurato */
+  --background-secondary:     #f3f4f5;   /* cornice: derivato, --foreground al 4% (non esposto) */
+  --background-secondary-alt: #eaebec;   /* nav attivo: derivato, --foreground all'8% (Craft usa un blu, Cosmos resta monocromo) */
+
+  --background-modifier-border:       #f1f1f2;   /* --foreground-150, composto */
+  --background-modifier-border-hover:  #e4e5e6;   /* derivato, un gradino sopra */
+  --background-modifier-hover:         #f8f8f8;   /* --st-index-bg-hover, misurato */
+
+  --text-normal: #35383b;        /* --editor-text 90%, composto */
+  --text-muted:  #5f6062;        /* --foreground-700, composto */
+  --text-faint:  #a3a4a5;        /* --foreground-500, composto */
+  --h1-color: #1a1c1e;           /* --foreground, misurato */
+  --h2-color: #1a1c1e;
+  --h3-color: #1a1c1e;
+  --h4-color: #1a1c1e;
+  --h5-color: #1a1c1e;
+  --h6-color: #1a1c1e;
+}
+
+/* Linear light — static.linear.app, blocco `[data-theme=light]`. Una sola
+   palette per Lighter e Darker: la differenza fra le due in dark è la cornice
+   scavata sotto il canvas, e in light la cornice sta già sotto. Hover e riga
+   selezionata sono i token generici della scala (bg-level-1, bg-tertiary):
+   Linear non espone quelli delle righe. */
+body.linear.theme-light.cupertino-light:not(.layout-baseline),
+body.linear-darker.theme-light.cupertino-light:not(.layout-baseline) {
+  --background-primary:       #ffffff;   /* --color-bg-primary, misurato */
+  --background-primary-alt:   #f8f8f8;   /* --color-bg-level-1, misurato */
+  --background-secondary:     #f9f8f9;   /* --color-bg-secondary, misurato */
+  --background-secondary-alt: #f4f2f4;   /* --color-bg-tertiary, misurato */
+
+  --background-modifier-border:       #e9e8ea;   /* --color-border-primary */
+  --background-modifier-border-hover:  #e4e2e4;   /* --color-border-secondary */
+  --background-modifier-hover:         #f8f8f8;   /* --color-bg-level-1 */
+
+  --text-normal: #282a30;        /* --color-text-primary */
+  --text-muted:  #3c4149;        /* --color-text-secondary */
+  --text-faint:  #6f6e77;        /* --color-text-tertiary */
+}
+
+/* Perplexity light — perplexity.ai, stile calcolato in light. Warm come la
+   versione dark: tutti gli stati sono lo stesso inchiostro rgb(39 26 0) a
+   opacità crescenti, qui composti sul canvas. */
+body.perplexity.theme-light.cupertino-light:not(.layout-baseline) {
+  --background-primary:       #fdfbfa;   /* --bg-base, misurato */
+  --background-primary-alt:   #f6f3f1;   /* --bg-subtle 3.5%, composto */
+  --background-secondary:     #f6f3f1;   /* sidebar reale (.bg-subtle), composto */
+  --background-secondary-alt: #e8e4e0;   /* nav attivo: 7% sulla cornice, derivato (Perplexity usa un teal) */
+
+  --background-modifier-border:       #eeebe8;   /* --border-soft 7%, composto */
+  --background-modifier-border-hover:  #dfdcd7;   /* --border-base 14%, composto */
+  --background-modifier-hover:         #efebe9;   /* --action-ghost-neutral-bg-hover sulla cornice, composto */
+
+  --text-normal: #27251e;        /* --fg-primary, misurato */
+  --text-muted:  #72706b;        /* --fg-secondary 65%, composto */
+  --text-faint:  #92908c;        /* --fg-tertiary 50%, composto */
+}
+
+/* --------------------------------------------------------------------------
    § NOTION (Cosmos Flavour: layout-notion) — flavour COMPLETO, non solo palette.
    Due assi in un colpo solo: GEOMETRIA squadrata (l'essenza "più squadrato" di
    Notion) + PALETTE carta-Notion, light E dark. Campionata dai valori reali di
@@ -699,7 +804,7 @@ body.layout-notion.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-l
   --cosmos-shadow-scale: 0.8;
 }
 
-body.layout-notion.theme-light.cupertino-light {
+body.layout-notion.theme-light.cupertino-light:not(.layout-baseline) {
   /* — Geometria squadrata (ripetuta: il blocco scheme è blankato dal contract) — */
   --corner-shape: round;
   --radius-s:  calc(3px * var(--radius-modifier));
@@ -725,7 +830,7 @@ body.layout-notion.theme-light.cupertino-light {
   --text-muted:  #787774;
   --text-faint:  #9b9a97;
 
-  /* Elevazione light — questo blocco (0,3,1) batte il body.theme-light (0,1,1),
+  /* Elevazione light — questo blocco (0,4,1) batte il body.theme-light (0,1,1),
      quindi i token della card vanno ridichiarati qui o Notion light resterebbe
      sui default dark. Card bianca su canvas bianco: stacca con l'hairline
      (la firma di Notion) e un'ombra minima, non con un riempimento tinto. */

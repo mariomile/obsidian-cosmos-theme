@@ -685,7 +685,7 @@ settings:
 	-
 		id: cosmos-flavour
 		title: Palette
-		description: The color/surface palette — distinct from the "Cosmos Flavour" (layout) above. Mutually exclusive, you always end up on one. New Craft Darker = dark by default. New Craft Lighter = light surfaces. Real Craft = Craft's real colors.
+		description: The color/surface palette — distinct from the "Cosmos Flavour" (layout) above. Mutually exclusive, you always end up on one. New Craft Darker = dark by default. New Craft Lighter = light surfaces. Real Craft = Craft's real colors. Every palette has a light version, applied when Obsidian is set to light.
 		type: class-select
 		allowEmpty: false
 		default: nc-darker
