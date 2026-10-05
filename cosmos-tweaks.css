@@ -21,15 +21,15 @@ body.cosmos-accent-amber  { --accent-h:  36; --accent-s: 52%; --accent-l: 54%; }
 body.cosmos-accent-rose   { --accent-h:   8; --accent-s: 48%; --accent-l: 62%; }
 
 /* --- Ribbon sinistra: centra le icone -------------------------------------
-   Baseline le offsetta con `.workspace-ribbon.mod-left:not(.is-collapsed){padding-left:12px}`
+   Baseline le offsetta con `.workspace-ribbon.mod-primary:not(.is-collapsed){padding-left:12px}`
    → sembrano spinte a sinistra. Azzeriamo il padding e centriamo la colonna.
    KEEP gate ×3 (slice 3): la ribbon sinistra non esiste come UI su phone →
    gate corretto. Audit: docs/2026-07-11-mobile-gate-audit.md. */
-body:not(.is-mobile) .workspace-ribbon.mod-left:not(.is-collapsed) {
+body:not(.is-mobile) .workspace-ribbon.mod-primary:not(.is-collapsed) {
   padding-left: 0;
 }
-body:not(.is-mobile) .workspace-ribbon.mod-left,
-body:not(.is-mobile) .workspace-ribbon.mod-left .side-dock-actions {
+body:not(.is-mobile) .workspace-ribbon.mod-primary,
+body:not(.is-mobile) .workspace-ribbon.mod-primary .side-dock-actions {
   align-items: center;
 }
 
@@ -417,7 +417,7 @@ body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab
    Toggle: cosmos-floating-ribbon · preset: layout-cosmos-fusion-glass */
 @media (hover: hover) and (pointer: fine) {
   body:is(.cosmos-floating-ribbon, .layout-cosmos-fusion-glass):not(.layout-baseline)
-    .workspace-ribbon.mod-left:not(.is-collapsed) {
+    .workspace-ribbon.mod-primary:not(.is-collapsed) {
     margin: var(--island-gap) 0 var(--island-gap) var(--island-gap);
     padding: 0;
     border-radius: var(--cosmos-r-floating-surface);
@@ -460,7 +460,7 @@ body.layout-cosmos-fusion-glass:not(.layout-baseline)
 
 /* Tablet: Fusion Glass rende anche il drawer pinned una island. Il target
    phone continua a usare il drawer full-screen nativo senza inset forzati. */
-body.layout-cosmos-fusion-glass.is-tablet .workspace-drawer.is-pinned.mod-left {
+body.layout-cosmos-fusion-glass.is-tablet .workspace-drawer.is-pinned.mod-primary {
   margin: var(--island-gap) 0 var(--island-gap) var(--island-gap);
   border-radius: var(--cosmos-r-floating-surface);
   outline: var(--cosmos-glass-outline);
