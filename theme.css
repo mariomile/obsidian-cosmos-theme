@@ -3868,6 +3868,11 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
 .bases-view .bases-group-heading .bases-group-property {
   color: var(--text-faint);      
 }
+.bases-view .bases-kanban-column-header .bases-group-heading {
+  margin-top: 0;
+  padding-bottom: 0;
+  align-items: center;
+}
 .bases-view .bases-cards-item {
   position: relative;
   border: 1px solid var(--mv-card-border);
