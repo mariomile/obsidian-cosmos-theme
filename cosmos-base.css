@@ -708,6 +708,9 @@ settings:
 			-
 				label: Linear Lighter
 				value: linear
+			-
+				label: ChatGPT
+				value: chatgpt
 	-
 		id: element-style
 		title: Personality
