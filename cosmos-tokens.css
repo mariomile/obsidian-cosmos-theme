@@ -475,7 +475,7 @@ body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light)
      { background-color: transparent }` è (0,4,1) e batte core (0,1,0), quindi
      l'header resta trasparente com'è previsto e la nota ci scorre sotto.
    Nessun background-color scritto qui = nessuna (0,7,1) che schiacci il phone. */
-body:is(.realcraft, .linear-darker).theme-dark:not(.layout-baseline):not(.cosmos-light)
+body:is(.realcraft, .linear-darker, .chatgpt, .chatgpt-rounded).theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .view-header {
   /* ENTRAMBI i token: core ne usa uno diverso sulla leaf attiva a fuoco
      (`.is-focused .workspace-leaf.mod-active .view-header { background-color:
@@ -657,6 +657,105 @@ body.linear-darker.theme-dark:not(.layout-baseline):not(.cosmos-light)
    com'era finita la prima volta. */
 
 /* --------------------------------------------------------------------------
+   § CHATGPT (Palette option, valore `chatgpt`): dall'app desktop ChatGPT in
+   dark, campionato pixel dallo screenshot di Mario (2026-10-07).
+   Monocromo neutro puro (R=G=B), zero tinta.
+
+   Struttura: canvas NERO PURO #000000 dentro una cornice appena sollevata
+   #0e0e0e. È lo Scoped Token Override di Linear Darker, ma col verso del
+   salto rovesciato: qui il pannello centrale è PIÙ SCURO della cornice.
+   Il globale porta la cornice, il .mod-root ridefinisce il canvas a nero.
+   --background-secondary resta #0e0e0e anche dentro il main pane, cioè PIÙ
+   CHIARO del canvas: è il modello Cosmos normale (chrome elevato), quindi la
+   riga attiva stacca da sola e § PALETTE INVERTITE di cosmos-tweaks.css NON
+   serve.
+
+   Accent lasciato al sistema/vault (come le altre palette). L'unico colore di
+   ChatGPT è il blu del pallino di notifica, #006efe (misurato): se lo vuoi, va impostato
+   dal picker accent. Il colore è un evento, non un ambiente.
+   -------------------------------------------------------------------------- */
+body.chatgpt.theme-dark:not(.layout-baseline):not(.cosmos-light),
+body.chatgpt-rounded.theme-dark:not(.layout-baseline):not(.cosmos-light) {
+  --cosmos-surface-0: #0e0e0e;   /* CORNICE: sidebar, ribbon, tab bar, fondo */
+  --cosmos-surface-1: #0e0e0e;   /* allineato: Cosmos non lo consuma per la chrome */
+  --cosmos-surface-2: #1a1a1a;   /* block / elevate: la pill del composer, misurato */
+  --cosmos-surface-3: #262626;   /* card / nav attivo: ChatGPT sta a #1e1e1e, alzato di un gradino perché in una sidebar lunga la selezione si perdeva */
+
+  /* Bordi: l'hairline del composer (misurato); hover derivato. */
+  --background-modifier-border:       #272727;
+  --background-modifier-border-hover:  #333333;
+
+  /* Testo, misurato: primario (il "+" e i puntini attivi), grigio del logo,
+     icone della rail. Il placeholder del composer sta a #4c4c4c: troppo
+     spento per il testo faint di Obsidian, quindi non usato. */
+  --text-normal: #ededed;
+  --text-muted:  #a7a7a7;
+  --text-faint:  #777777;
+
+  /* Piolo card esplicito (vedi realcraft: .cupertino-dark tracima altrimenti). */
+  --cosmos-surface-card: var(--cosmos-surface-2);
+  --cosmos-surface-card-hover: var(--cosmos-surface-3);
+
+  /* Sul nero l'ombra non si vede comunque: accenna, la superficie fa il lavoro. */
+  --cosmos-shadow-scale: 0.6;
+}
+
+/* Il main pane torna canvas: nero puro. */
+body:is(.chatgpt, .chatgpt-rounded).theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .workspace-split.mod-root {
+  --background-primary:       #000000;
+  --file-header-background:   #000000;   /* derivato: vedi ⚠️ in § LINEAR DARKER */
+}
+body:is(.chatgpt, .chatgpt-rounded).theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .workspace-split.mod-root .workspace-tab-container {
+  background-color: var(--background-primary);
+}
+
+/* Sidebar sinistra e ribbon più quiete, come la rail di ChatGPT: etichette nel
+   grigio del logo, icone nel grigio della rail, solo la voce attiva in bianco.
+   Scoped Token Override, nessun elemento dipinto. La sidebar destra resta
+   esclusa: ospita la chat di Exo e altre view di lettura, che devono restare
+   in bianco pieno. --icon-color va ridichiarato: è un derivato di
+   --text-muted risolto sul body (trappola 1). */
+body:is(.chatgpt, .chatgpt-rounded).theme-dark:not(.layout-baseline):not(.cosmos-light)
+  :is(.workspace-split.mod-left-split, .workspace-ribbon) {
+  --text-normal: #a7a7a7;
+  --text-muted:  #777777;
+  --icon-color:  #777777;
+}
+body:is(.chatgpt, .chatgpt-rounded).theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .portal-file.is-active {
+  --text-normal: #ededed;
+}
+/* Selezione Portal un gradino più marcata (wash 9% → 14%): il wash di Portal è
+   un derivato di --text-normal dichiarato su .portal-rail, quindi con lo scope
+   sopra scenderebbe al grigio e la riga attiva sparirebbe. */
+body:is(.chatgpt, .chatgpt-rounded).theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .portal-rail {
+  --portal-wash:        color-mix(in srgb, #ededed 7%, transparent);
+  --portal-wash-strong: color-mix(in srgb, #ededed 14%, transparent);
+}
+
+/* § CHATGPT ROUNDED (Palette option, valore `chatgpt-rounded`): stessi colori
+   di ChatGPT, raggi grandi come la pill del composer e del nav attivo. È una
+   voce separata del select su richiesta di Mario (2026-10-07), così la
+   geometria cambia solo scegliendola e le altre palette restano identiche.
+   Tutta la geometria passa dai token di raggio, come § NOTION: --tab-radius è
+   var(--radius-s) sul body, quindi segue da solo e porta con sé isole e
+   pannello centrale. Blocchi scheme dark e light: la ripetizione è coperta
+   dal blanking del contract. */
+body.chatgpt-rounded.theme-dark:not(.layout-baseline):not(.cosmos-light) {
+  --radius-s:  calc(14px * var(--radius-modifier));
+  --radius-m:  calc(18px * var(--radius-modifier));
+  --radius-l:  calc(26px * var(--radius-modifier));
+  --radius-xl: calc(32px * var(--radius-modifier));
+  --mv-r1: 10px;
+  --mv-r-card: 18px;
+  --mv-r-chip: 999px;
+  --cosmos-tab-radius: 12px;
+}
+
+/* --------------------------------------------------------------------------
    § PALETTE IN LIGHT — ogni voce del select "Palette" ha la sua versione
    chiara. Fino al 2026-09-25 le palette erano solo dark: in light venivano
    ignorate e restava la scala cupertino-light di Baseline per tutte.
@@ -743,6 +842,35 @@ body.perplexity.theme-light.cupertino-light:not(.layout-baseline) {
   --text-normal: #27251e;        /* --fg-primary, misurato */
   --text-muted:  #72706b;        /* --fg-secondary 65%, composto */
   --text-faint:  #92908c;        /* --fg-tertiary 50%, composto */
+}
+
+/* ChatGPT light: chatgpt.com, blocco `html, .light` del CSS pubblicato
+   (letto il 2026-10-07). Stessa logica monocroma della dark. "misurato" =
+   token letto; "composto" = token rgba composto sul fondo. */
+body.chatgpt.theme-light.cupertino-light:not(.layout-baseline),
+body.chatgpt-rounded.theme-light.cupertino-light:not(.layout-baseline) {
+  --background-primary:       #ffffff;   /* --bg-primary, misurato */
+  --background-primary-alt:   #f3f3f3;   /* --bg-tertiary, misurato */
+  --background-secondary:     #fcfcfc;   /* --component-sidebar-bg, misurato */
+  --background-secondary-alt: #e8e8e8;   /* --bg-secondary, misurato */
+
+  --background-modifier-border:       #e6e6e6;   /* --border-default 10%, composto */
+  --background-modifier-border-hover:  #d9d9d9;   /* --border-heavy 15%, composto */
+  --background-modifier-hover:         #f0f0f0;   /* --interactive-bg-secondary-hover 5% sulla sidebar, composto */
+
+  --text-normal: #0d0d0d;        /* --text-primary, misurato */
+  --text-muted:  #5d5d5d;        /* --text-secondary, misurato */
+  --text-faint:  #8f8f8f;        /* --text-tertiary, misurato */
+}
+body.chatgpt-rounded.theme-light.cupertino-light:not(.layout-baseline) {
+  --radius-s:  calc(14px * var(--radius-modifier));
+  --radius-m:  calc(18px * var(--radius-modifier));
+  --radius-l:  calc(26px * var(--radius-modifier));
+  --radius-xl: calc(32px * var(--radius-modifier));
+  --mv-r1: 10px;
+  --mv-r-card: 18px;
+  --mv-r-chip: 999px;
+  --cosmos-tab-radius: 12px;
 }
 
 /* --------------------------------------------------------------------------

@@ -19,6 +19,10 @@ body.cosmos-accent-teal   { --accent-h: 184; --accent-s: 40%; --accent-l: 44%; }
 body.cosmos-accent-purple { --accent-h: 260; --accent-s: 32%; --accent-l: 63%; }
 body.cosmos-accent-amber  { --accent-h:  36; --accent-s: 52%; --accent-l: 54%; }
 body.cosmos-accent-rose   { --accent-h:   8; --accent-s: 48%; --accent-l: 62%; }
+/* ChatGPT Blue: il pallino di notifica dell'app ChatGPT, #006efe misurato.
+   L'unico preset saturo: è pensato per le palette ChatGPT, dove è l'unico
+   colore dell'interfaccia e quindi non rompe il registro calmo. */
+body.cosmos-accent-chatgpt { --accent-h: 214; --accent-s: 100%; --accent-l: 50%; }
 
 /* --- Ribbon sinistra: centra le icone -------------------------------------
    Baseline le offsetta con `.workspace-ribbon.mod-primary:not(.is-collapsed){padding-left:12px}`
