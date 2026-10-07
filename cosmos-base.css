@@ -46,6 +46,9 @@ settings:
 			-
 				label: Rose
 				value: cosmos-accent-rose
+			-
+				label: ChatGPT Blue
+				value: cosmos-accent-chatgpt
 	-
 		id: accent
 		title: Custom accent
@@ -711,6 +714,9 @@ settings:
 			-
 				label: ChatGPT
 				value: chatgpt
+			-
+				label: ChatGPT Rounded
+				value: chatgpt-rounded
 	-
 		id: element-style
 		title: Personality
