@@ -3500,15 +3500,15 @@ body.linear-darker.theme-dark:not(.layout-baseline):not(.cosmos-light)
   background-color: var(--background-primary);
 }
 body.chatgpt.theme-dark:not(.layout-baseline):not(.cosmos-light) {
-  --cosmos-surface-0: #0d0d0d;   
-  --cosmos-surface-1: #0d0d0d;   
-  --cosmos-surface-2: #1e1e1e;   
-  --cosmos-surface-3: #2a2a2a;   
-  --background-modifier-border:       #262626;
+  --cosmos-surface-0: #0e0e0e;   
+  --cosmos-surface-1: #0e0e0e;   
+  --cosmos-surface-2: #1a1a1a;   
+  --cosmos-surface-3: #1e1e1e;   
+  --background-modifier-border:       #272727;
   --background-modifier-border-hover:  #333333;
-  --text-normal: #ececec;
-  --text-muted:  #8f8f8f;
-  --text-faint:  #5d5d5d;
+  --text-normal: #ededed;
+  --text-muted:  #a7a7a7;
+  --text-faint:  #777777;
   --cosmos-surface-card: var(--cosmos-surface-2);
   --cosmos-surface-card-hover: var(--cosmos-surface-3);
   --cosmos-shadow-scale: 0.6;
