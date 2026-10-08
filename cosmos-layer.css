@@ -427,6 +427,14 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
 .bases-view .bases-group-heading .bases-group-property {
   color: var(--text-faint);      /* più muto del label base */
 }
+/* Kanban: la heading vive nella column-header (flex centrata). Margin e
+   padding del gruppo-tabella la spingevano giù e il conteggio restava in
+   alto come un apice. */
+.bases-view .bases-kanban-column-header .bases-group-heading {
+  margin-top: 0;
+  padding-bottom: 0;
+  align-items: center;
+}
 
 /* --------------------------------------------------------------------------
    § 3 — Cards: identiche alle card masonry (bordo quieto, bg mix, lift +
