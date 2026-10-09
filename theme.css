@@ -4508,6 +4508,17 @@ body.is-mobile.theme-dark > *, body.is-mobile.theme-light > * {
 .modal.mod-settings {
   --setting-items-background: transparent;
 }
+@media (pointer: fine) {
+  body.metadata-cupertino:not(.metadata-compact) .metadata-container .metadata-property {
+    min-height: 0;
+  }
+  body.metadata-cupertino:not(.metadata-compact) .metadata-container .metadata-property-key {
+    padding-block: 4px;
+  }
+}
+body :is(.cm-content, .markdown-preview-sizer) iframe.external-embed[src*="platform.twitter.com"] {
+  background: transparent;
+}
 body.cosmos-phone-edition.is-phone {
   --navbar-height: var(--touch-size-l);   
   --navbar-radius: var(--touch-size-l);   

@@ -905,3 +905,31 @@ body.is-mobile.theme-dark > *, body.is-mobile.theme-light > * {
 .modal.mod-settings {
   --setting-items-background: transparent;
 }
+
+/* ==========================================================================
+   § UX AUDIT 2026-10-09 — densità su desktop
+   ========================================================================== */
+
+/* --- Proprietà: righe da 36px su desktop -----------------------------------
+   input-cupertino dà alla chiave 8px sopra e sotto, così ogni riga arriva a
+   44px, il target tattile di iOS. Su desktop una nota di progetto con 8
+   proprietà spingeva il contenuto molto in basso. Il toggle `metadata-compact`
+   esiste già ma vale anche su phone, dove i 44px servono: qui vale solo con un
+   puntatore preciso (pointer: fine). */
+@media (pointer: fine) {
+  body.metadata-cupertino:not(.metadata-compact) .metadata-container .metadata-property {
+    min-height: 0;
+  }
+  body.metadata-cupertino:not(.metadata-compact) .metadata-container .metadata-property-key {
+    padding-block: 4px;
+  }
+}
+
+/* --- Embed di X: niente lastra dietro la card ------------------------------
+   L'iframe del tweet è largo quanto la colonna e ha lo sfondo di un pannello,
+   ma la card che Twitter disegna dentro si ferma a ~550px: a destra restava
+   una lastra vuota. Senza sfondo resta solo la card. Il selettore batte la
+   regola media-width-full della base (`.cm-content iframe`). */
+body :is(.cm-content, .markdown-preview-sizer) iframe.external-embed[src*="platform.twitter.com"] {
+  background: transparent;
+}
