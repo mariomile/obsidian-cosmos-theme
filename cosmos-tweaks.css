@@ -905,3 +905,32 @@ body.is-mobile.theme-dark > *, body.is-mobile.theme-light > * {
 .modal.mod-settings {
   --setting-items-background: transparent;
 }
+
+/* ==========================================================================
+   § UX AUDIT 2026-10-09 — densità su desktop
+   ========================================================================== */
+
+/* --- Proprietà: righe da 32px su desktop -----------------------------------
+   input-cupertino porta ogni riga a 44px, il target tattile di iOS. Su desktop
+   una nota di progetto con 8 proprietà spingeva il contenuto a ~350px dal
+   titolo. Il toggle `metadata-compact` esiste già ma vale anche su phone, dove
+   i 44px servono: qui vale solo con un puntatore preciso (pointer: fine). */
+@media (pointer: fine) {
+  body.metadata-cupertino:not(.metadata-compact) .metadata-container {
+    --input-height: 28px;
+  }
+  body.metadata-cupertino:not(.metadata-compact) .metadata-container .metadata-property {
+    min-height: 32px;
+  }
+  body.metadata-cupertino:not(.metadata-compact) .metadata-container .metadata-property-key {
+    padding-block: 4px;
+  }
+}
+
+/* --- Kanban di Bases: le colonne vuote si stringono ------------------------
+   Una colonna senza card prendeva i 280px di una piena e spingeva le altre
+   fuori dal pannello. Stretta, resta un bersaglio di drop riconoscibile. */
+.bases-kanban-column:not(:has(.bases-kanban-card)) {
+  width: 160px;
+  min-width: 160px;
+}

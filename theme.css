@@ -4508,6 +4508,21 @@ body.is-mobile.theme-dark > *, body.is-mobile.theme-light > * {
 .modal.mod-settings {
   --setting-items-background: transparent;
 }
+@media (pointer: fine) {
+  body.metadata-cupertino:not(.metadata-compact) .metadata-container {
+    --input-height: 28px;
+  }
+  body.metadata-cupertino:not(.metadata-compact) .metadata-container .metadata-property {
+    min-height: 32px;
+  }
+  body.metadata-cupertino:not(.metadata-compact) .metadata-container .metadata-property-key {
+    padding-block: 4px;
+  }
+}
+.bases-kanban-column:not(:has(.bases-kanban-card)) {
+  width: 160px;
+  min-width: 160px;
+}
 body.cosmos-phone-edition.is-phone {
   --navbar-height: var(--touch-size-l);   
   --navbar-radius: var(--touch-size-l);   
