@@ -685,6 +685,9 @@ settings:
 			-
 				label: Notion
 				value: layout-notion
+			-
+				label: Kore
+				value: layout-kore
 	-
 		id: cosmos-flavour
 		title: Palette

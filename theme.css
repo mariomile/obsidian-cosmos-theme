@@ -684,6 +684,9 @@ settings:
 			-
 				label: Notion
 				value: layout-notion
+			-
+				label: Kore
+				value: layout-kore
 	-
 		id: cosmos-flavour
 		title: Palette
@@ -3536,6 +3539,22 @@ body.kore.theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .workspace-tab-container {
   background-color: var(--background-primary);
 }
+body.layout-kore.theme-dark:not(.layout-baseline) {
+  --kore-hairline: color-mix(in srgb, var(--text-normal) 10%, transparent);
+  --mv-r-card: 16px;
+  --mv-card-rest: none;
+  --mv-card-lift: none;
+  --mv-card-bg-hover: var(--mv-card-bg);
+  --cosmos-tab-radius: 10px;
+}
+body.layout-kore.theme-light:not(.layout-baseline) {
+  --kore-hairline: color-mix(in srgb, var(--text-normal) 12%, transparent);
+  --mv-r-card: 16px;
+  --mv-card-rest: none;
+  --mv-card-lift: none;
+  --mv-card-bg-hover: var(--mv-card-bg);
+  --cosmos-tab-radius: 10px;
+}
 body.realcraft.theme-light.cupertino-light:not(.layout-baseline) {
   --background-primary:       #fcfdfe;   
   --background-primary-alt:   #fafafa;   
@@ -4498,6 +4517,16 @@ body.is-mobile.theme-dark > *, body.is-mobile.theme-light > * {
 }
 body :is(.cm-content, .markdown-preview-sizer) iframe.external-embed[src*="platform.twitter.com"] {
   background: transparent;
+}
+body.layout-kore:is(.tab-floating, .tab-floating-center):not(.layout-baseline)
+  .workspace-split.mod-root .workspace-tab-header-container {
+  --craft-tab-active: transparent;
+  --shadow-tactile: inset 0 0 0 1px var(--kore-hairline);
+}
+body.layout-kore:not(.layout-baseline) .workspace-split.mod-root,
+body.layout-kore:not(.layout-baseline)
+  .workspace-split.mod-root .workspace-tab-header-container {
+  background-color: var(--background-primary);
 }
 body.cosmos-phone-edition.is-phone {
   --navbar-height: var(--touch-size-l);   

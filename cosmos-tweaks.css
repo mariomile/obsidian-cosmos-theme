@@ -888,3 +888,23 @@ body.is-mobile.theme-dark > *, body.is-mobile.theme-light > * {
 body :is(.cm-content, .markdown-preview-sizer) iframe.external-embed[src*="platform.twitter.com"] {
   background: transparent;
 }
+
+/* ==========================================================================
+   § KORE LAYOUT (flavour layout-kore) — vedi i token in cosmos-tokens.css.
+   Scoped Token Override dove possibile: le tab Craft leggono
+   --craft-tab-active e --shadow-tactile, quindi basta ridichiararli nella
+   tab bar del pannello centrale (non sul body: --shadow-tactile lo usano
+   anche callout e code block). Il canvas va sotto anche alla tab bar, come
+   in Kore dove la riga delle tab sta sul fondo del documento.
+   ========================================================================== */
+body.layout-kore:is(.tab-floating, .tab-floating-center):not(.layout-baseline)
+  .workspace-split.mod-root .workspace-tab-header-container {
+  --craft-tab-active: transparent;
+  --shadow-tactile: inset 0 0 0 1px var(--kore-hairline);
+}
+body.layout-kore:not(.layout-baseline) .workspace-split.mod-root,
+body.layout-kore:not(.layout-baseline)
+  .workspace-split.mod-root .workspace-tab-header-container {
+  background-color: var(--background-primary);
+}
+
