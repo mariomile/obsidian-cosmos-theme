@@ -717,6 +717,9 @@ settings:
 			-
 				label: ChatGPT Rounded
 				value: chatgpt-rounded
+			-
+				label: Kore
+				value: kore
 	-
 		id: element-style
 		title: Personality
