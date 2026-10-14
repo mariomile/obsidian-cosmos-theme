@@ -3568,11 +3568,11 @@ body.kore.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   --text-normal: #ededed;
   --text-muted:  #9e9e9e;
   --text-faint:  #686868;
-  --link-color:                  #7b7ef4;
-  --link-color-hover:            #9598f7;
-  --link-external-color:         #7b7ef4;
-  --link-external-color-hover:   #9598f7;
-  --link-unresolved-color:       #7b7ef4;
+  --link-color:                  #94a2b8;   
+  --link-color-hover:            #b4bfcd;
+  --link-external-color:         #94a2b8;
+  --link-external-color-hover:   #b4bfcd;
+  --link-unresolved-color:       #94a2b8;
   --cosmos-surface-card: var(--cosmos-surface-2);
   --cosmos-surface-card-hover: var(--cosmos-surface-2);
   --mv-r-card: 16px;
@@ -3664,11 +3664,11 @@ body.kore.theme-light.cupertino-light:not(.layout-baseline) {
   --text-normal: #17181c;
   --text-muted:  #6b6f76;
   --text-faint:  #9a9ea7;
-  --link-color:                  #4f46e5;
-  --link-color-hover:            #6366f1;
-  --link-external-color:         #4f46e5;
-  --link-external-color-hover:   #6366f1;
-  --link-unresolved-color:       #4f46e5;
+  --link-color:                  #64748b;   
+  --link-color-hover:            #475569;
+  --link-external-color:         #64748b;
+  --link-external-color-hover:   #475569;
+  --link-unresolved-color:       #64748b;
   --mv-r-card: 16px;
 }
 body.layout-notion.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {

@@ -758,8 +758,9 @@ body.chatgpt-rounded.theme-dark:not(.layout-baseline):not(.cosmos-light) {
 /* --------------------------------------------------------------------------
    § KORE (Palette option, valore `kore`): dall'app Kore Brain di Mario, tema
    "Codex" (letto dai token del repo Kore, `design-system/tokens/colors.css`,
-   2026-10-14). Monocromo neutro quasi nero, nessun accent tranne il blu
-   pervinca dei link (#7b7ef4, l'accent di `.dark` che Codex non ridefinisce).
+   2026-10-14) e verificato pixel per pixel sullo screenshot di Mario.
+   Monocromo neutro quasi nero, nessun accent tranne i link grigio-blu
+   #94a2b8 (misurato).
 
    Stessa struttura di § CHATGPT: la cornice (sidebar di Kore, --surface-sunken
    #0c0c0c) sta appena SOPRA il canvas (#060606), quindi il globale porta la
@@ -784,11 +785,11 @@ body.kore.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   --text-faint:  #686868;
 
   /* Solo i link prendono il colore, il resto dell'accent resta al preset. */
-  --link-color:                  #7b7ef4;
-  --link-color-hover:            #9598f7;
-  --link-external-color:         #7b7ef4;
-  --link-external-color-hover:   #9598f7;
-  --link-unresolved-color:       #7b7ef4;
+  --link-color:                  #94a2b8;   /* misurato dallo screenshot di Kore */
+  --link-color-hover:            #b4bfcd;
+  --link-external-color:         #94a2b8;
+  --link-external-color-hover:   #b4bfcd;
+  --link-unresolved-color:       #94a2b8;
 
   --cosmos-surface-card: var(--cosmos-surface-2);
   --cosmos-surface-card-hover: var(--cosmos-surface-2);
@@ -927,7 +928,7 @@ body.chatgpt-rounded.theme-light.cupertino-light:not(.layout-baseline) {
 }
 
 /* Kore light: i token :root di Kore (`design-system/tokens/colors.css`).
-   "composto" = rgba di inchiostro composto sul fondo. Link indigo-600. */
+   "composto" = rgba di inchiostro composto sul fondo. */
 body.kore.theme-light.cupertino-light:not(.layout-baseline) {
   --background-primary:       #ffffff;   /* --surface */
   --background-primary-alt:   #f7f7f8;   /* --surface-sunken */
@@ -942,11 +943,11 @@ body.kore.theme-light.cupertino-light:not(.layout-baseline) {
   --text-muted:  #6b6f76;
   --text-faint:  #9a9ea7;
 
-  --link-color:                  #4f46e5;
-  --link-color-hover:            #6366f1;
-  --link-external-color:         #4f46e5;
-  --link-external-color-hover:   #6366f1;
-  --link-unresolved-color:       #4f46e5;
+  --link-color:                  #64748b;   /* stessa tinta slate, scurita per il bianco */
+  --link-color-hover:            #475569;
+  --link-external-color:         #64748b;
+  --link-external-color-hover:   #475569;
+  --link-unresolved-color:       #64748b;
 
   --mv-r-card: 16px;
 }
