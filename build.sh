@@ -47,6 +47,15 @@ def trim_personalities(css: str) -> tuple[str, int]:
     return ''.join(kept), dropped
 
 raw = open('cosmos-base.css').read().rstrip('\n')
+
+# Baseline incorpora "Instrument Serif" come due @font-face base64 (77KB, l'11%
+# del theme.css). Cosmos non lo usa: la base lo nomina solo come fallback di
+# --inline-title-font e --h1..h6-font su `body`, e § TITOLI/HEADING SANS in
+# cosmos-tweaks.css ridichiara tutte e sette le variabili su
+# body.theme-dark/light, che vince sempre. Nessuna opzione di Style Settings lo
+# offre. Si toglie qui, come le personalità: cosmos-base.css resta il fork intatto.
+raw, n_fonts = re.subn(r'@font-face\{font-family:"Instrument Serif";[^}]*\}', '', raw)
+assert n_fonts == 2, f"attese 2 @font-face Instrument Serif nella base, trovate {n_fonts}"
 if DROP_PERSONALITIES:
     # Il blocco @settings è un commento: si estrae, si sfronda il solo CSS, si
     # rimette. Altrimenti il conteggio graffe della sfronda leggerebbe le
