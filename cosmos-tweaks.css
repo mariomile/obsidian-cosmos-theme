@@ -902,10 +902,21 @@ body.layout-kore:is(.tab-floating, .tab-floating-center):not(.layout-baseline)
   --craft-tab-active: transparent;
   --shadow-tactile: inset 0 0 0 1px var(--kore-hairline);
 }
-body.layout-kore:not(.layout-baseline) .workspace-split.mod-root,
-body.layout-kore:not(.layout-baseline)
-  .workspace-split.mod-root .workspace-tab-header-container {
+body.layout-kore:not(.layout-baseline) .workspace-split.mod-root {
   background-color: var(--background-primary);
+  /* Finestra traslucida fuori dal fullscreen: app.css forza
+     `.is-translucent:not(.is-fullscreen) .workspace-split` e la tab bar
+     `.mod-top` a background transparent !important, e la riga delle tab
+     tornava del colore della cornice. Un box-shadow inset non è un
+     background, quindi quella regola non lo tocca: dipinge lo stesso canvas
+     sotto ai figli trasparenti. */
+  box-shadow: inset 0 0 0 100vmax var(--background-primary);
+}
+/* Il contenitore del documento ha il suo raggio: sul canvas continuo di Kore
+   l'angolo staccava una tacca del colore della cornice. */
+body.layout-kore:not(.layout-baseline)
+  .workspace-split.mod-root > .workspace-tabs > .workspace-tab-container {
+  border-radius: 0;
 }
 
 /* Segmentati (filtro a pill di Masonry e simili): pista grigia, pill attivo
