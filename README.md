@@ -22,15 +22,9 @@ The Cosmos skin (Craft-style compact pill tabs + a darker, uniform dark surface)
 
 **Right sidebar island** — in Cupertino & Fusion the right sidebar becomes a floating "island" matching the editor's native island (radius + hairline outline + shadow, top-aligned).
 
-### Cupertino Light — the "Superfici chiare" toggle
+### Lighter surfaces
 
-A **class-toggle** in Style Settings (`cosmos-light`, off by default). When on, it disables the Cosmos *darker* surfaces → the theme falls back to Baseline's native (lighter) Cupertino greys. Combine with Cupertino/Fusion to get "Cupertino Light": same craft tabs + island, lighter surfaces. Works in dark and light mode.
-
-### Fusion tabs — optional Craft capsule treatment
-
-The **Fusion tabs (Craft)** toggle (`cosmos-fusion-tabs`, off by default) reuses Baseline Fusion's full-round capsule, translucent active surface, and elevated shadow without switching the whole workspace to the Fusion flavour. It applies to desktop editor tabs only and intentionally stays off in Standard, preserving Standard's clean-Baseline contract.
-
-Additional independent toggles—**Floating editor surface**, **Floating settings panel**, and **Floating ribbon**—apply the corresponding Fusion/Craft treatment without changing flavour. All default to off; Fusion Glass includes all three as a preset.
+The **New Craft Lighter** option of the Palette select (`cosmos-light`) disables the Cosmos *darker* surfaces and falls back to Baseline's native, lighter Cupertino greys. Works in dark and light mode.
 
 ### Filled navigation icons — optional Craft object language
 

@@ -684,6 +684,9 @@ settings:
 			-
 				label: Notion
 				value: layout-notion
+			-
+				label: Kore
+				value: layout-kore
 	-
 		id: cosmos-flavour
 		title: Palette
@@ -744,48 +747,6 @@ settings:
 			-
 				label: Plain
 				value: input-baseline
-	-
-		id: cosmos-light
-		title: Light surfaces (New Craft Light)
-		description: Disables dark Cosmos surfaces → lighter native grays. Combines with New Craft/Apple.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-h-extras
-		title: Craft & Fusion extras
-		type: heading
-		level: 1
-		collapsed: false
-	-
-		id: craft-nav-toggle
-		title: Craft sidebar nav
-		description: Craft-style sidebar nav — active pill, soft hover, uppercase section labels. OFF = current look.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-fusion-tabs
-		title: Fusion tabs (Craft)
-		description: Uses Baseline Fusion's capsule and translucent tab treatment without changing the Cosmos flavour. Desktop only; Standard stays unchanged.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-floating-editor
-		title: Floating editor surface
-		description: Turns the editor into a suspended surface with inset, hairline, translucency and shadow. Fusion Glass includes it automatically.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-floating-settings
-		title: Floating settings panel
-		description: Turns settings navigation into a translucent island, Craft/macOS-style. Fusion Glass includes it automatically.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-floating-ribbon
-		title: Floating ribbon
-		description: Detaches the left ribbon from the edges with a coordinated surface, radius and shadow. Fusion Glass includes it automatically.
-		type: class-toggle
-		default: false
 	-
 		id: accessibility
 		title: Accessibility
@@ -3097,15 +3058,6 @@ settings:
 		title: Disable rounded media
 		type: class-toggle
 	-
-		id: img-grid-gap
-		title: Image grids spacing
-		type: variable-number-slider
-		default: 4
-		min: 0
-		max: 16
-		step: 1
-		format: px
-	-
 		id: pdf
 		title: PDF
 		type: heading
@@ -3586,6 +3538,22 @@ body.kore.theme-dark:not(.layout-baseline):not(.cosmos-light)
 body.kore.theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .workspace-tab-container {
   background-color: var(--background-primary);
+}
+body.layout-kore.theme-dark:not(.layout-baseline) {
+  --kore-hairline: color-mix(in srgb, var(--text-normal) 10%, transparent);
+  --mv-r-card: 16px;
+  --mv-card-rest: none;
+  --mv-card-lift: none;
+  --mv-card-bg-hover: var(--mv-card-bg);
+  --cosmos-tab-radius: 10px;
+}
+body.layout-kore.theme-light:not(.layout-baseline) {
+  --kore-hairline: color-mix(in srgb, var(--text-normal) 12%, transparent);
+  --mv-r-card: 16px;
+  --mv-card-rest: none;
+  --mv-card-lift: none;
+  --mv-card-bg-hover: var(--mv-card-bg);
+  --cosmos-tab-radius: 10px;
 }
 body.realcraft.theme-light.cupertino-light:not(.layout-baseline) {
   --background-primary:       #fcfdfe;   
@@ -4288,7 +4256,7 @@ body.radius-generous.theme-light {
   --mv-r1: 9px;
   --mv-r-chip: 7px;
 }
-body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab-floating-center):not(.layout-baseline)
+body.layout-cosmos-fusion-glass:is(.tab-floating, .tab-floating-center):not(.layout-baseline)
   .workspace-split.mod-root .workspace-tabs:not(.mod-stacked) {
   --cosmos-tab-radius: var(--cosmos-r-fusion-tab);
   --cosmos-tabbar-radius: var(--cosmos-r-fusion-tabbar);
@@ -4296,7 +4264,7 @@ body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab
   --shadow-tactile: var(--cosmos-fusion-tab-shadow);
 }
 @media (hover: hover) and (pointer: fine) {
-  body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab-floating-center):not(.layout-baseline)
+  body.layout-cosmos-fusion-glass:is(.tab-floating, .tab-floating-center):not(.layout-baseline)
     .workspace-split.mod-root .workspace-tabs:not(.mod-stacked)
     .workspace-tab-header {
     transition:
@@ -4307,7 +4275,7 @@ body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab
       transform var(--cosmos-t-fast) var(--cosmos-spring);
   }
   @starting-style {
-    body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab-floating-center):not(.layout-baseline)
+    body.layout-cosmos-fusion-glass:is(.tab-floating, .tab-floating-center):not(.layout-baseline)
       .workspace-split.mod-root .workspace-tabs:not(.mod-stacked)
       .workspace-tab-header {
       filter: blur(var(--cosmos-tab-entry-blur));
@@ -4317,7 +4285,7 @@ body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab
   }
 }
 @media (hover: hover) and (pointer: fine) {
-  body:is(.cosmos-floating-editor, .layout-cosmos-fusion-glass):not(.layout-baseline)
+  body.layout-cosmos-fusion-glass:not(.layout-baseline)
     .workspace-split.mod-root > .workspace-tabs > .workspace-tab-container {
     margin: 0 var(--island-gap) var(--island-gap);
     border-radius: var(--cosmos-r-floating-surface);
@@ -4327,18 +4295,18 @@ body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab
     backdrop-filter: var(--cosmos-glass-blur);
     overflow: hidden;
   }
-  body:is(.cosmos-floating-editor, .layout-cosmos-fusion-glass):not(.layout-baseline)
+  body.layout-cosmos-fusion-glass:not(.layout-baseline)
     .workspace-split.mod-root > .workspace-tabs > .workspace-tab-header-container {
     margin-inline: var(--island-gap);
   }
-  body:is(.cosmos-floating-editor, .layout-cosmos-fusion-glass):not(.layout-baseline)
+  body.layout-cosmos-fusion-glass:not(.layout-baseline)
     .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     :is(.workspace-leaf, .workspace-leaf-content, .view-header, .view-content, .document-search-container) {
     background-color: transparent;
   }
 }
 @media (hover: hover) and (pointer: fine) {
-  body:is(.cosmos-floating-settings, .layout-cosmos-fusion-glass):not(.layout-baseline)
+  body.layout-cosmos-fusion-glass:not(.layout-baseline)
     .modal.mod-settings .vertical-tab-header {
     margin: var(--island-gap) 0 var(--island-gap) var(--island-gap);
     border-radius: var(--cosmos-r-floating-surface);
@@ -4349,7 +4317,7 @@ body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab
   }
 }
 @media (hover: hover) and (pointer: fine) {
-  body:is(.cosmos-floating-ribbon, .layout-cosmos-fusion-glass):not(.layout-baseline)
+  body.layout-cosmos-fusion-glass:not(.layout-baseline)
     .workspace-ribbon.mod-primary:not(.is-collapsed) {
     margin: var(--island-gap) 0 var(--island-gap) var(--island-gap);
     padding: 0;
@@ -4466,26 +4434,6 @@ body:is(.input-cupertino, .input-material) .modal.mod-settings .vertical-tab-nav
   color: inherit;
   stroke: currentColor;
 }
-body.craft-nav-toggle .tree-item-self.is-active,
-body.craft-nav-toggle .nav-file-title.is-active,
-body.craft-nav-toggle .nav-folder-title.is-active {
-  background-color: var(--craft-tab-active);
-  box-shadow: var(--shadow-tactile);
-  border-radius: var(--mv-r-card);
-}
-body.craft-nav-toggle .nav-file-title,
-body.craft-nav-toggle .nav-folder-title {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: var(--mv-r-card);
-}
-body.craft-nav-toggle .nav-folder-title:not([data-path*="/"]) > .nav-folder-title-content {
-  color: var(--mv-label-color);
-  font-size: var(--mv-label-size);
-  font-weight: var(--mv-label-weight);
-  letter-spacing: var(--mv-label-track);
-  text-transform: uppercase;
-}
 body:is(.realcraft, .linear, .linear-darker).active-line-block .view-content > .markdown-source-view .cm-line.cm-active:not(.cm-gutterElement, .HyperMD-callout, .HyperMD-codeblock-bg, .HyperMD-quote)::before {
   background: var(--background-primary-alt);
 }
@@ -4569,6 +4517,34 @@ body.is-mobile.theme-dark > *, body.is-mobile.theme-light > * {
 }
 body :is(.cm-content, .markdown-preview-sizer) iframe.external-embed[src*="platform.twitter.com"] {
   background: transparent;
+}
+body.layout-kore:is(.tab-floating, .tab-floating-center):not(.layout-baseline)
+  .workspace-split.mod-root .workspace-tab-header-container {
+  --craft-tab-active: transparent;
+  --shadow-tactile: inset 0 0 0 1px var(--kore-hairline);
+}
+body.layout-kore:not(.layout-baseline) .workspace-split.mod-root,
+body.layout-kore:not(.layout-baseline)
+  .workspace-split.mod-root .workspace-tab-header-container {
+  background-color: var(--background-primary);
+}
+body.layout-kore:not(.layout-baseline) .mv-seg {
+  background: var(--background-modifier-hover);
+}
+body.layout-kore:not(.layout-baseline) .mv-seg > .mv-seg-item[aria-pressed='true'],
+body.layout-kore:not(.layout-baseline) .mv-seg > .mv-seg-item[aria-pressed='true']:hover {
+  background: var(--background-primary);
+  box-shadow: none;
+}
+body.layout-kore:not(.layout-baseline) .portal-section-title {
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: var(--font-ui-small);
+  font-weight: 500;
+  color: var(--text-faint);
+}
+body.layout-kore:not(.layout-baseline) .portal-count {
+  color: var(--text-faint);
 }
 body.cosmos-phone-edition.is-phone {
   --navbar-height: var(--touch-size-l);   
