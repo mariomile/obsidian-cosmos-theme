@@ -716,6 +716,9 @@ settings:
 			-
 				label: ChatGPT Rounded
 				value: chatgpt-rounded
+			-
+				label: Kore
+				value: kore
 	-
 		id: element-style
 		title: Personality
@@ -3448,7 +3451,7 @@ body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light)
   --background-primary:     #222222;
   --file-header-background: #222222;
 }
-body:is(.realcraft, .linear-darker, .chatgpt, .chatgpt-rounded).theme-dark:not(.layout-baseline):not(.cosmos-light)
+body:is(.realcraft, .linear-darker, .chatgpt, .chatgpt-rounded, .kore).theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .view-header {
   --file-header-background: var(--background-primary);
   --file-header-background-focused: var(--background-primary);
@@ -3554,6 +3557,36 @@ body.chatgpt-rounded.theme-dark:not(.layout-baseline):not(.cosmos-light) {
   --mv-r-chip: 999px;
   --cosmos-tab-radius: 12px;
 }
+body.kore.theme-dark:not(.layout-baseline):not(.cosmos-light) {
+  --cosmos-surface-0: #0c0c0c;   
+  --cosmos-surface-1: #0c0c0c;   
+  --cosmos-surface-2: #0c0c0c;   
+  --cosmos-surface-3: #1b1b1b;   
+  --background-modifier-border:       #141414;   
+  --background-modifier-border-hover:  #454545;   
+  --background-modifier-hover:         #1b1b1b;
+  --text-normal: #ededed;
+  --text-muted:  #9e9e9e;
+  --text-faint:  #686868;
+  --link-color:                  #94a2b8;   
+  --link-color-hover:            #b4bfcd;
+  --link-external-color:         #94a2b8;
+  --link-external-color-hover:   #b4bfcd;
+  --link-unresolved-color:       #94a2b8;
+  --cosmos-surface-card: var(--cosmos-surface-2);
+  --cosmos-surface-card-hover: var(--cosmos-surface-2);
+  --mv-r-card: 16px;
+  --cosmos-shadow-scale: 0.6;
+}
+body.kore.theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .workspace-split.mod-root {
+  --background-primary:       #060606;
+  --file-header-background:   #060606;   
+}
+body.kore.theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .workspace-split.mod-root .workspace-tab-container {
+  background-color: var(--background-primary);
+}
 body.realcraft.theme-light.cupertino-light:not(.layout-baseline) {
   --background-primary:       #fcfdfe;   
   --background-primary-alt:   #fafafa;   
@@ -3619,6 +3652,24 @@ body.chatgpt-rounded.theme-light.cupertino-light:not(.layout-baseline) {
   --mv-r-card: 18px;
   --mv-r-chip: 999px;
   --cosmos-tab-radius: 12px;
+}
+body.kore.theme-light.cupertino-light:not(.layout-baseline) {
+  --background-primary:       #ffffff;   
+  --background-primary-alt:   #f7f7f8;   
+  --background-secondary:     #f7f7f8;   
+  --background-secondary-alt: #ededee;   
+  --background-modifier-border:       #eeeeef;   
+  --background-modifier-border-hover:  #e0e0e1;   
+  --background-modifier-hover:         #ededee;   
+  --text-normal: #17181c;
+  --text-muted:  #6b6f76;
+  --text-faint:  #9a9ea7;
+  --link-color:                  #64748b;   
+  --link-color-hover:            #475569;
+  --link-external-color:         #64748b;
+  --link-external-color-hover:   #475569;
+  --link-unresolved-color:       #64748b;
+  --mv-r-card: 16px;
 }
 body.layout-notion.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) {
   --corner-shape: round;                             

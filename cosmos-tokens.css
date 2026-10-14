@@ -475,7 +475,7 @@ body.realcraft.theme-dark:not(.layout-baseline):not(.cosmos-light)
      { background-color: transparent }` è (0,4,1) e batte core (0,1,0), quindi
      l'header resta trasparente com'è previsto e la nota ci scorre sotto.
    Nessun background-color scritto qui = nessuna (0,7,1) che schiacci il phone. */
-body:is(.realcraft, .linear-darker, .chatgpt, .chatgpt-rounded).theme-dark:not(.layout-baseline):not(.cosmos-light)
+body:is(.realcraft, .linear-darker, .chatgpt, .chatgpt-rounded, .kore).theme-dark:not(.layout-baseline):not(.cosmos-light)
   .workspace-split.mod-root .view-header {
   /* ENTRAMBI i token: core ne usa uno diverso sulla leaf attiva a fuoco
      (`.is-focused .workspace-leaf.mod-active .view-header { background-color:
@@ -756,6 +756,60 @@ body.chatgpt-rounded.theme-dark:not(.layout-baseline):not(.cosmos-light) {
 }
 
 /* --------------------------------------------------------------------------
+   § KORE (Palette option, valore `kore`): dall'app Kore Brain di Mario, tema
+   "Codex" (letto dai token del repo Kore, `design-system/tokens/colors.css`,
+   2026-10-14) e verificato pixel per pixel sullo screenshot di Mario.
+   Monocromo neutro quasi nero, nessun accent tranne i link grigio-blu
+   #94a2b8 (misurato).
+
+   Stessa struttura di § CHATGPT: la cornice (sidebar di Kore, --surface-sunken
+   #0c0c0c) sta appena SOPRA il canvas (#060606), quindi il globale porta la
+   cornice e il .mod-root ridefinisce il canvas. Secondary resta più chiara del
+   canvas: modello Cosmos normale, § PALETTE INVERTITE non serve.
+
+   Card come le note di Kore: superficie #0c0c0c sul canvas, hairline #141414,
+   raggio 16px (rounded-2xl). Voce attiva e hover: #1b1b1b.
+   -------------------------------------------------------------------------- */
+body.kore.theme-dark:not(.layout-baseline):not(.cosmos-light) {
+  --cosmos-surface-0: #0c0c0c;   /* CORNICE: --surface-sunken di Kore */
+  --cosmos-surface-1: #0c0c0c;   /* allineato: Cosmos non lo consuma per la chrome */
+  --cosmos-surface-2: #0c0c0c;   /* card: le note di Kore stanno sulla stessa superficie della sidebar */
+  --cosmos-surface-3: #1b1b1b;   /* --surface-hover / --surface-active */
+
+  --background-modifier-border:       #141414;   /* --border */
+  --background-modifier-border-hover:  #454545;   /* --border-strong: hover delle card */
+  --background-modifier-hover:         #1b1b1b;
+
+  --text-normal: #ededed;
+  --text-muted:  #9e9e9e;
+  --text-faint:  #686868;
+
+  /* Solo i link prendono il colore, il resto dell'accent resta al preset. */
+  --link-color:                  #94a2b8;   /* misurato dallo screenshot di Kore */
+  --link-color-hover:            #b4bfcd;
+  --link-external-color:         #94a2b8;
+  --link-external-color-hover:   #b4bfcd;
+  --link-unresolved-color:       #94a2b8;
+
+  --cosmos-surface-card: var(--cosmos-surface-2);
+  --cosmos-surface-card-hover: var(--cosmos-surface-2);
+  --mv-r-card: 16px;
+
+  --cosmos-shadow-scale: 0.6;
+}
+
+/* Il main pane torna canvas: #060606 (--surface-app di Codex). */
+body.kore.theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .workspace-split.mod-root {
+  --background-primary:       #060606;
+  --file-header-background:   #060606;   /* derivato: vedi ⚠️ in § LINEAR DARKER */
+}
+body.kore.theme-dark:not(.layout-baseline):not(.cosmos-light)
+  .workspace-split.mod-root .workspace-tab-container {
+  background-color: var(--background-primary);
+}
+
+/* --------------------------------------------------------------------------
    § PALETTE IN LIGHT — ogni voce del select "Palette" ha la sua versione
    chiara. Fino al 2026-09-25 le palette erano solo dark: in light venivano
    ignorate e restava la scala cupertino-light di Baseline per tutte.
@@ -871,6 +925,31 @@ body.chatgpt-rounded.theme-light.cupertino-light:not(.layout-baseline) {
   --mv-r-card: 18px;
   --mv-r-chip: 999px;
   --cosmos-tab-radius: 12px;
+}
+
+/* Kore light: i token :root di Kore (`design-system/tokens/colors.css`).
+   "composto" = rgba di inchiostro composto sul fondo. */
+body.kore.theme-light.cupertino-light:not(.layout-baseline) {
+  --background-primary:       #ffffff;   /* --surface */
+  --background-primary-alt:   #f7f7f8;   /* --surface-sunken */
+  --background-secondary:     #f7f7f8;   /* --surface-app: la sidebar condivide il fondo */
+  --background-secondary-alt: #ededee;   /* --surface-active 6%, composto */
+
+  --background-modifier-border:       #eeeeef;   /* --border 7%, composto */
+  --background-modifier-border-hover:  #e0e0e1;   /* --border-strong 13%, composto */
+  --background-modifier-hover:         #ededee;   /* --surface-hover 4.5% sulla sidebar, composto */
+
+  --text-normal: #17181c;
+  --text-muted:  #6b6f76;
+  --text-faint:  #9a9ea7;
+
+  --link-color:                  #64748b;   /* stessa tinta slate, scurita per il bianco */
+  --link-color-hover:            #475569;
+  --link-external-color:         #64748b;
+  --link-external-color-hover:   #475569;
+  --link-unresolved-color:       #64748b;
+
+  --mv-r-card: 16px;
 }
 
 /* --------------------------------------------------------------------------
