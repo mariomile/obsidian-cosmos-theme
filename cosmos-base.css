@@ -746,48 +746,6 @@ settings:
 				label: Plain
 				value: input-baseline
 	-
-		id: cosmos-light
-		title: Light surfaces (New Craft Light)
-		description: Disables dark Cosmos surfaces → lighter native grays. Combines with New Craft/Apple.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-h-extras
-		title: Craft & Fusion extras
-		type: heading
-		level: 1
-		collapsed: false
-	-
-		id: craft-nav-toggle
-		title: Craft sidebar nav
-		description: Craft-style sidebar nav — active pill, soft hover, uppercase section labels. OFF = current look.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-fusion-tabs
-		title: Fusion tabs (Craft)
-		description: Uses Baseline Fusion's capsule and translucent tab treatment without changing the Cosmos flavour. Desktop only; Standard stays unchanged.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-floating-editor
-		title: Floating editor surface
-		description: Turns the editor into a suspended surface with inset, hairline, translucency and shadow. Fusion Glass includes it automatically.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-floating-settings
-		title: Floating settings panel
-		description: Turns settings navigation into a translucent island, Craft/macOS-style. Fusion Glass includes it automatically.
-		type: class-toggle
-		default: false
-	-
-		id: cosmos-floating-ribbon
-		title: Floating ribbon
-		description: Detaches the left ribbon from the edges with a coordinated surface, radius and shadow. Fusion Glass includes it automatically.
-		type: class-toggle
-		default: false
-	-
 		id: accessibility
 		title: Accessibility
 		type: heading
@@ -3097,15 +3055,6 @@ settings:
 		id: img-radius-off
 		title: Disable rounded media
 		type: class-toggle
-	-
-		id: img-grid-gap
-		title: Image grids spacing
-		type: variable-number-slider
-		default: 4
-		min: 0
-		max: 16
-		step: 1
-		format: px
 	-
 		id: pdf
 		title: PDF

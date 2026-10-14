@@ -325,19 +325,19 @@ body.radius-generous.theme-light {
 }
 
 /* ==========================================================================
-   § FUSION TABS (toggle Style Settings: cosmos-fusion-tabs)
+   § FUSION TABS (flavour Fusion Glass)
    --------------------------------------------------------------------------
    Riprende il solo trattamento tab di Baseline Fusion senza trascinarsi
    dietro il layout Fusion completo: capsule full-round, active surface
-   translucent e shadow elevata. Il toggle è ortogonale al flavour, ma resta
-   spento in Standard per mantenere il contratto "clean Baseline".
+   translucent e shadow elevata. Era anche un toggle separato, ritirato il
+   2026-10-14 (pulizia settings): ora vive solo nel flavour Fusion Glass.
 
    Le classi floating non sono presenti nel tab switcher phone, quindi non
    serve un nuovo gate mobile. Invece di duplicare regole con !important, il
-   toggle cambia i tre token già consumati dal layer Craft: radius, active
+   flavour cambia i tre token già consumati dal layer Craft: radius, active
    surface e shadow. Min-width, scroll, hover, focus e press restano invariati.
    ========================================================================== */
-body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab-floating-center):not(.layout-baseline)
+body.layout-cosmos-fusion-glass:is(.tab-floating, .tab-floating-center):not(.layout-baseline)
   .workspace-split.mod-root .workspace-tabs:not(.mod-stacked) {
   --cosmos-tab-radius: var(--cosmos-r-fusion-tab);
   --cosmos-tabbar-radius: var(--cosmos-r-fusion-tabbar);
@@ -346,10 +346,10 @@ body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab
 }
 
 /* Fusion: ingresso delle nuove tab con fade + blur + micro-scale. Il flavour
-   completo lo include; il toggle tab lo abilita sugli altri flavour. Le durate
+   completo lo include. Le durate
    consumano i token Cosmos, quindi Reduce motion le azzera by-construction. */
 @media (hover: hover) and (pointer: fine) {
-  body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab-floating-center):not(.layout-baseline)
+  body.layout-cosmos-fusion-glass:is(.tab-floating, .tab-floating-center):not(.layout-baseline)
     .workspace-split.mod-root .workspace-tabs:not(.mod-stacked)
     .workspace-tab-header {
     transition:
@@ -361,7 +361,7 @@ body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab
   }
 
   @starting-style {
-    body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab-floating-center):not(.layout-baseline)
+    body.layout-cosmos-fusion-glass:is(.tab-floating, .tab-floating-center):not(.layout-baseline)
       .workspace-split.mod-root .workspace-tabs:not(.mod-stacked)
       .workspace-tab-header {
       filter: blur(var(--cosmos-tab-entry-blur));
@@ -373,12 +373,12 @@ body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab
 
 /* ==========================================================================
    § FLOATING EDITOR SURFACE
-   Toggle: cosmos-floating-editor · preset: layout-cosmos-fusion-glass
+   Flavour: layout-cosmos-fusion-glass (toggle separato ritirato 2026-10-14)
    --------------------------------------------------------------------------
    Il contenitore dell'editor diventa una island. Il contenuto interno resta
    trasparente per mostrare UNA sola superficie, evitando card dentro card. */
 @media (hover: hover) and (pointer: fine) {
-  body:is(.cosmos-floating-editor, .layout-cosmos-fusion-glass):not(.layout-baseline)
+  body.layout-cosmos-fusion-glass:not(.layout-baseline)
     .workspace-split.mod-root > .workspace-tabs > .workspace-tab-container {
     margin: 0 var(--island-gap) var(--island-gap);
     border-radius: var(--cosmos-r-floating-surface);
@@ -389,12 +389,12 @@ body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab
     overflow: hidden;
   }
 
-  body:is(.cosmos-floating-editor, .layout-cosmos-fusion-glass):not(.layout-baseline)
+  body.layout-cosmos-fusion-glass:not(.layout-baseline)
     .workspace-split.mod-root > .workspace-tabs > .workspace-tab-header-container {
     margin-inline: var(--island-gap);
   }
 
-  body:is(.cosmos-floating-editor, .layout-cosmos-fusion-glass):not(.layout-baseline)
+  body.layout-cosmos-fusion-glass:not(.layout-baseline)
     .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     :is(.workspace-leaf, .workspace-leaf-content, .view-header, .view-content, .document-search-container) {
     background-color: transparent;
@@ -403,9 +403,9 @@ body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab
 
 /* ==========================================================================
    § FLOATING SETTINGS PANEL
-   Toggle: cosmos-floating-settings · preset: layout-cosmos-fusion-glass */
+   Flavour: layout-cosmos-fusion-glass (toggle separato ritirato 2026-10-14) */
 @media (hover: hover) and (pointer: fine) {
-  body:is(.cosmos-floating-settings, .layout-cosmos-fusion-glass):not(.layout-baseline)
+  body.layout-cosmos-fusion-glass:not(.layout-baseline)
     .modal.mod-settings .vertical-tab-header {
     margin: var(--island-gap) 0 var(--island-gap) var(--island-gap);
     border-radius: var(--cosmos-r-floating-surface);
@@ -418,9 +418,9 @@ body:is(.cosmos-fusion-tabs, .layout-cosmos-fusion-glass):is(.tab-floating, .tab
 
 /* ==========================================================================
    § FLOATING RIBBON
-   Toggle: cosmos-floating-ribbon · preset: layout-cosmos-fusion-glass */
+   Flavour: layout-cosmos-fusion-glass (toggle separato ritirato 2026-10-14) */
 @media (hover: hover) and (pointer: fine) {
-  body:is(.cosmos-floating-ribbon, .layout-cosmos-fusion-glass):not(.layout-baseline)
+  body.layout-cosmos-fusion-glass:not(.layout-baseline)
     .workspace-ribbon.mod-primary:not(.is-collapsed) {
     margin: var(--island-gap) 0 var(--island-gap) var(--island-gap);
     padding: 0;
@@ -600,51 +600,6 @@ body:is(.input-cupertino, .input-material) .modal.mod-settings .vertical-tab-nav
 body:is(.input-cupertino, .input-material) .modal.mod-settings .vertical-tab-nav-item .vertical-tab-nav-item-icon svg {
   color: inherit;
   stroke: currentColor;
-}
-
-/* ==========================================================================
-   § CRAFT SIDEBAR NAV (toggle: craft-nav-toggle, default OFF) — 2026-07-12
-   --------------------------------------------------------------------------
-   Porta il linguaggio Craft dei tab editor sulla NAV della sidebar. Le righe
-   Cosmos hanno già hover-wash + peso-selezione (sezioni sopra, ungated); qui
-   aggiungiamo SOLO la parte Craft "full", tutta gated su .craft-nav-toggle:
-     • riga attiva = superficie "paper" + soft lift + pill arrotondato
-       (stesso pattern del tab attivo Craft: --craft-tab-active + shadow-tactile)
-     • ritmo verticale più arioso (padding — statico, la transition nav è solo
-       su background/color quindi niente layout-thrash)
-     • top-folder come section-header UPPERCASE (ricetta --mv-label-* da Bases)
-   Reversibile-by-construction: senza la classe = look attuale, zero residui.
-   Vincoli contract: niente !important (batte la base per specificità: la body
-   class in più supera l'accent-bg base), niente gate :not(.is-phone), colori/
-   durate solo da token (no raw hex/ms). ====================================== */
-
-/* Riga attiva = document card: paper neutro + soft lift, angoli morbidi */
-body.craft-nav-toggle .tree-item-self.is-active,
-body.craft-nav-toggle .nav-file-title.is-active,
-body.craft-nav-toggle .nav-folder-title.is-active {
-  background-color: var(--craft-tab-active);
-  box-shadow: var(--shadow-tactile);
-  border-radius: var(--mv-r-card);
-}
-
-/* Ritmo più arioso: le righe respirano come in Craft (solo padding, statico) */
-body.craft-nav-toggle .nav-file-title,
-body.craft-nav-toggle .nav-folder-title {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: var(--mv-r-card);
-}
-
-/* Top-folder (path senza slash = primo livello) = section-header UPPERCASE muto,
-   come le sezioni "FOLDERS/STARRED" di Craft. Ricetta condivisa con le micro-label
-   di Bases (--mv-label-*). Selettore robusto al nesting/virtualizzazione del tree
-   (verificato live 2026-07-12): il data-path di una cartella top non ha "/". */
-body.craft-nav-toggle .nav-folder-title:not([data-path*="/"]) > .nav-folder-title-content {
-  color: var(--mv-label-color);
-  font-size: var(--mv-label-size);
-  font-weight: var(--mv-label-weight);
-  letter-spacing: var(--mv-label-track);
-  text-transform: uppercase;
 }
 
 /* ==========================================================================
