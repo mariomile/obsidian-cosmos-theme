@@ -4523,10 +4523,13 @@ body.layout-kore:is(.tab-floating, .tab-floating-center):not(.layout-baseline)
   --craft-tab-active: transparent;
   --shadow-tactile: inset 0 0 0 1px var(--kore-hairline);
 }
-body.layout-kore:not(.layout-baseline) .workspace-split.mod-root,
-body.layout-kore:not(.layout-baseline)
-  .workspace-split.mod-root .workspace-tab-header-container {
+body.layout-kore:not(.layout-baseline) .workspace-split.mod-root {
   background-color: var(--background-primary);
+  box-shadow: inset 0 0 0 100vmax var(--background-primary);
+}
+body.layout-kore:not(.layout-baseline)
+  .workspace-split.mod-root > .workspace-tabs > .workspace-tab-container {
+  border-radius: 0;
 }
 body.layout-kore:not(.layout-baseline) .mv-seg {
   background: var(--background-modifier-hover);
