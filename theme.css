@@ -4528,6 +4528,24 @@ body.layout-kore:not(.layout-baseline)
   .workspace-split.mod-root .workspace-tab-header-container {
   background-color: var(--background-primary);
 }
+body.layout-kore:not(.layout-baseline) .mv-seg {
+  background: var(--background-modifier-hover);
+}
+body.layout-kore:not(.layout-baseline) .mv-seg > .mv-seg-item[aria-pressed='true'],
+body.layout-kore:not(.layout-baseline) .mv-seg > .mv-seg-item[aria-pressed='true']:hover {
+  background: var(--background-primary);
+  box-shadow: none;
+}
+body.layout-kore:not(.layout-baseline) .portal-section-title {
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: var(--font-ui-small);
+  font-weight: 500;
+  color: var(--text-faint);
+}
+body.layout-kore:not(.layout-baseline) .portal-count {
+  color: var(--text-faint);
+}
 body.cosmos-phone-edition.is-phone {
   --navbar-height: var(--touch-size-l);   
   --navbar-radius: var(--touch-size-l);   

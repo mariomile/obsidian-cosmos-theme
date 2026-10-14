@@ -908,3 +908,26 @@ body.layout-kore:not(.layout-baseline)
   background-color: var(--background-primary);
 }
 
+/* Segmentati (filtro a pill di Masonry e simili): pista grigia, pill attivo
+   scavato nel canvas, come la barra "Inbox / All / #tag" di Kore. */
+body.layout-kore:not(.layout-baseline) .mv-seg {
+  background: var(--background-modifier-hover);
+}
+body.layout-kore:not(.layout-baseline) .mv-seg > .mv-seg-item[aria-pressed='true'],
+body.layout-kore:not(.layout-baseline) .mv-seg > .mv-seg-item[aria-pressed='true']:hover {
+  background: var(--background-primary);
+  box-shadow: none;
+}
+
+/* Sidebar Portal: header di sezione piccoli e grigi, senza maiuscolo, e
+   conteggi nel grigio più tenue, come "Types" e "Open" in Kore. */
+body.layout-kore:not(.layout-baseline) .portal-section-title {
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: var(--font-ui-small);
+  font-weight: 500;
+  color: var(--text-faint);
+}
+body.layout-kore:not(.layout-baseline) .portal-count {
+  color: var(--text-faint);
+}
