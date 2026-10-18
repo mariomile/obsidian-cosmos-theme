@@ -324,12 +324,13 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
    si sfoca invece di essere tagliato. Stesso modello che Obsidian usa già
    su phone con il floating nav.
 
-   Il vetro è progressivo, senza bordo: l'header resta trasparente e due
-   pseudo-elementi scendono --cosmos-glass-fade oltre il suo bordo. ::before
-   è un blur leggero che sfuma su tutta l'altezza, ::after il blur pieno con
-   la tinta che sfuma prima: in alto il testo è velato e molto sfocato, più
-   giù appena morbido, poi nitido. z-index -1 li tiene sotto i bottoni
-   dentro lo stacking context dell'header (z-index 1 di core).
+   Il vetro è progressivo, senza bordo, come in Craft: l'header resta
+   trasparente e due pseudo-elementi scendono --cosmos-glass-fade oltre il
+   suo bordo. ::after è il blur pieno, intero in cima e già sparito a metà
+   altezza; ::before è un blur leggero che arriva quasi in fondo. In alto il
+   testo è molto sfocato ma resta luminoso (velo solo al 25%), sotto appena
+   morbido, poi nitido: circa due righe di rampa. z-index -1 li tiene sotto
+   i bottoni dentro lo stacking context dell'header (z-index 1 di core).
 
    Solo note markdown (canvas, bases e view dei plugin hanno il loro layout),
    solo tab non impilate (lì l'header è verticale), solo puntatore fine come
@@ -361,13 +362,13 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header::before {
     backdrop-filter: var(--cosmos-glass-blur-soft);
-    mask-image: linear-gradient(to bottom, black 50%, transparent);
+    mask-image: linear-gradient(to bottom, black 20%, transparent 95%);
   }
 
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header::after {
     backdrop-filter: var(--cosmos-glass-blur);
-    mask-image: linear-gradient(to bottom, black 30%, transparent 75%);
+    mask-image: linear-gradient(to bottom, black 15%, transparent 55%);
   }
 
   body:not(.layout-baseline):not(.focus-view):not(.layout-cosmos-fusion-glass) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
@@ -377,7 +378,7 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
 
   body:not(.layout-baseline):not(.focus-view):not(.layout-cosmos-fusion-glass) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header::after {
-    background-color: color-mix(in srgb, var(--background-primary) 72%, transparent);
+    background-color: color-mix(in srgb, var(--background-primary) 25%, transparent);
   }
 
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
