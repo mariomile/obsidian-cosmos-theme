@@ -3958,7 +3958,6 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   align-items: center;
 }
 .bases-view .bases-cards-item {
-  position: relative;
   border: 1px solid var(--mv-card-border);
   border-radius: var(--mv-r-card);
   background: var(--mv-card-bg);
