@@ -100,6 +100,9 @@ body {
   --cosmos-glass-surface: color-mix(in srgb, var(--background-primary) 78%, transparent);
   --cosmos-glass-surface-strong: color-mix(in srgb, var(--background-secondary) 86%, transparent);
   --cosmos-glass-outline: 1px solid color-mix(in srgb, var(--text-muted) 16%, transparent);
+  /* Header delle note: blur progressivo che sfuma oltre il bordo inferiore. */
+  --cosmos-glass-fade: 28px;
+  --cosmos-glass-blur-soft: blur(4px);
   --cosmos-r-floating-surface: var(--radius-m);
 
   /* --- Spacing rhythm (base 4) -------------------------------------------- */
