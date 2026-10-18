@@ -3286,8 +3286,8 @@ body {
   --cosmos-glass-surface: color-mix(in srgb, var(--background-primary) 78%, transparent);
   --cosmos-glass-surface-strong: color-mix(in srgb, var(--background-secondary) 86%, transparent);
   --cosmos-glass-outline: 1px solid color-mix(in srgb, var(--text-muted) 16%, transparent);
-  --cosmos-glass-fade: 28px;
-  --cosmos-glass-blur-soft: blur(4px);
+  --cosmos-glass-fade: 36px;
+  --cosmos-glass-blur-soft: blur(6px);
   --cosmos-r-floating-surface: var(--radius-m);
   --cosmos-gap-1: 4px;
   --cosmos-gap-2: 8px;
@@ -3853,12 +3853,12 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header::before {
     backdrop-filter: var(--cosmos-glass-blur-soft);
-    mask-image: linear-gradient(to bottom, black 50%, transparent);
+    mask-image: linear-gradient(to bottom, black 20%, transparent 95%);
   }
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header::after {
     backdrop-filter: var(--cosmos-glass-blur);
-    mask-image: linear-gradient(to bottom, black 30%, transparent 75%);
+    mask-image: linear-gradient(to bottom, black 15%, transparent 55%);
   }
   body:not(.layout-baseline):not(.focus-view):not(.layout-cosmos-fusion-glass) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header {
@@ -3866,7 +3866,7 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   }
   body:not(.layout-baseline):not(.focus-view):not(.layout-cosmos-fusion-glass) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header::after {
-    background-color: color-mix(in srgb, var(--background-primary) 72%, transparent);
+    background-color: color-mix(in srgb, var(--background-primary) 25%, transparent);
   }
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-content:not(:has(.document-search-container)) {
