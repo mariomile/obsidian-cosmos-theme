@@ -3838,21 +3838,25 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
   background-color: var(--background-primary);  
 }
 @media (hover: hover) and (pointer: fine) {
-  body:not(.layout-baseline) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
+  body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header {
-    background-color: color-mix(in srgb, var(--background-primary) 72%, transparent);
     backdrop-filter: var(--cosmos-glass-blur);
   }
-  body:not(.layout-baseline) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
-    .workspace-leaf-content[data-type="markdown"] > .view-content {
+  body:not(.layout-baseline):not(.focus-view):not(.layout-cosmos-fusion-glass) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
+    .workspace-leaf-content[data-type="markdown"] > .view-header {
+    background-color: color-mix(in srgb, var(--background-primary) 72%, transparent);
+  }
+  body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
+    .workspace-leaf-content[data-type="markdown"] > .view-content:not(:has(.document-search-container)) {
     height: 100%;
     margin-top: calc(-1 * var(--header-height));
   }
-  body:not(.layout-baseline) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
-    .workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller,
-  body:not(.layout-baseline) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
-    .workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view {
+  body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
+    .workspace-leaf-content[data-type="markdown"] > .view-content:not(:has(.document-search-container)) > .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller,
+  body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
+    .workspace-leaf-content[data-type="markdown"] > .view-content:not(:has(.document-search-container)) > .markdown-reading-view > .markdown-preview-view {
     padding-top: calc(var(--header-height) + var(--file-margins-y));
+    scroll-padding-top: var(--header-height);
   }
 }
 .bases-view .bases-table-header-name,
