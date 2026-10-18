@@ -3850,19 +3850,23 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
     .workspace-leaf-content[data-type="markdown"] > .view-header::after {
     content: "";
     position: absolute;
-    inset: 0 0 calc(-1 * var(--cosmos-glass-fade)) 0;
+    inset: calc(-1 * var(--header-height)) 0 calc(-1 * var(--cosmos-glass-fade)) 0;
     z-index: -1;
     pointer-events: none;
   }
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header::before {
     backdrop-filter: var(--cosmos-glass-blur-soft);
-    mask-image: linear-gradient(to bottom, black 20%, transparent 95%);
+    mask-image: linear-gradient(to bottom,
+      black calc(var(--header-height) + 0.2 * var(--cosmos-glass-span)),
+      transparent calc(var(--header-height) + 0.95 * var(--cosmos-glass-span)));
   }
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header::after {
     backdrop-filter: var(--cosmos-glass-blur);
-    mask-image: linear-gradient(to bottom, black 15%, transparent 55%);
+    mask-image: linear-gradient(to bottom,
+      black calc(var(--header-height) + 0.15 * var(--cosmos-glass-span)),
+      transparent calc(var(--header-height) + 0.55 * var(--cosmos-glass-span)));
   }
   body:not(.layout-baseline):not(.focus-view):not(.layout-cosmos-fusion-glass) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header {
@@ -3872,17 +3876,30 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
     .workspace-leaf-content[data-type="markdown"] > .view-header::after {
     background-color: color-mix(in srgb, var(--background-primary) 25%, transparent);
   }
+  body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked):has(> .workspace-tab-container > .workspace-leaf:not([style*="display: none"]) > .workspace-leaf-content[data-type="markdown"]) {
+    > .workspace-tab-header-container {
+      z-index: 1;
+    }
+    > .workspace-tab-container {
+      margin-top: calc(-1 * var(--header-height));
+    }
+  }
+  body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
+    .workspace-leaf-content[data-type="markdown"] > .view-header {
+    --cosmos-glass-span: calc(var(--header-height) + var(--cosmos-glass-fade));
+    margin-top: var(--header-height);
+  }
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-content:not(:has(.document-search-container)) {
     height: 100%;
-    margin-top: calc(-1 * var(--header-height));
+    margin-top: calc(-2 * var(--header-height));
   }
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-content:not(:has(.document-search-container)) > .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller,
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-content:not(:has(.document-search-container)) > .markdown-reading-view > .markdown-preview-view {
-    padding-top: calc(var(--header-height) + var(--file-margins-y));
-    scroll-padding-top: var(--header-height);
+    padding-top: calc(2 * var(--header-height) + var(--file-margins-y));
+    scroll-padding-top: calc(2 * var(--header-height));
   }
 }
 .bases-view .bases-table-header-name,
