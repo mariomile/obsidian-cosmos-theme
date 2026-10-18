@@ -314,6 +314,58 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
 }
 
 
+/* ==========================================================================
+   § GLASS HEADER: la nota scorre sotto la barra di navigazione (2026-10-18)
+   --------------------------------------------------------------------------
+   Prima l'header di una nota era una striscia opaca sopra il contenuto: le
+   properties sparivano sotto un bordo netto. Ora l'header si sovrappone al
+   contenuto (view-content risale di --header-height e il primo padding del
+   testo scende della stessa misura) ed è vetro: il testo che ci passa sotto
+   si sfoca invece di essere tagliato. Stesso modello che Obsidian usa già
+   su phone con il floating nav.
+
+   Solo note markdown (canvas, bases e view dei plugin hanno il loro layout),
+   solo tab non impilate (lì l'header è verticale), solo puntatore fine come
+   le altre superfici glass in cosmos-tweaks. Fuori da focus-view di Baseline,
+   che sposta già l'header fuori dal flusso con il suo margine. Lo sfondo è
+   un mix di --background-primary calcolato QUI, nello scope del pannello: un
+   token derivato dichiarato sul body si risolverebbe con il colore della
+   cornice. In fusion-glass il pannello è già vetro: lì solo il blur.
+   Da (0,9,1) in su: batte `.is-focused .workspace-leaf.mod-active
+   .view-header` di core e Baseline (0,3,1), nessun !important.
+
+   Con la barra di ricerca (Cmd+F) aperta la nota torna al layout normale: la
+   barra sta in cima alla view e finirebbe sotto l'header. scroll-padding
+   tiene sotto la banda i salti nativi (ancore in lettura). Limite noto: CM6
+   non legge scroll-padding, quindi risalendo con le frecce il cursore può
+   passare sotto la banda; un tema non può registrare scrollMargins. */
+@media (hover: hover) and (pointer: fine) {
+  body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
+    .workspace-leaf-content[data-type="markdown"] > .view-header {
+    backdrop-filter: var(--cosmos-glass-blur);
+  }
+
+  body:not(.layout-baseline):not(.focus-view):not(.layout-cosmos-fusion-glass) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
+    .workspace-leaf-content[data-type="markdown"] > .view-header {
+    background-color: color-mix(in srgb, var(--background-primary) 72%, transparent);
+  }
+
+  body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
+    .workspace-leaf-content[data-type="markdown"] > .view-content:not(:has(.document-search-container)) {
+    height: 100%;
+    margin-top: calc(-1 * var(--header-height));
+  }
+
+  body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
+    .workspace-leaf-content[data-type="markdown"] > .view-content:not(:has(.document-search-container)) > .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller,
+  body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
+    .workspace-leaf-content[data-type="markdown"] > .view-content:not(:has(.document-search-container)) > .markdown-reading-view > .markdown-preview-view {
+    padding-top: calc(var(--header-height) + var(--file-margins-y));
+    scroll-padding-top: var(--header-height);
+  }
+}
+
+
 
 /* ===== BASES SKIN ===== */
 /* ==========================================================================
