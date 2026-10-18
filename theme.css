@@ -3884,6 +3884,9 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
       margin-top: calc(-1 * var(--header-height));
     }
   }
+  body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked) > .workspace-tab-container {
+    transition-property: border-radius, background-color;
+  }
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header {
     --cosmos-glass-span: calc(var(--header-height) + var(--cosmos-glass-fade));

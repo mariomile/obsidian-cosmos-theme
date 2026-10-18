@@ -406,6 +406,13 @@ body.theme-dark.cupertino-dark:not(.layout-baseline):not(.cosmos-light) .app-con
     }
   }
 
+  /* Baseline dà al contenitore `transition: <durata>` su tutte le proprietà:
+     passando da una tab di altro tipo a una nota il margine sopra scorreva
+     in 320ms e la nota scivolava. Il margine deve scattare. */
+  body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked) > .workspace-tab-container {
+    transition-property: border-radius, background-color;
+  }
+
   body:not(.layout-baseline):not(.focus-view) .workspace-split.mod-root > .workspace-tabs:not(.mod-stacked)
     .workspace-leaf-content[data-type="markdown"] > .view-header {
     --cosmos-glass-span: calc(var(--header-height) + var(--cosmos-glass-fade));
