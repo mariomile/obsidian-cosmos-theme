@@ -3270,6 +3270,7 @@ body {
   --cosmos-native: cubic-bezier(0.32, 0.72, 0, 1);
   --cosmos-r-pill: var(--cosmos-tab-radius, var(--tab-radius, 8px));
   --cosmos-tab-inset: 2px;
+  --cosmos-tab-pad-y: 4px;   
   --cosmos-r-tabbar: calc(var(--cosmos-r-pill) + var(--cosmos-tab-inset));
   --cosmos-r-outer: var(--mv-r-card);
   --cosmos-r-inset: var(--cosmos-gap-2);
@@ -3781,6 +3782,9 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
   .workspace-split.mod-root .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
   gap: var(--cosmos-gap-1);
+  & .workspace-tab-header-inner {
+    padding-block: var(--cosmos-tab-pad-y);
+  }
 }
 body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline) {
   --craft-tab-active: var(--background-primary);

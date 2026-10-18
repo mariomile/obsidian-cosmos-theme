@@ -159,6 +159,11 @@ body:is(.tab-floating, .tab-floating-center):not(.is-phone):not(.layout-baseline
   .workspace-split.mod-root .workspace-tabs:not(.mod-stacked)
   .workspace-tab-header-container-inner {
   gap: var(--cosmos-gap-1);
+  /* Chip più alte: senza padding verticale l'altezza era solo quella del
+     testo (20px). Annidato qui per riusare il gate solo-editor. */
+  & .workspace-tab-header-inner {
+    padding-block: var(--cosmos-tab-pad-y);
+  }
 }
 
 /* --- Tab attivo = document card: paper + soft lift -----------------------

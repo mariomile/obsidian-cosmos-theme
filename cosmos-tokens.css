@@ -50,6 +50,7 @@ body {
      la barra che lo contiene è SEMPRE pill + inset — mai un numero a sé. */
   --cosmos-r-pill: var(--cosmos-tab-radius, var(--tab-radius, 8px));
   --cosmos-tab-inset: 2px;
+  --cosmos-tab-pad-y: 4px;   /* chip dei tab editor: 20px di testo + 2×4 = 28px */
   --cosmos-r-tabbar: calc(var(--cosmos-r-pill) + var(--cosmos-tab-inset));
 
   /* --- Concentricità INTERNA (specchio di --cosmos-r-tabbar) ----------------
